@@ -1,0 +1,12 @@
+#ifndef QTRADINGVIEW_GLOBAL_H
+#define QTRADINGVIEW_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(QTRADINGVIEW_LIBRARY)
+#define QTRADINGVIEW_EXPORT Q_DECL_EXPORT
+#else
+#define QTRADINGVIEW_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QTRADINGVIEW_GLOBAL_H
