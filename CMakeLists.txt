@@ -24,17 +24,21 @@ file(GLOB_RECURSE HEADER_FILES
 
         include/data/TimePoint.h
         include/data/DataPoint.h
+        include/data/CandleStick.h
         include/data/IDataProvider.h
         include/data/DataProvider.h
+        include/data/CandleStickProvider.h
 
         include/scale/IScale.h
         include/scale/LinearScale.h
 
         include/series/ISeries.h
         include/series/LineSeries.h
+        include/series/CandleStickSeries.h
 
         include/style/SeriesStyle.h
         include/style/LineStyle.h
+        include/style/CandleStickStyle.h
         include/style/ChartTheme.h
 )
 file(GLOB_RECURSE SOURCE_FILES
@@ -50,10 +54,13 @@ file(GLOB_RECURSE SOURCE_FILES
         src/data/TimePoint.cpp
         src/data/DataPoint.cpp
         src/data/DataProvider.cpp
+        src/data/CandleStick.cpp
+        src/data/CandleStickProvider.cpp
 
         src/scale/LinearScale.cpp
 
         src/series/LineSeries.cpp
+        src/series/CandleStickSeries.cpp
 
         src/style/SeriesStyle.cpp
         src/style/LineStyle.cpp
