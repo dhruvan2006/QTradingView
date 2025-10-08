@@ -7,6 +7,7 @@ ChartTheme::ChartTheme()
     , chartBackgroundColor(QColor(19, 23, 34))      // TradingView dark chart area
     , gridColor(QColor(42, 46, 57))                 // TradingView dark grid
     , borderColor(QColor(42, 46, 57))               // TradingView dark border
+    , paneBorderColor(QColor(56, 61, 74))           // Lighter border for pane separation
     , axisTextColor(QColor(131, 137, 149))          // TradingView dark axis text
     , axisBackgroundColor(QColor(19, 23, 34))       // TradingView dark axis bg
     , crosshairColor(QColor(120, 123, 134))         // TradingView dark crosshair
@@ -24,6 +25,7 @@ ChartTheme ChartTheme::tradingViewDark()
     theme.chartBackgroundColor = QColor(19, 23, 34);      // #131722
     theme.gridColor = QColor(42, 46, 57);                 // #2a2e39
     theme.borderColor = QColor(42, 46, 57);               // #2a2e39
+    theme.paneBorderColor = QColor(56, 61, 74);           // Lighter for pane separation
     theme.axisTextColor = QColor(131, 137, 149);          // #838995
     theme.axisBackgroundColor = QColor(19, 23, 34);       // #131722
     theme.crosshairColor = QColor(120, 123, 134);         // #787b86
@@ -43,6 +45,7 @@ ChartTheme ChartTheme::tradingViewLight()
     theme.chartBackgroundColor = QColor(255, 255, 255);   // #ffffff
     theme.gridColor = QColor(233, 236, 239);              // #e9ecef
     theme.borderColor = QColor(233, 236, 239);            // #e9ecef
+    theme.paneBorderColor = QColor(200, 203, 208);        // Darker for pane separation
     theme.axisTextColor = QColor(131, 137, 149);          // #838995
     theme.axisBackgroundColor = QColor(255, 255, 255);    // #ffffff
     theme.crosshairColor = QColor(120, 123, 134);         // #787b86
@@ -62,6 +65,7 @@ ChartTheme ChartTheme::dark()
     theme.chartBackgroundColor = QColor(20, 20, 20);
     theme.gridColor = QColor(60, 60, 60);
     theme.borderColor = QColor(60, 60, 60);
+    theme.paneBorderColor = QColor(80, 80, 80);
     theme.axisTextColor = QColor(180, 180, 180);
     theme.axisBackgroundColor = QColor(20, 20, 20);
     theme.crosshairColor = QColor(150, 150, 150);
@@ -81,6 +85,7 @@ ChartTheme ChartTheme::light()
     theme.chartBackgroundColor = QColor(255, 255, 255);
     theme.gridColor = QColor(220, 220, 220);
     theme.borderColor = QColor(200, 200, 200);
+    theme.paneBorderColor = QColor(180, 180, 180);
     theme.axisTextColor = QColor(100, 100, 100);
     theme.axisBackgroundColor = QColor(255, 255, 255);
     theme.crosshairColor = QColor(120, 120, 120);
@@ -94,4 +99,3 @@ ChartTheme ChartTheme::light()
 }
 
 } // namespace QTradingView
-

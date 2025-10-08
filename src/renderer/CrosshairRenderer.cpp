@@ -34,7 +34,7 @@ void CrosshairRenderer::setFont(const QFont& font) {
 }
 
 void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const ViewPort& viewport,
-                                const Pane* pane, IDataProvider* dataProvider) {
+                                const Pane* pane, IDataProvider* dataProvider, double xAxisY) {
     if (!painter || !pane) return;
 
     QRectF paneRect = pane->rect();
@@ -53,9 +53,8 @@ void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const
     painter->setPen(crosshairPen);
     painter->setRenderHint(QPainter::Antialiasing, false);
 
-    // Vertical line
-    painter->drawLine(QPointF(snappedX, paneRect.top()),
-                     QPointF(snappedX, paneRect.bottom()));
+    // NOTE: Vertical line is now drawn in Chart::render() across all panes
+    // We only draw the horizontal line here (within this pane)
 
     // Horizontal line
     painter->drawLine(QPointF(paneRect.left(), position.y()),
@@ -75,7 +74,9 @@ void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const
         if (dataIndex >= 0 && dataIndex < dataProvider->count()) {
             QDateTime dt = dataProvider->timeAt(dataIndex).timestamp();
             QString timeStr = dt.toString("yyyy-MM-dd");
-            drawTimeLabel(painter, snappedX, timeStr, paneRect, paneRect.bottom());
+            // Use the provided xAxisY position if valid, otherwise use pane bottom
+            double labelY = (xAxisY >= 0) ? xAxisY : paneRect.bottom();
+            drawTimeLabel(painter, snappedX, timeStr, paneRect, labelY);
         }
     }
 

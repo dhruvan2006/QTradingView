@@ -17,7 +17,9 @@ QTradingView::QTradingView(QWidget* parent)
     , m_initialVisibleCount(0)
     , m_dragMode(DragMode::None)
     , m_dragPane(nullptr)
-    , m_dragStartValue(0.0) {
+    , m_dragStartValue(0.0)
+    , m_resizingBorderIndex(-1)
+    , m_minPaneHeight(50.0) {
     setMinimumSize(400, 300);
 
     // Enable mouse tracking for smooth interactions
@@ -74,6 +76,17 @@ void QTradingView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         QPointF pos = event->pos();
 
+        // Check if clicking on a pane border for resizing
+        int borderIndex = m_chart->paneBorderAtPosition(pos);
+        if (borderIndex >= 0) {
+            m_dragMode = DragMode::PaneResize;
+            m_resizingBorderIndex = borderIndex;
+            m_lastMousePos = event->pos();
+            setCursor(Qt::SplitVCursor);
+            event->accept();
+            return;
+        }
+
         // Check if clicking on Y-axis (left or right)
         if (m_chart->leftAxisRect().contains(pos) || m_chart->rightAxisRect().contains(pos)) {
             // Find which pane's Y-axis was clicked
@@ -116,7 +129,53 @@ void QTradingView::mousePressEvent(QMouseEvent* event) {
 }
 
 void QTradingView::mouseMoveEvent(QMouseEvent* event) {
-    if (m_dragMode == DragMode::YAxisZoom && m_dragPane) {
+    if (m_dragMode == DragMode::PaneResize && m_resizingBorderIndex >= 0) {
+        // Handle pane border dragging to resize panes
+        int deltaY = event->pos().y() - m_lastMousePos.y();
+
+        const auto& panes = m_chart->panes();
+        if (m_resizingBorderIndex < static_cast<int>(panes.size()) - 1) {
+            auto& upperPane = panes[m_resizingBorderIndex];
+            auto& lowerPane = panes[m_resizingBorderIndex + 1];
+
+            double upperRatio = upperPane->heightRatio();
+            double lowerRatio = lowerPane->heightRatio();
+
+            // Calculate total height available for these two panes
+            double totalRatio = upperRatio + lowerRatio;
+            double totalHeight = upperPane->rect().height() + lowerPane->rect().height();
+
+            // Calculate new heights
+            double newUpperHeight = upperPane->rect().height() + deltaY;
+            double newLowerHeight = lowerPane->rect().height() - deltaY;
+
+            // Enforce minimum height constraints
+            if (newUpperHeight < m_minPaneHeight) {
+                newUpperHeight = m_minPaneHeight;
+                newLowerHeight = totalHeight - newUpperHeight;
+            }
+            if (newLowerHeight < m_minPaneHeight) {
+                newLowerHeight = m_minPaneHeight;
+                newUpperHeight = totalHeight - newLowerHeight;
+            }
+
+            // Convert heights back to ratios
+            double newUpperRatio = (newUpperHeight / totalHeight) * totalRatio;
+            double newLowerRatio = (newLowerHeight / totalHeight) * totalRatio;
+
+            // Update the pane ratios
+            upperPane->setHeightRatio(newUpperRatio);
+            lowerPane->setHeightRatio(newLowerRatio);
+
+            // Recalculate layout
+            m_chart->calculateLayout();
+
+            m_lastMousePos = event->pos();
+            update();
+            event->accept();
+        }
+    }
+    else if (m_dragMode == DragMode::YAxisZoom && m_dragPane) {
         // Vertical drag on Y-axis zooms the price scale
         int deltaY = event->pos().y() - m_lastMousePos.y();
 
@@ -189,10 +248,38 @@ void QTradingView::mouseMoveEvent(QMouseEvent* event) {
         update();
         event->accept();
     } else {
-        // Update crosshair position when not dragging
-        m_chart->setCrosshairVisible(true);
-        m_chart->setCrosshairPosition(event->pos());
-        update();
+        // Not dragging - check if hovering over special areas and update cursor
+        QPointF pos = event->pos();
+
+        // Check if hovering over a pane border (for potential resizing)
+        int borderIndex = m_chart->paneBorderAtPosition(pos);
+        if (borderIndex >= 0) {
+            // Mouse is near a pane border - show resize cursor
+            m_chart->setCrosshairVisible(false);
+            setCursor(Qt::SplitVCursor);
+            update();
+        }
+        // Check if hovering over Y-axis
+        else if (m_chart->leftAxisRect().contains(pos) || m_chart->rightAxisRect().contains(pos)) {
+            m_chart->setCrosshairVisible(false);
+            setCursor(Qt::SizeVerCursor);
+            update();
+        }
+        // Check if hovering over X-axis
+        else if (m_chart->xAxisRect().contains(pos)) {
+            m_chart->setCrosshairVisible(false);
+            setCursor(Qt::SizeHorCursor);
+            update();
+        }
+        // Default - arrow cursor and show crosshair
+        else {
+            setCursor(Qt::ArrowCursor);
+
+            // Update crosshair position when not dragging
+            m_chart->setCrosshairVisible(true);
+            m_chart->setCrosshairPosition(event->pos());
+            update();
+        }
     }
 }
 

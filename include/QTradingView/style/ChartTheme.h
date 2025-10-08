@@ -19,6 +19,7 @@ public:
     // Grid colors
     QColor gridColor;
     QColor borderColor;
+    QColor paneBorderColor;  // Border color for pane separation
 
     // Axis colors
     QColor axisTextColor;
@@ -44,4 +45,3 @@ public:
 } // namespace QTradingView
 
 #endif // QTRADINGVIEW_CHARTTHEME_H
-

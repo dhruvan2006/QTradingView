@@ -80,3 +80,28 @@ if(WIN32)
         $<TARGET_FILE_DIR:bar_chart>
     )
 endif()
+
+# Multi-Pane Chart Example
+add_executable(multi_pane_chart
+    multi_pane_chart.cpp
+)
+
+target_link_libraries(multi_pane_chart
+    PRIVATE
+    QTradingView
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+)
+
+set_target_properties(multi_pane_chart PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/examples"
+)
+
+if(WIN32)
+    add_custom_command(TARGET multi_pane_chart POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:QTradingView>
+        $<TARGET_FILE_DIR:multi_pane_chart>
+    )
+endif()

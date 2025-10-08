@@ -57,6 +57,9 @@ public:
     QRectF xAxisRect() const;
     Pane* paneAtPosition(const QPointF& position) const;
 
+    // Pane border detection
+    int paneBorderAtPosition(const QPointF& position, double threshold = 5.0) const;
+
 private:
     std::vector<std::shared_ptr<Pane>> m_panes;
     std::shared_ptr<IDataProvider> m_dataProvider;

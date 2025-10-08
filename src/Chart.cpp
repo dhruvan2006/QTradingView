@@ -161,6 +161,24 @@ namespace QTradingView {
             m_axisRenderer.drawYAxis(painter, leftAxisRect, rightAxisRect, pane.get());
         }
 
+        // Draw pane borders (after rendering all panes, so borders are on top)
+        painter->save();
+        QPen borderPen(m_theme.paneBorderColor, 2.5);
+        painter->setPen(borderPen);
+        painter->setRenderHint(QPainter::Antialiasing, false); // Sharp lines for borders
+
+        for (size_t i = 0; i < m_panes.size(); ++i) {
+            const auto& pane = m_panes[i];
+            QRectF paneRect = pane->rect();
+
+            // Draw horizontal line at the bottom of each pane except the last one
+            if (i < m_panes.size() - 1) {
+                painter->drawLine(QPointF(0, paneRect.bottom()),
+                                 QPointF(m_width, paneRect.bottom()));
+            }
+        }
+        painter->restore();
+
         // Draw X axis
         QRectF xAxisRect(0, m_height - m_xAxisHeight,
                          m_width, m_xAxisHeight);
@@ -169,12 +187,37 @@ namespace QTradingView {
         // Render crosshair if visible (draw last, on top of everything)
         if (m_crosshairVisible && !m_panes.empty()) {
             // Find the pane that contains the crosshair
+            Pane* activePane = nullptr;
             for (const auto& pane : m_panes) {
                 if (pane->rect().contains(m_crosshairPosition)) {
-                    m_crosshairRenderer.render(painter, m_crosshairPosition, m_viewport,
-                                              pane.get(), m_dataProvider.get());
+                    activePane = pane.get();
                     break;
                 }
+            }
+
+            if (activePane) {
+                painter->save();
+
+                // Snap the X position to the nearest data point
+                int dataIndex = m_viewport.pixelToIndex(m_crosshairPosition.x());
+                double snappedX = m_viewport.indexToPixel(dataIndex);
+
+                // Draw vertical crosshair line across ALL panes (not clipped)
+                QPen crosshairPen(m_theme.crosshairColor, 1, Qt::DashLine);
+                painter->setPen(crosshairPen);
+                painter->setRenderHint(QPainter::Antialiasing, false);
+
+                // Draw vertical line from top of first pane to bottom of last pane
+                double topY = m_panes.front()->rect().top();
+                double bottomY = m_panes.back()->rect().bottom();
+                painter->drawLine(QPointF(snappedX, topY), QPointF(snappedX, bottomY));
+
+                painter->restore();
+
+                // Now render the rest of the crosshair (horizontal line, labels, marker) for the active pane
+                double xAxisY = m_height - m_xAxisHeight;
+                m_crosshairRenderer.render(painter, m_crosshairPosition, m_viewport,
+                                          activePane, m_dataProvider.get(), xAxisY);
             }
         }
     }
@@ -253,6 +296,22 @@ namespace QTradingView {
             }
         }
         return nullptr;
+    }
+
+    int Chart::paneBorderAtPosition(const QPointF& position, double threshold) const {
+        // Returns the index of the border below the pane at the position
+        // Returns -1 if no border is near the position
+        for (size_t i = 0; i < m_panes.size() - 1; ++i) {
+            const auto& pane = m_panes[i];
+            double borderY = pane->rect().bottom();
+
+            // Check if position is within threshold distance of the border
+            if (std::abs(position.y() - borderY) <= threshold &&
+                position.x() >= 0 && position.x() <= m_width) {
+                return static_cast<int>(i);
+            }
+        }
+        return -1;
     }
 
 } // namespace QTradingView

@@ -53,11 +53,16 @@ private:
         None,
         ChartPan,
         YAxisZoom,
-        XAxisZoom
+        XAxisZoom,
+        PaneResize
     };
     DragMode m_dragMode;
     Pane* m_dragPane;  // The pane being zoomed on Y-axis
     double m_dragStartValue;  // Starting price value for Y-axis zoom
+
+    // Pane resize state
+    int m_resizingBorderIndex;  // Index of the border being resized
+    double m_minPaneHeight;  // Minimum height for a pane in pixels
 };
 
 } // namespace QTradingView
