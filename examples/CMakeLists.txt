@@ -55,3 +55,28 @@ if(WIN32)
         $<TARGET_FILE_DIR:candlestick_chart>
     )
 endif()
+
+# Bar Chart Example
+add_executable(bar_chart
+    bar_chart.cpp
+)
+
+target_link_libraries(bar_chart
+    PRIVATE
+    QTradingView
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+)
+
+set_target_properties(bar_chart PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/examples"
+)
+
+if(WIN32)
+    add_custom_command(TARGET bar_chart POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:QTradingView>
+        $<TARGET_FILE_DIR:bar_chart>
+    )
+endif()
