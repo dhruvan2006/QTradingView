@@ -20,7 +20,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-project(QTradingView LANGUAGES CXX)
+project(QTradingView VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -31,41 +31,41 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets)
 
-file(GLOB_RECURSE HEADER_FILES
-        include/QTradingView.h
-        include/qtradingview_global.h
-        include/Chart.h
-        include/ViewPort.h
-        include/Pane.h
+file(GLOB HEADER_FILES
+        include/QTradingView/QTradingView.h
+        include/QTradingView/qtradingview_global.h
+        include/QTradingView/Chart.h
+        include/QTradingView/ViewPort.h
+        include/QTradingView/Pane.h
 
-        include/renderer/AxisRenderer.h
-        include/renderer/GridRenderer.h
-        include/renderer/CrosshairRenderer.h
+        include/QTradingView/renderer/AxisRenderer.h
+        include/QTradingView/renderer/GridRenderer.h
+        include/QTradingView/renderer/CrosshairRenderer.h
 
-        include/data/TimePoint.h
-        include/data/DataPoint.h
-        include/data/CandleStick.h
-        include/data/Bar.h
-        include/data/IDataProvider.h
-        include/data/DataProvider.h
-        include/data/CandleStickProvider.h
-        include/data/BarProvider.h
+        include/QTradingView/data/TimePoint.h
+        include/QTradingView/data/DataPoint.h
+        include/QTradingView/data/CandleStick.h
+        include/QTradingView/data/Bar.h
+        include/QTradingView/data/IDataProvider.h
+        include/QTradingView/data/DataProvider.h
+        include/QTradingView/data/CandleStickProvider.h
+        include/QTradingView/data/BarProvider.h
 
-        include/scale/IScale.h
-        include/scale/LinearScale.h
+        include/QTradingView/scale/IScale.h
+        include/QTradingView/scale/LinearScale.h
 
-        include/series/ISeries.h
-        include/series/LineSeries.h
-        include/series/CandleStickSeries.h
-        include/series/BarSeries.h
+        include/QTradingView/series/ISeries.h
+        include/QTradingView/series/LineSeries.h
+        include/QTradingView/series/CandleStickSeries.h
+        include/QTradingView/series/BarSeries.h
 
-        include/style/SeriesStyle.h
-        include/style/LineStyle.h
-        include/style/CandleStickStyle.h
-        include/style/BarStyle.h
-        include/style/ChartTheme.h
+        include/QTradingView/style/SeriesStyle.h
+        include/QTradingView/style/LineStyle.h
+        include/QTradingView/style/CandleStickStyle.h
+        include/QTradingView/style/BarStyle.h
+        include/QTradingView/style/ChartTheme.h
 )
-file(GLOB_RECURSE SOURCE_FILES
+file(GLOB SOURCE_FILES
         src/QTradingView.cpp
         src/Chart.cpp
         src/ViewPort.cpp
@@ -99,11 +99,59 @@ add_library(QTradingView SHARED
         ${SOURCE_FILES}
 )
 
-target_include_directories(QTradingView PUBLIC ${CMAKE_SOURCE_DIR}/include)
+add_library(QTradingView::QTradingView ALIAS QTradingView)
 
-target_link_libraries(QTradingView PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets)
+target_include_directories(QTradingView
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(QTradingView PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_compile_definitions(QTradingView PRIVATE QTRADINGVIEW_LIBRARY)
+
+set_target_properties(QTradingView PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        SOVERSION 1
+)
+
+# Installation rules
+include(GNUInstallDirs)
+install(TARGETS QTradingView
+        EXPORT QTradingViewTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# Export targets for find_package
+install(EXPORT QTradingViewTargets
+        FILE QTradingViewTargets.cmake
+        NAMESPACE QTradingView::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QTradingView
+)
+
+# Create Config file for find_package
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/QTradingViewConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY SameMajorVersion
+)
+
+configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QTradingViewConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/QTradingViewConfig.cmake"
+        INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QTradingView
+)
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/QTradingViewConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/QTradingViewConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QTradingView
+)
 
 # Build examples (optional)
 option(BUILD_EXAMPLES "Build example applications" ON)
