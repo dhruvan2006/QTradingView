@@ -135,18 +135,19 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
     painter->drawLine(leftAxisRect.topRight(), QPointF(leftAxisRect.right(), leftAxisRect.bottom()));
     painter->drawLine(rightAxisRect.topLeft(), QPointF(rightAxisRect.left(), rightAxisRect.bottom()));
 
-    painter->setPen(m_textColor);
-    painter->setFont(QFont("Arial", 9));
+    QFont labelFont = QFont("Arial", 9);
+    painter->setFont(labelFont);
 
     auto ticks = calculateYAxisTicks(minValue, maxValue, 5);
+
+    int availableWidth = static_cast<int>(leftAxisRect.width() - 10);
 
     for (double value : ticks) {
         double normalizedPos = (value - minValue) / (maxValue - minValue);
         double y = paneRect.bottom() - normalizedPos * paneRect.height();
-
         int pixelY = qRound(y);
 
-        QString label = QString::number(value, 'f', 2);
+        QString label = formatYAxisLabel(value, minValue, maxValue, availableWidth, labelFont);
 
         // Draw tick marks with grid color
         painter->setPen(QPen(m_gridColor, 1));
@@ -173,10 +174,21 @@ std::vector<double> AxisRenderer::calculateYAxisTicks(double minValue, double ma
 
     if (maxValue <= minValue) return ticks;
 
-    double range = niceNumber(maxValue - minValue, false);
+    // Add padding to the range to make sure label's dont stick to the edges
+    double rangePadding = (maxValue - minValue) * 0.05;
+    double paddedMin = minValue + rangePadding;
+    double paddedMax = maxValue - rangePadding;
+
+    if (paddedMax <= paddedMin) {
+        // If padding makes range invalid, fall back to original range
+        paddedMin = minValue;
+        paddedMax = maxValue;
+    }
+
+    double range = niceNumber(paddedMax - paddedMin, false);
     double tickSpacing = niceNumber(range / (approxTickCount - 1), true);
-    double niceMin = std::floor(minValue / tickSpacing) * tickSpacing;
-    double niceMax = std::ceil(maxValue / tickSpacing) * tickSpacing;
+    double niceMin = std::floor(paddedMin / tickSpacing) * tickSpacing;
+    double niceMax = std::ceil(paddedMax / tickSpacing) * tickSpacing;
 
     for (double value = niceMin; value <= niceMax + 0.5 * tickSpacing; value += tickSpacing) {
         if (value >= minValue && value <= maxValue) {
@@ -281,4 +293,31 @@ std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewpo
     return labels;
 }
 
+QString AxisRenderer::formatYAxisLabel(double value, double minValue, double maxValue, int availableWidth,
+    const QFont &font) const {
+    double range = maxValue - minValue;
+
+    if (std::abs(value) >= 1000000) {
+        return QString::number(value / 1000000.0, 'f', 1) + "M";
+    } else if (std::abs(value) >= 1000) {
+        return QString::number(value / 1000.0, 'f', 1) + "K";
+    }
+
+    int precision = 2;
+    if (range < 1.0) precision = 4;
+    else if (range < 10.0) precision = 3;
+
+    QString label = QString::number(value, 'f', precision);
+
+    QFontMetrics fm(font);
+    int textWidth = fm.horizontalAdvance(label);
+
+    while (textWidth > availableWidth && precision > 0) {
+        precision--;
+        label = QString::number(value, 'f', precision);
+        textWidth = fm.horizontalAdvance(label);
+    }
+
+    return label;
+}
 } // namespace QTradingView

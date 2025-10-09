@@ -66,6 +66,8 @@ private:
     QColor m_borderColor;
     QColor m_backgroundColor;
     int m_axisWidth;
+
+    QString formatYAxisLabel(double value, double minValue, double maxValue, int availableWidth, const QFont& font) const;
 };
 
 } // namespace QTradingView
