@@ -44,6 +44,7 @@ QTradingView::QTradingView(QWidget* parent)
 
     // Enable mouse tracking for smooth interactions
     setMouseTracking(true);
+    setFocusPolicy(Qt::StrongFocus);
 
     // Enable touch and gesture events
     setAttribute(Qt::WA_AcceptTouchEvents, true);
@@ -93,6 +94,10 @@ void QTradingView::wheelEvent(QWheelEvent* event) {
 }
 
 void QTradingView::mousePressEvent(QMouseEvent* event) {
+    if (!hasFocus()) {
+        setFocus();
+    }
+
     if (event->button() == Qt::LeftButton) {
         QPointF pos = event->pos();
 
@@ -350,20 +355,42 @@ void QTradingView::leaveEvent(QEvent* event) {
 
 bool QTradingView::event(QEvent* event) {
     if (event->type() == QEvent::Gesture) {
-        QGestureEvent* gestureEvent = static_cast<QGestureEvent*>(event);
+        QGestureEvent* gestureEvent = dynamic_cast<QGestureEvent*>(event);
 
         if (QGesture* pinch = gestureEvent->gesture(Qt::PinchGesture)) {
-            handlePinchGesture(static_cast<QPinchGesture*>(pinch));
+            handlePinchGesture(dynamic_cast<QPinchGesture*>(pinch));
             return true;
         }
 
         if (QGesture* pan = gestureEvent->gesture(Qt::PanGesture)) {
-            handlePanGesture(static_cast<QPanGesture*>(pan));
+            handlePanGesture(dynamic_cast<QPanGesture*>(pan));
             return true;
         }
     }
 
     return QWidget::event(event);
+}
+
+void QTradingView::keyPressEvent(QKeyEvent *event) {
+    Qt::KeyboardModifiers modifiers = event->modifiers();
+    int modified = modifiers & (Qt::ControlModifier | Qt::AltModifier);
+    int panAmount = modified ? 10 : 1;
+
+    if (event->type() == QEvent::KeyPress) {
+        switch (event->key()) {
+            case Qt::Key_Right:
+                m_chart->pan(panAmount);
+                event->accept();
+                break;
+            case Qt::Key_Left:
+                m_chart->pan(-panAmount);
+                event->accept();
+                break;
+            default:
+                QWidget::keyPressEvent(event);
+                break;
+        }
+    }
 }
 
 void QTradingView::handlePinchGesture(QPinchGesture* gesture) {

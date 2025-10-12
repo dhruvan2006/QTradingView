@@ -57,6 +57,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent* event) override;
     void leaveEvent(QEvent* event) override;
     bool event(QEvent* event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     void handlePinchGesture(QPinchGesture* gesture);
