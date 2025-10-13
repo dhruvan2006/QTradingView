@@ -130,6 +130,12 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
     double minValue = pane->minValue();
     double maxValue = pane->maxValue();
 
+    IScale* scale = pane->scale();
+    if (!scale) {
+        painter->restore();
+        return;
+    }
+
     // Draw separator lines between chart and axes
     painter->setPen(QPen(m_borderColor, 1));
     painter->drawLine(leftAxisRect.topRight(), QPointF(leftAxisRect.right(), leftAxisRect.bottom()));
@@ -143,8 +149,7 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
     int availableWidth = static_cast<int>(leftAxisRect.width() - 10);
 
     for (double value : ticks) {
-        double normalizedPos = (value - minValue) / (maxValue - minValue);
-        double y = paneRect.bottom() - normalizedPos * paneRect.height();
+        double y = scale->dataToPixel(value);
         int pixelY = qRound(y);
 
         QString label = formatYAxisLabel(value, minValue, maxValue, availableWidth, labelFont);

@@ -33,6 +33,7 @@
 #include "QTradingView/series/BarSeries.h"
 #include "QTradingView/series/LineSeries.h"
 #include "QTradingView/scale/LinearScale.h"
+#include "QTradingView/scale/LogScale.h"
 #include <random>
 #include <algorithm>
 
@@ -181,7 +182,7 @@ int main(int argc, char *argv[])
 
     // === Pane 1: Main Price Chart (60% height) ===
     auto pricePane = chart->addPane(2.0); // Larger ratio = more height
-    auto priceScale = std::make_shared<QTradingView::LinearScale>();
+    auto priceScale = std::make_shared<QTradingView::LogScale>();
     pricePane->setScale(priceScale);
 
     // Add candlestick series

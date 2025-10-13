@@ -53,6 +53,7 @@ file(GLOB HEADER_FILES
 
         include/QTradingView/scale/IScale.h
         include/QTradingView/scale/LinearScale.h
+        include/QTradingView/scale/LogScale.h
 
         include/QTradingView/series/ISeries.h
         include/QTradingView/series/LineSeries.h
@@ -84,6 +85,7 @@ file(GLOB SOURCE_FILES
         src/data/BarProvider.cpp
 
         src/scale/LinearScale.cpp
+        src/scale/LogScale.cpp
 
         src/series/LineSeries.cpp
         src/series/CandleStickSeries.cpp
