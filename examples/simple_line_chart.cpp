@@ -22,7 +22,6 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QDateTime>
-#include "QTradingView/QTradingView.h"
 #include "QTradingView/Chart.h"
 #include "QTradingView/data/DataProvider.h"
 #include "QTradingView/data/DataPoint.h"
@@ -41,8 +40,8 @@ int main(int argc, char *argv[])
     window.resize(1400, 700);
 
     // Create chart widget
-    auto chartView = new QTradingView::QTradingView(&window);
-    window.setCentralWidget(chartView);
+    auto chart = new QTradingView::Chart(&window);
+    window.setCentralWidget(chart);
 
     // Generate more realistic sample data (price-like movement with trend and noise)
     QList<QTradingView::DataPoint> data;
@@ -81,7 +80,6 @@ int main(int argc, char *argv[])
     auto dataProvider = std::make_shared<QTradingView::DataProvider>(data);
 
     // Get chart and setup
-    auto chart = chartView->chart();
     chart->setDataProvider(dataProvider);
 
     // Create main pane

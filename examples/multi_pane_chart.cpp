@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDateTime>
-#include "QTradingView/QTradingView.h"
 #include "QTradingView/Chart.h"
 #include "QTradingView/data/CandleStickProvider.h"
 #include "QTradingView/data/CandleStick.h"
@@ -47,8 +46,8 @@ int main(int argc, char *argv[])
     window.resize(1600, 900);
 
     // Create chart widget
-    auto chartView = new QTradingView::QTradingView(&window);
-    window.setCentralWidget(chartView);
+    auto chart = new QTradingView::Chart(&window);
+    window.setCentralWidget(chart);
 
     // Generate realistic market data
     QList<QTradingView::CandleStick> candles;
@@ -168,8 +167,6 @@ int main(int argc, char *argv[])
     }
 
     // === Setup Chart ===
-    auto chart = chartView->chart();
-
     // Create data providers
     auto candleProvider = std::make_shared<QTradingView::CandleStickProvider>(candles);
     auto volumeProvider = std::make_shared<QTradingView::BarProvider>(volumeBars);

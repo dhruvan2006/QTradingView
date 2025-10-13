@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     window.resize(1400, 700);
 
     // Create chart widget
-    auto chartView = new QTradingView::QTradingView(&window);
-    window.setCentralWidget(chartView);
+    auto chart = new QTradingView::Chart(&window);
+    window.setCentralWidget(chart);
 
     // Generate realistic candlestick data
     QList<QTradingView::CandleStick> candles;
@@ -85,7 +85,6 @@ int main(int argc, char *argv[])
     auto dataProvider = std::make_shared<QTradingView::CandleStickProvider>(candles);
 
     // Get chart and setup
-    auto chart = chartView->chart();
     chart->setDataProvider(dataProvider);
 
     // Create main pane

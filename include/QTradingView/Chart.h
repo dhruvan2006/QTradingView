@@ -23,8 +23,20 @@
 #ifndef QTRADINGVIEW_CHART_H
 #define QTRADINGVIEW_CHART_H
 
+#include <QObject>
+#include <QWidget>
+#include <QRectF>
+#include <QPointF>
+#include <QEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QPaintEvent>
+#include <QResizeEvent>
 #include <vector>
 #include <memory>
+#include <QPinchGesture>
+
 #include "QTradingView/Pane.h"
 #include "QTradingView/ViewPort.h"
 #include "QTradingView/data/IDataProvider.h"
@@ -38,10 +50,13 @@ class QPainter;
 
 namespace QTradingView {
 
-class QTRADINGVIEW_EXPORT Chart
+class QTRADINGVIEW_EXPORT Chart : public QWidget
 {
+    Q_OBJECT
+
 public:
-    Chart();
+    explicit Chart(QWidget *parent = nullptr);
+    ~Chart() override;
 
     Pane* addPane(double heightRatio = 1.0);
     void removePane(Pane* pane);
@@ -55,8 +70,6 @@ public:
     const ViewPort& viewport() const;
 
     void setSize(int width, int height);
-    int width() const;
-    int height() const;
 
     void setTheme(const ChartTheme& theme);
     const ChartTheme& theme() const;
@@ -82,13 +95,40 @@ public:
     // Pane border detection
     int paneBorderAtPosition(const QPointF& position, double threshold = 5.0) const;
 
+protected:
+    void paintEvent(QPaintEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void wheelEvent(QWheelEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+    void leaveEvent(QEvent* event) override;
+    bool event(QEvent* event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
+    void handlePinchGesture(QPinchGesture* gesture);
+    void handlePanGesture(QPanGesture* gesture);
+
+    // Chart logic members
     std::vector<std::shared_ptr<Pane>> m_panes;
     std::shared_ptr<IDataProvider> m_dataProvider;
     ViewPort m_viewport;
-    int m_width;
-    int m_height;
     ChartTheme m_theme;
+
+    // Mouse/interaction state
+    bool m_isPanning;
+    QPoint m_lastMousePos;
+    int m_lastMouseIndex;
+    double m_initialVisibleCount;
+
+    enum class DragMode { None, ChartPan, YAxisZoom, XAxisZoom, PaneResize };
+    DragMode m_dragMode;
+    Pane* m_dragPane;
+    double m_dragStartValue;
+    int m_resizingBorderIndex;
+    double m_minPaneHeight;
 
     // Renderers
     AxisRenderer m_axisRenderer;

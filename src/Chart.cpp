@@ -25,12 +25,26 @@
 #include <algorithm>
 
 namespace QTradingView {
+    Chart::Chart(QWidget *parent)
+        : QWidget(parent)
+          , m_leftAxisWidth(60), m_rightAxisWidth(60), m_xAxisHeight(30)
+          , m_theme(ChartTheme::tradingViewDark())
+          , m_crosshairVisible(false)
+          , m_isPanning(false)
+          , m_lastMouseIndex(0)
+          , m_initialVisibleCount(0)
+          , m_dragMode(DragMode::None)
+          , m_dragPane(nullptr)
+          , m_dragStartValue(0.0)
+          , m_resizingBorderIndex(-1)
+          , m_minPaneHeight(50.0) {
+        setMinimumSize(400, 300);
+        setMouseTracking(true);
+        setFocusPolicy(Qt::StrongFocus);
+        setAttribute(Qt::WA_AcceptTouchEvents, true);
+        grabGesture(Qt::PinchGesture);
+        grabGesture(Qt::PanGesture);
 
-    Chart::Chart()
-        : m_width(800), m_height(600)
-        , m_leftAxisWidth(60), m_rightAxisWidth(60), m_xAxisHeight(30)
-        , m_theme(ChartTheme::tradingViewDark())
-        , m_crosshairVisible(false) {
         // Initialize axis renderer with theme colors
         m_axisRenderer.setTextColor(m_theme.axisTextColor);
         m_axisRenderer.setGridColor(m_theme.gridColor);
@@ -46,6 +60,8 @@ namespace QTradingView {
         m_crosshairRenderer.setLabelTextColor(m_theme.axisTextColor);
         m_crosshairRenderer.setFont(m_theme.textFont);
     }
+
+    Chart::~Chart() = default;
 
     Pane *Chart::addPane(double heightRatio) {
         auto pane = std::make_shared<Pane>();
@@ -91,17 +107,7 @@ namespace QTradingView {
     }
 
     void Chart::setSize(int width, int height) {
-        m_width = width;
-        m_height = height;
         calculateLayout();
-    }
-
-    int Chart::width() const {
-        return m_width;
-    }
-
-    int Chart::height() const {
-        return m_height;
     }
 
     void Chart::calculateLayout() {
@@ -112,8 +118,8 @@ namespace QTradingView {
             totalRatio += pane->heightRatio();
         }
 
-        double chartWidth = m_width - m_leftAxisWidth - m_rightAxisWidth;
-        double chartHeight = m_height - m_xAxisHeight;
+        double chartWidth = width() - m_leftAxisWidth - m_rightAxisWidth;
+        double chartHeight = height() - m_xAxisHeight;
         double currentY = 0.0;
 
         for (const auto &pane: m_panes) {
@@ -126,7 +132,7 @@ namespace QTradingView {
         m_viewport.setPixelRect(QRectF(m_leftAxisWidth, 0, chartWidth, chartHeight));
     }
 
-    void Chart::setTheme(const ChartTheme& theme) {
+    void Chart::setTheme(const ChartTheme &theme) {
         m_theme = theme;
         m_axisRenderer.setTextColor(m_theme.axisTextColor);
         m_axisRenderer.setGridColor(m_theme.gridColor);
@@ -141,7 +147,7 @@ namespace QTradingView {
         m_crosshairRenderer.setFont(m_theme.textFont);
     }
 
-    const ChartTheme& Chart::theme() const {
+    const ChartTheme &Chart::theme() const {
         return m_theme;
     }
 
@@ -149,12 +155,12 @@ namespace QTradingView {
         if (!painter || m_panes.empty()) return;
 
         // Fill chart background
-        painter->fillRect(0, 0, m_width, m_height, m_theme.backgroundColor);
+        painter->fillRect(0, 0, width(), height(), m_theme.backgroundColor);
 
         // Fill chart area background
         QRectF chartArea(m_leftAxisWidth, 0,
-                        m_width - m_leftAxisWidth - m_rightAxisWidth,
-                        m_height - m_xAxisHeight);
+                         width() - m_leftAxisWidth - m_rightAxisWidth,
+                         height() - m_xAxisHeight);
         painter->fillRect(chartArea, m_theme.chartBackgroundColor);
 
         for (const auto &pane: m_panes) {
@@ -176,8 +182,8 @@ namespace QTradingView {
 
             // Draw Y axes for this pane
             QRectF leftAxisRect(0, pane->rect().top(), m_leftAxisWidth, pane->rect().height());
-            QRectF rightAxisRect(m_width - m_rightAxisWidth, pane->rect().top(),
-                                m_rightAxisWidth, pane->rect().height());
+            QRectF rightAxisRect(width() - m_rightAxisWidth, pane->rect().top(),
+                                 m_rightAxisWidth, pane->rect().height());
             m_axisRenderer.drawYAxis(painter, leftAxisRect, rightAxisRect, pane.get());
         }
 
@@ -188,27 +194,27 @@ namespace QTradingView {
         painter->setRenderHint(QPainter::Antialiasing, false); // Sharp lines for borders
 
         for (size_t i = 0; i < m_panes.size(); ++i) {
-            const auto& pane = m_panes[i];
+            const auto &pane = m_panes[i];
             QRectF paneRect = pane->rect();
 
             // Draw horizontal line at the bottom of each pane except the last one
             if (i < m_panes.size() - 1) {
                 painter->drawLine(QPointF(0, paneRect.bottom()),
-                                 QPointF(m_width, paneRect.bottom()));
+                                  QPointF(width(), paneRect.bottom()));
             }
         }
         painter->restore();
 
         // Draw X axis
-        QRectF xAxisRect(0, m_height - m_xAxisHeight,
-                         m_width, m_xAxisHeight);
+        QRectF xAxisRect(0, height() - m_xAxisHeight,
+                         width(), m_xAxisHeight);
         m_axisRenderer.drawXAxis(painter, xAxisRect, m_viewport, m_dataProvider.get());
 
         // Render crosshair if visible (draw last, on top of everything)
         if (m_crosshairVisible && !m_panes.empty()) {
             // Find the pane that contains the crosshair
-            Pane* activePane = nullptr;
-            for (const auto& pane : m_panes) {
+            Pane *activePane = nullptr;
+            for (const auto &pane: m_panes) {
                 if (pane->rect().contains(m_crosshairPosition)) {
                     activePane = pane.get();
                     break;
@@ -235,9 +241,9 @@ namespace QTradingView {
                 painter->restore();
 
                 // Now render the rest of the crosshair (horizontal line, labels, marker) for the active pane
-                double xAxisY = m_height - m_xAxisHeight;
+                double xAxisY = height() - m_xAxisHeight;
                 m_crosshairRenderer.render(painter, m_crosshairPosition, m_viewport,
-                                          activePane, m_dataProvider.get(), xAxisY);
+                                           activePane, m_dataProvider.get(), xAxisY);
             }
         }
     }
@@ -287,7 +293,7 @@ namespace QTradingView {
         return m_crosshairVisible;
     }
 
-    void Chart::setCrosshairPosition(const QPointF& position) {
+    void Chart::setCrosshairPosition(const QPointF &position) {
         m_crosshairPosition = position;
     }
 
@@ -297,20 +303,20 @@ namespace QTradingView {
 
     QRectF Chart::leftAxisRect() const {
         if (m_panes.empty()) return QRectF();
-        return QRectF(0, 0, m_leftAxisWidth, m_height - m_xAxisHeight);
+        return QRectF(0, 0, m_leftAxisWidth, height() - m_xAxisHeight);
     }
 
     QRectF Chart::rightAxisRect() const {
         if (m_panes.empty()) return QRectF();
-        return QRectF(m_width - m_rightAxisWidth, 0, m_rightAxisWidth, m_height - m_xAxisHeight);
+        return QRectF(width() - m_rightAxisWidth, 0, m_rightAxisWidth, height() - m_xAxisHeight);
     }
 
     QRectF Chart::xAxisRect() const {
-        return QRectF(0, m_height - m_xAxisHeight, m_width, m_xAxisHeight);
+        return QRectF(0, height() - m_xAxisHeight, width(), m_xAxisHeight);
     }
 
-    Pane* Chart::paneAtPosition(const QPointF& position) const {
-        for (const auto& pane : m_panes) {
+    Pane *Chart::paneAtPosition(const QPointF &position) const {
+        for (const auto &pane: m_panes) {
             if (pane->rect().contains(position)) {
                 return pane.get();
             }
@@ -318,20 +324,338 @@ namespace QTradingView {
         return nullptr;
     }
 
-    int Chart::paneBorderAtPosition(const QPointF& position, double threshold) const {
+    int Chart::paneBorderAtPosition(const QPointF &position, double threshold) const {
         // Returns the index of the border below the pane at the position
         // Returns -1 if no border is near the position
         for (size_t i = 0; i < m_panes.size() - 1; ++i) {
-            const auto& pane = m_panes[i];
+            const auto &pane = m_panes[i];
             double borderY = pane->rect().bottom();
 
             // Check if position is within threshold distance of the border
             if (std::abs(position.y() - borderY) <= threshold &&
-                position.x() >= 0 && position.x() <= m_width) {
+                position.x() >= 0 && position.x() <= width()) {
                 return static_cast<int>(i);
             }
         }
         return -1;
     }
 
+    void Chart::paintEvent(QPaintEvent *event) {
+        QPainter painter(this);
+        render(&painter);
+    }
+
+    void Chart::resizeEvent(QResizeEvent *event) {
+        QWidget::resizeEvent(event);
+        calculateLayout();
+    }
+
+    void Chart::wheelEvent(QWheelEvent *event) {
+        int mouseX = event->position().x();
+        int anchorIndex = m_viewport.pixelToIndex(mouseX);
+        int zoomDelta = event->angleDelta().y() / 120; // Standard wheel step is 120
+
+        // make zoom proportional to visible data count
+        int visibleCount = m_viewport.visibleCount();
+        double zoomSensitivity = std::max(2.0, visibleCount * 0.05); // Scale with visible count, minimum 2
+        int indexDelta = static_cast<int>(zoomDelta * zoomSensitivity);
+
+        zoom(indexDelta, anchorIndex);
+        update();
+        event->accept();
+    }
+
+    void Chart::mousePressEvent(QMouseEvent *event) {
+        if (!hasFocus()) {
+            setFocus();
+        }
+
+        if (event->button() == Qt::LeftButton) {
+            QPointF pos = event->pos();
+
+            // Check if clicking on a pane border for resizing
+            int borderIndex = paneBorderAtPosition(pos);
+            if (borderIndex >= 0) {
+                m_dragMode = DragMode::PaneResize;
+                m_resizingBorderIndex = borderIndex;
+                m_lastMousePos = event->pos();
+                setCursor(Qt::SplitVCursor);
+                event->accept();
+                return;
+            }
+
+            // Check if clicking on Y axis
+            if (leftAxisRect().contains(pos) || rightAxisRect().contains(pos)) {
+                for (const auto &pane: m_panes) {
+                    QRectF paneRect = pane->rect();
+                    if (pos.y() >= paneRect.top() && pos.y() <= paneRect.bottom()) {
+                        m_dragMode = DragMode::YAxisZoom;
+                        m_dragPane = pane.get();
+                        m_lastMousePos = event->pos();
+
+                        double normalizedPos = (paneRect.bottom() - pos.y()) / paneRect.height();
+                        m_dragStartValue = pane->minValue() + normalizedPos * (pane->maxValue() - pane->minValue());
+
+                        setCursor(Qt::SizeVerCursor);
+                        event->accept();
+                        return;
+                    }
+                }
+            }
+            // Check if clicking on X axis
+            else if (xAxisRect().contains(pos)) {
+                m_dragMode = DragMode::XAxisZoom;
+                m_lastMousePos = event->pos();
+                m_lastMouseIndex = m_viewport.pixelToIndex(event->pos().x());
+                setCursor(Qt::SizeHorCursor);
+                event->accept();
+                return;
+            }
+            // Otherwise chart panning
+            else {
+                m_dragMode = DragMode::ChartPan;
+                m_isPanning = true;
+                m_lastMousePos = event->pos();
+                m_lastMouseIndex = viewport().pixelToIndex(event->pos().x());
+                setCursor(Qt::ClosedHandCursor);
+                event->accept();
+            }
+        }
+    }
+
+    void Chart::mouseMoveEvent(QMouseEvent *event) {
+        if (m_dragMode == DragMode::PaneResize && m_resizingBorderIndex >= 0) {
+            int deltaY = event->pos().y() - m_lastMousePos.y();
+
+            const auto &panes = m_panes;
+            if (m_resizingBorderIndex < static_cast<int>(panes.size()) - 1) {
+                auto &upperPane = panes[m_resizingBorderIndex];
+                auto &lowerPane = panes[m_resizingBorderIndex + 1];
+
+                double upperRatio = upperPane->heightRatio();
+                double lowerRatio = lowerPane->heightRatio();
+
+                double totalRatio = upperRatio + lowerRatio;
+                double totalHeight = upperPane->rect().height() + lowerPane->rect().height();
+
+                double newUpperHeight = upperPane->rect().height() + deltaY;
+                double newLowerHeight = lowerPane->rect().height() - deltaY;
+
+                if (newUpperHeight < m_minPaneHeight) {
+                    newUpperHeight = m_minPaneHeight;
+                    newLowerHeight = totalHeight - newUpperHeight;
+                }
+                if (newLowerHeight < m_minPaneHeight) {
+                    newLowerHeight = m_minPaneHeight;
+                    newUpperHeight = totalHeight - newLowerHeight;
+                }
+
+                double newUpperRatio = (newUpperHeight / totalHeight) * totalRatio;
+                double newLowerRatio = (newLowerHeight / totalHeight) * totalRatio;
+
+                upperPane->setHeightRatio(newUpperRatio);
+                lowerPane->setHeightRatio(newLowerRatio);
+
+                calculateLayout();
+
+                m_lastMousePos = event->pos();
+                update();
+                event->accept();
+            }
+        } else if (m_dragMode == DragMode::YAxisZoom && m_dragPane) {
+            int deltaY = event->pos().y() - m_lastMousePos.y();
+            double zoomFactor = 1.0 + (deltaY * 0.01);
+            m_dragPane->zoomYAxis(zoomFactor, m_dragStartValue);
+
+            m_lastMousePos = event->pos();
+            update();
+            event->accept();
+        } else if (m_dragMode == DragMode::XAxisZoom) {
+            int deltaX = event->pos().x() - m_lastMousePos.x();
+            int zoomDelta = static_cast<int>(-deltaX * 0.5);
+
+            if (zoomDelta != 0) {
+                zoom(zoomDelta, m_lastMouseIndex);
+            }
+
+            m_lastMousePos = event->pos();
+            update();
+            event->accept();
+        } else if (m_dragMode == DragMode::ChartPan && m_isPanning) {
+            int currentIndex = m_viewport.pixelToIndex(event->pos().x());
+            int indexDelta = m_lastMouseIndex - currentIndex;
+
+            if (indexDelta != 0) {
+                pan(indexDelta);
+                m_lastMouseIndex = m_viewport.pixelToIndex(event->pos().x());
+            }
+
+            int deltaY = event->pos().y() - m_lastMousePos.y();
+            if (deltaY != 0) {
+                for (const auto &pane: m_panes) {
+                    if (pane->rect().contains(event->pos())) {
+                        if (!pane->isAutoRange()) {
+                            double priceRange = pane->maxValue() - pane->minValue();
+                            double priceShift = (deltaY / pane->rect().height()) * priceRange;
+
+                            pane->setManualRange(pane->minValue() + priceShift,
+                                                 pane->maxValue() + priceShift);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            m_lastMousePos = event->pos();
+
+            if (m_crosshairVisible)
+                setCrosshairPosition(event->pos());
+
+            update();
+            event->accept();
+        } else {
+            QPointF pos = event->pos();
+
+            int borderIndex = paneBorderAtPosition(pos);
+            if (borderIndex >= 0) {
+                setCrosshairVisible(false);
+                setCursor(Qt::SplitVCursor);
+                update();
+            } else if (leftAxisRect().contains(pos) || rightAxisRect().contains(pos)) {
+                setCrosshairVisible(false);
+                setCursor(Qt::SizeVerCursor);
+                update();
+            } else if (xAxisRect().contains(pos)) {
+                setCrosshairVisible(false);
+                setCursor(Qt::SizeHorCursor);
+                update();
+            } else {
+                setCursor(Qt::ArrowCursor);
+                setCrosshairVisible(true);
+                setCrosshairPosition(event->pos());
+                update();
+            }
+        }
+    }
+
+    void Chart::mouseReleaseEvent(QMouseEvent *event) {
+        if (event->button() == Qt::LeftButton) {
+            m_dragMode = DragMode::None;
+            m_isPanning = false;
+            m_dragPane = nullptr;
+            setCursor(Qt::ArrowCursor);
+            event->accept();
+        }
+    }
+
+    void Chart::mouseDoubleClickEvent(QMouseEvent *event) {
+        if (event->button() == Qt::LeftButton) {
+            QPointF pos = event->pos();
+
+            if (leftAxisRect().contains(pos) || rightAxisRect().contains(pos)) {
+                for (const auto &pane: m_panes) {
+                    QRectF paneRect = pane->rect();
+                    if (pos.y() >= paneRect.top() && pos.y() <= paneRect.bottom()) {
+                        pane->resetAutoRange();
+                        update();
+                        event->accept();
+                        return;
+                    }
+                }
+            } else if (xAxisRect().contains(pos)) {
+                fitToData();
+                update();
+                event->accept();
+                return;
+            }
+        }
+    }
+
+    void Chart::leaveEvent(QEvent *event) {
+        setCrosshairVisible(false);
+        update();
+        QWidget::leaveEvent(event);
+    }
+
+    bool Chart::event(QEvent *event) {
+        if (event->type() == QEvent::Gesture) {
+            QGestureEvent *gestureEvent = dynamic_cast<QGestureEvent *>(event);
+
+            if (QGesture *pinch = gestureEvent->gesture(Qt::PinchGesture)) {
+                handlePinchGesture(dynamic_cast<QPinchGesture *>(pinch));
+                return true;
+            }
+
+            if (QGesture *pan = gestureEvent->gesture(Qt::PanGesture)) {
+                handlePanGesture(dynamic_cast<QPanGesture *>(pan));
+                return true;
+            }
+        }
+
+        return QWidget::event(event);
+    }
+
+    void Chart::keyPressEvent(QKeyEvent *event) {
+        Qt::KeyboardModifiers modifiers = event->modifiers();
+        int modified = modifiers & (Qt::ControlModifier | Qt::AltModifier);
+        int panAmount = modified ? 10 : 1;
+
+        if (event->type() == QEvent::KeyPress) {
+            switch (event->key()) {
+                case Qt::Key_Right:
+                    pan(panAmount);
+                    event->accept();
+                    break;
+                case Qt::Key_Left:
+                    pan(-panAmount);
+                    event->accept();
+                    break;
+                default:
+                    QWidget::keyPressEvent(event);
+                    break;
+            }
+        }
+    }
+
+    void Chart::handlePinchGesture(QPinchGesture *gesture) {
+        if (!gesture) return;
+
+        QPointF centerPoint = gesture->centerPoint();
+        int anchorIndex = m_viewport.pixelToIndex(centerPoint.x());
+
+        if (gesture->state() == Qt::GestureStarted) {
+            m_initialVisibleCount = m_viewport.visibleCount();
+        } else if (gesture->state() == Qt::GestureUpdated) {
+            qreal scaleFactor = gesture->totalScaleFactor();
+
+            int targetVisibleCount = static_cast<int>(m_initialVisibleCount / scaleFactor);
+            int currentVisibleCount = m_viewport.visibleCount();
+            int indexDelta = currentVisibleCount - targetVisibleCount;
+
+            if (indexDelta != 0) {
+                zoom(indexDelta, anchorIndex);
+                update();
+            }
+        }
+    }
+
+    void Chart::handlePanGesture(QPanGesture *gesture) {
+        if (!gesture) return;
+
+        if (gesture->state() == Qt::GestureUpdated) {
+            QPointF delta = gesture->delta();
+
+            double pixelWidth = m_viewport.pixelRect().width();
+            int visibleCount = m_viewport.visibleCount();
+
+            if (pixelWidth > 0) {
+                int indexDelta = static_cast<int>(-delta.x() * visibleCount / pixelWidth);
+
+                if (indexDelta != 0) {
+                    pan(indexDelta);
+                    update();
+                }
+            }
+        }
+    }
 } // namespace QTradingView

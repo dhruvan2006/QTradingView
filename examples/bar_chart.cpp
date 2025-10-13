@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDateTime>
-#include "QTradingView/QTradingView.h"
 #include "QTradingView/Chart.h"
 #include "QTradingView/data/BarProvider.h"
 #include "QTradingView/data/Bar.h"
@@ -40,8 +39,8 @@ int main(int argc, char *argv[])
     window.resize(1400, 700);
 
     // Create chart widget
-    auto chartView = new QTradingView::QTradingView(&window);
-    window.setCentralWidget(chartView);
+    auto chart = new QTradingView::Chart(&window);
+    window.setCentralWidget(chart);
 
     // Generate data with both positive and negative values (e.g., profit/loss, price changes)
     QList<QTradingView::Bar> bars;
@@ -77,7 +76,6 @@ int main(int argc, char *argv[])
     auto dataProvider = std::make_shared<QTradingView::BarProvider>(bars);
 
     // Get chart and setup
-    auto chart = chartView->chart();
     chart->setDataProvider(dataProvider);
 
     // Create main pane
