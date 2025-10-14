@@ -39,7 +39,6 @@
 
 #include "QTradingView/Pane.h"
 #include "QTradingView/ViewPort.h"
-#include "QTradingView/data/IDataProvider.h"
 #include "QTradingView/qtradingview_global.h"
 #include "QTradingView/style/ChartTheme.h"
 #include "renderer/AxisRenderer.h"
@@ -62,9 +61,6 @@ public:
     void removePane(Pane* pane);
     Pane* mainPane();
     const std::vector<std::shared_ptr<Pane>>& panes() const;
-
-    void setDataProvider(std::shared_ptr<IDataProvider> provider);
-    std::shared_ptr<IDataProvider> dataProvider() const;
 
     ViewPort& viewport();
     const ViewPort& viewport() const;
@@ -113,7 +109,6 @@ private:
 
     // Chart logic members
     std::vector<std::shared_ptr<Pane>> m_panes;
-    std::shared_ptr<IDataProvider> m_dataProvider;
     ViewPort m_viewport;
     ChartTheme m_theme;
 

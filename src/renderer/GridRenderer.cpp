@@ -22,7 +22,7 @@
 #include "QTradingView/renderer/AxisRenderer.h"
 #include "QTradingView/Pane.h"
 #include "QTradingView/ViewPort.h"
-#include "QTradingView/data/IDataProvider.h"
+#include "QTradingView/series/Series.h"
 #include "QTradingView/scale/IScale.h"
 #include <QPainter>
 #include <QPen>
@@ -49,7 +49,7 @@ void GridRenderer::setHorizontalGridEnabled(bool enabled) {
 }
 
 void GridRenderer::render(QPainter* painter, const Pane* pane, const ViewPort& viewport,
-                         IDataProvider* dataProvider, const AxisRenderer* axisRenderer) {
+                         const Series* series, const AxisRenderer* axisRenderer) {
     if (!painter || !pane) return;
 
     QRectF paneRect = pane->rect();
@@ -69,7 +69,7 @@ void GridRenderer::render(QPainter* painter, const Pane* pane, const ViewPort& v
         double minValue = pane->minValue();
         double maxValue = pane->maxValue();
 
-        std::vector<double> ticks = axisRenderer->calculateYAxisTicks(minValue, maxValue, 5);
+        std::vector<double> ticks = scale->getTicks();
 
         for (double value : ticks) {
             double y = scale->dataToPixel(value);
@@ -78,9 +78,9 @@ void GridRenderer::render(QPainter* painter, const Pane* pane, const ViewPort& v
     }
 
     // Draw vertical grid lines - use AxisRenderer's label calculation for perfect sync
-    if (m_verticalGridEnabled && dataProvider && axisRenderer) {
+    if (m_verticalGridEnabled && series && axisRenderer) {
         // Use the same label positions as the axis renderer
-        std::vector<TimeLabel> labels = axisRenderer->calculateXAxisLabels(viewport, dataProvider);
+        std::vector<TimeLabel> labels = axisRenderer->calculateXAxisLabels(viewport, series);
 
         for (const auto& label : labels) {
             double x = viewport.indexToPixel(label.dataIndex);

@@ -19,12 +19,12 @@
 // SOFTWARE.
 
 #include "QTradingView/Chart.h"
-#include "QTradingView/data/IDataProvider.h"
 #include "QTradingView/style/ChartTheme.h"
-#include <QPainter>
 #include <algorithm>
 
 namespace QTradingView {
+#include "QTradingView/scale/LogScale.h"
+
     Chart::Chart(QWidget *parent)
         : QWidget(parent)
           , m_leftAxisWidth(60), m_rightAxisWidth(60), m_xAxisHeight(30)
@@ -85,17 +85,6 @@ namespace QTradingView {
 
     const std::vector<std::shared_ptr<Pane> > &Chart::panes() const {
         return m_panes;
-    }
-
-    void Chart::setDataProvider(std::shared_ptr<IDataProvider> provider) {
-        m_dataProvider = std::move(provider);
-        if (m_dataProvider) {
-            fitToData();
-        }
-    }
-
-    std::shared_ptr<IDataProvider> Chart::dataProvider() const {
-        return m_dataProvider;
     }
 
     ViewPort &Chart::viewport() {
@@ -175,7 +164,8 @@ namespace QTradingView {
             }
 
             // Render grid first (behind series)
-            m_gridRenderer.render(painter, pane.get(), m_viewport, m_dataProvider.get(), &m_axisRenderer);
+            Series* firstSeries = !pane->series().empty() ? pane->series()[0].get() : nullptr;
+            m_gridRenderer.render(painter, pane.get(), m_viewport, firstSeries, &m_axisRenderer);
 
             // Render the pane
             pane->render(painter, m_viewport);
@@ -206,9 +196,12 @@ namespace QTradingView {
         painter->restore();
 
         // Draw X axis
+        Series* mainSeries = !m_panes.empty() && !m_panes[0]->series().empty()
+                         ? m_panes[0]->series()[0].get()
+                         : nullptr;
         QRectF xAxisRect(0, height() - m_xAxisHeight,
                          width(), m_xAxisHeight);
-        m_axisRenderer.drawXAxis(painter, xAxisRect, m_viewport, m_dataProvider.get());
+        m_axisRenderer.drawXAxis(painter, xAxisRect, m_viewport, mainSeries);
 
         // Render crosshair if visible (draw last, on top of everything)
         if (m_crosshairVisible && !m_panes.empty()) {
@@ -241,16 +234,17 @@ namespace QTradingView {
                 painter->restore();
 
                 // Now render the rest of the crosshair (horizontal line, labels, marker) for the active pane
+                Series* activeSeries = !activePane->series().empty()
+                                   ? activePane->series()[0].get()
+                                   : nullptr;
                 double xAxisY = height() - m_xAxisHeight;
                 m_crosshairRenderer.render(painter, m_crosshairPosition, m_viewport,
-                                           activePane, m_dataProvider.get(), xAxisY);
+                                           activePane, activeSeries, xAxisY);
             }
         }
     }
 
     void Chart::pan(int indexDelta) {
-        if (!m_dataProvider) return;
-
         int newStart = m_viewport.startIndex() + indexDelta;
         int newEnd = m_viewport.endIndex() + indexDelta;
 
@@ -258,8 +252,6 @@ namespace QTradingView {
     }
 
     void Chart::zoom(int indexDelta, int anchorIndex) {
-        if (!m_dataProvider) return;
-
         int visibleCount = m_viewport.visibleCount();
 
         int newVisibleCount = visibleCount - indexDelta;
@@ -276,10 +268,13 @@ namespace QTradingView {
         m_viewport.setVisibleRange(newStart, newEnd);
     }
 
-    void Chart::fitToData() {
-        if (!m_dataProvider) return;
+    void Chart:: fitToData() {
+        if (m_panes.empty()) return;
 
-        int count = m_dataProvider->count();
+        Pane* pane = mainPane();
+        if (!pane || pane->series().empty()) return;
+
+        int count = pane->series()[0]->dataCount();
         if (count > 0) {
             m_viewport.setVisibleRange(0, count - 1);
         }
@@ -472,7 +467,10 @@ namespace QTradingView {
             event->accept();
         } else if (m_dragMode == DragMode::XAxisZoom) {
             int deltaX = event->pos().x() - m_lastMousePos.x();
-            int zoomDelta = static_cast<int>(-deltaX * 0.5);
+
+            int visibleCount = m_viewport.visibleCount();
+            double zoomSensitivity = std::max(0.01, visibleCount * 0.002);
+            int zoomDelta = static_cast<int>(-deltaX * zoomSensitivity);
 
             if (zoomDelta != 0) {
                 zoom(zoomDelta, m_lastMouseIndex);
@@ -493,15 +491,14 @@ namespace QTradingView {
             int deltaY = event->pos().y() - m_lastMousePos.y();
             if (deltaY != 0) {
                 for (const auto &pane: m_panes) {
-                    if (pane->rect().contains(event->pos())) {
-                        if (!pane->isAutoRange()) {
-                            double priceRange = pane->maxValue() - pane->minValue();
-                            double priceShift = (deltaY / pane->rect().height()) * priceRange;
+                    if (pane->rect().contains(event->pos()) && !pane->isAutoRange()) {
+                        auto scale = pane->scale();
+                        if (!scale) continue;
 
-                            pane->setManualRange(pane->minValue() + priceShift,
-                                                 pane->maxValue() + priceShift);
-                        }
-                        break;
+                        double minData = scale->pixelToData(pane->rect().bottom() - deltaY);
+                        double maxData = scale->pixelToData(pane->rect().top() - deltaY);
+
+                        pane->setManualRange(minData, maxData);
                     }
                 }
             }

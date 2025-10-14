@@ -42,6 +42,9 @@ public:
     void setRange(double minPixel, double maxPixel) override;
     std::vector<double> getTicks(int approxCount) const override;
 
+    void applyPadding(double &minValue, double &maxValue, double paddingRatio) const override;
+    void zoomDomain(double &minValue, double &maxValue, double zoomFactor, double anchorValue) const override;
+
 private:
     double m_minValue;
     double m_maxValue;

@@ -21,90 +21,56 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QDateTime>
-#include "QTradingView/QTradingView.h"
 #include "QTradingView/Chart.h"
-#include "QTradingView/data/CandleStickProvider.h"
-#include "QTradingView/data/CandleStick.h"
+#include "QTradingView/Data.h"
 #include "QTradingView/series/CandleStickSeries.h"
 #include "QTradingView/scale/LinearScale.h"
-#include <random>
+#include <QFile>
+#include <QTextStream>
 
-int main(int argc, char *argv[])
-{
+#include "QTradingView/scale/ScaleType.h"
+
+QList<QTradingView::CandleStick> loadCandles(const QString &csvPath) {
+    QList<QTradingView::CandleStick> candles;
+    QFile file(csvPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return candles;
+    QTextStream in(&file);
+    in.readLine(); // Skip header
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        auto fields = line.split(',');
+        if (fields.size() < 5) continue;
+        QDateTime time = QDateTime::fromString(fields[0], "yyyy-MM-dd HH:mm:ss+00:00");
+        double open = fields[1].toDouble();
+        double high = fields[2].toDouble();
+        double low = fields[3].toDouble();
+        double close = fields[4].toDouble();
+        candles.append(QTradingView::CandleStick{time, open, high, low, close});
+    }
+    return candles;
+}
+
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    // Create main window
     QMainWindow window;
-    window.setWindowTitle("QTradingView - Candlestick Chart Example");
+    window.setWindowTitle("QTradingView Candlestick Chart Example");
     window.resize(1400, 700);
 
-    // Create chart widget
+    QString csvPath = QCoreApplication::applicationDirPath() + "/btc-usd.csv";
+    QList<QTradingView::CandleStick> candles = loadCandles(csvPath);
+
     auto chart = new QTradingView::Chart(&window);
     window.setCentralWidget(chart);
 
-    // Generate realistic candlestick data
-    QList<QTradingView::CandleStick> candles;
-    QDateTime startTime = QDateTime::currentDateTime().addDays(-200);
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<> priceMove(0, 2.0);
-    std::uniform_real_distribution<> wickRatio(0.3, 0.7);
-
-    double basePrice = 150.0;
-    double lastClose = basePrice;
-
-    for (int i = 0; i < 200; ++i) {
-        QDateTime time = startTime.addSecs(i * 86400); // 1 day intervals
-
-        // Generate OHLC values
-        double open = lastClose;
-        double priceChange = priceMove(gen);
-        double close = open + priceChange;
-
-        // Ensure close doesn't go too low
-        if (close < 50.0) {
-            close = 50.0 + std::abs(priceMove(gen));
-        }
-
-        // Calculate high and low based on open/close
-        double rangeSize = std::abs(close - open) * 1.5 + std::abs(priceMove(gen));
-        double high = std::max(open, close) + rangeSize * wickRatio(gen);
-        double low = std::min(open, close) - rangeSize * (1.0 - wickRatio(gen));
-
-        // Ensure low doesn't go negative
-        if (low < 40.0) low = 40.0;
-
-        QTradingView::TimePoint timePoint(time, i);
-        candles.append(QTradingView::CandleStick(timePoint, open, high, low, close));
-
-        lastClose = close;
-    }
-
-    // Create candlestick data provider
-    auto dataProvider = std::make_shared<QTradingView::CandleStickProvider>(candles);
-
-    // Get chart and setup
-    chart->setDataProvider(dataProvider);
-
-    // Create main pane
     auto mainPane = chart->addPane(1.0);
-
-    // Create and configure scale
-    auto scale = std::make_shared<QTradingView::LinearScale>();
-    mainPane->setScale(scale);
-
-    // Create candlestick series
-    auto candleSeries = std::make_shared<QTradingView::CandleStickSeries>(dataProvider);
-
-    // Add series to pane
+    auto candleSeries = std::make_shared<QTradingView::CandleStickSeries>(candles);
     mainPane->addSeries(candleSeries);
+    mainPane->setScale(QTradingView::ScaleType::Logarithmic);
 
-    // Use the dark theme for a professional look
     chart->setTheme(QTradingView::ChartTheme::tradingViewDark());
+    chart->fitToData();
 
-    // Show window
     window.show();
-
     return app.exec();
 }

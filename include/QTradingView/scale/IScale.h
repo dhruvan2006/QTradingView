@@ -40,6 +40,12 @@ public:
     virtual void setRange(double minPixel, double maxPixel) = 0;
 
     [[nodiscard]] virtual std::vector<double> getTicks(int approxCount) const = 0;
+    [[nodiscard]] std::vector<double> getTicks() const {
+        return getTicks(5);
+    }
+
+    virtual void applyPadding(double &minValue, double &maxValue, double paddingRatio) const = 0;
+    virtual void zoomDomain(double &minValue, double &maxValue, double zoomFactor, double anchorValue) const = 0;
 };
 
 } // namespace QTradingView

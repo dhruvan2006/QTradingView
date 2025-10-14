@@ -18,44 +18,80 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <QPainter>
 #include "QTradingView/series/BarSeries.h"
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include "QTradingView/ViewPort.h"
+#include "QTradingView/scale/IScale.h"
+
 
 namespace QTradingView {
 
-    BarSeries::BarSeries(std::shared_ptr<IDataProvider> data)
-        : m_data(std::move(data)) {
+    BarSeries::BarSeries(const QList<DataPoint> &data)
+        : Series(SeriesType::Bar)
+    , m_data(data)
+    , m_upColor(Qt::green)
+    , m_downColor(Qt::red)
+    , m_barWidthRatio(0.7)
+    , m_lineWidth(1.0)
+    , m_antialiasing(true) {
     }
+
 
     BarSeries::~BarSeries() = default;
 
-    QString BarSeries::type() const {
-        return QStringLiteral("BarSeries");
+    void BarSeries::setData(const QList<DataPoint> &data) {
+        m_data = data;
     }
 
-    std::shared_ptr<IDataProvider> BarSeries::dataProvider() const {
+    const QList<DataPoint> & BarSeries::data() const {
         return m_data;
     }
 
-    void BarSeries::setStyle(const SeriesStyle &style) {
-        if (auto bs = dynamic_cast<const BarStyle*>(&style)) {
-            m_style = *bs;
+    QDateTime BarSeries::timestampAt(int index) const {
+        if (index < 0 || index >= m_data.size()) {
+            return QDateTime();
         }
+        return m_data[index].time;
+    }
+
+    int BarSeries::dataCount() const {
+        return m_data.size();
+    }
+
+    void BarSeries::setUpColor(const QColor &color) {
+        m_upColor = color;
+    }
+
+    void BarSeries::setDownColor(const QColor &color) {
+        m_downColor = color;
+    }
+
+    void BarSeries::setBarWidthRatio(double ratio) {
+        m_barWidthRatio = std::clamp(ratio, 0.1, 1.0);
+    }
+
+    void BarSeries::setLineWidth(double width) {
+        m_lineWidth = width;
+    }
+
+    void BarSeries::setAntialiasing(bool enabled) {
+        m_antialiasing = enabled;
     }
 
     void BarSeries::render(QPainter *painter, const ViewPort &viewport, IScale *scale) {
-        if (!painter || !m_data || !scale) return;
+        if (!painter || !scale) return;
 
-        const int count = m_data->count();
+        const int count = m_data.size();
         if (count <= 0) return;
 
         int start = std::max(viewport.startIndex(), 0);
         int end = std::min(viewport.endIndex(), count - 1);
         if (start > end) return;
 
-        painter->setRenderHint(QPainter::Antialiasing, false);
+        painter->setRenderHint(QPainter::Antialiasing, m_antialiasing);
 
         // Calculate bar width based on available space
         double stepX = 5.0;
@@ -65,30 +101,20 @@ namespace QTradingView {
             stepX = std::max(1.0, (pxEnd - pxStart) / static_cast<double>(end - start));
         }
 
-        double barWidth = std::clamp(
-            stepX * m_style.barWidthRatio,
-            m_style.minBarWidthPx,
-            m_style.maxBarWidthPx
-        );
+        // Use m_barWidth as a ratio
+        double barWidth = stepX * m_barWidthRatio;
 
         // Get baseline (zero line) in pixel coordinates
         const double baselineY = scale->dataToPixel(0.0);
 
         for (int i = start; i <= end; ++i) {
-            const QVariant v = m_data->valueAt(i);
-            if (!v.isValid() || !v.canConvert<double>()) continue;
-
-            const double value = v.toDouble();
-            if (!std::isfinite(value)) continue;
+            double value = m_data[i].value;
 
             const double x = viewport.indexToPixel(i);
             const double valueY = scale->dataToPixel(value);
 
             // Determine bar color
-            QColor fillColor = m_style.color;
-            if (m_style.usePositiveNegativeColors) {
-                fillColor = (value >= 0.0) ? m_style.positiveColor : m_style.negativeColor;
-            }
+            QColor fillColor = (value >= 0.0) ? m_upColor : m_downColor;
 
             // Calculate bar rectangle
             const double barTop = std::min(baselineY, valueY);
@@ -98,19 +124,14 @@ namespace QTradingView {
 
             // Draw bar
             painter->setBrush(fillColor);
-            if (m_style.drawBorder) {
-                QPen borderPen(m_style.borderColor, m_style.borderWidth);
-                painter->setPen(borderPen);
-            } else {
-                painter->setPen(Qt::NoPen);
-            }
+            QPen pen(fillColor, m_lineWidth);
+            painter->setPen(pen);
             painter->drawRect(barRect);
         }
     }
 
     bool BarSeries::hitTest(const QPointF& point, int& outIndex) const {
-        if (!m_data) return false;
-        const int count = m_data->count();
+        const int count = m_data.size();
         if (count <= 0) return false;
 
         double minDist = std::numeric_limits<double>::max();
@@ -133,8 +154,7 @@ namespace QTradingView {
         outMin = std::numeric_limits<double>::max();
         outMax = std::numeric_limits<double>::lowest();
 
-        if (!m_data) return;
-        const int count = m_data->count();
+        const int count = m_data.size();
         if (count <= 0) return;
 
         if (endIndex < 0 || startIndex >= count) return;
@@ -147,12 +167,7 @@ namespace QTradingView {
         outMax = 0.0;
 
         for (int i = startIndex; i <= endIndex; ++i) {
-            const QVariant v = m_data->valueAt(i);
-            if (!v.isValid() || !v.canConvert<double>()) continue;
-
-            const double value = v.toDouble();
-            if (!std::isfinite(value)) continue;
-
+            double value = m_data[i].value;
             outMax = std::max(outMax, value);
             outMin = std::min(outMin, value);
         }

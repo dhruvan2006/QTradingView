@@ -68,4 +68,18 @@ namespace QTradingView {
         return ticks;
     }
 
+    void LinearScale::applyPadding(double &minValue, double &maxValue, double paddingRatio) const {
+        double padding = (maxValue - minValue) * paddingRatio;
+        minValue -= padding;
+        maxValue += padding;
+    }
+
+    void LinearScale::zoomDomain(double &minValue, double &maxValue, double zoomFactor, double anchorValue) const {
+        double range = maxValue - minValue;
+        double newRange = range * zoomFactor;
+        double anchorRatio = (anchorValue - minValue) / range;
+
+        minValue = anchorValue - anchorRatio * newRange;
+        maxValue = minValue + newRange;
+    }
 } // namespace QTradingView

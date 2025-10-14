@@ -35,7 +35,7 @@ namespace QTradingView {
 
 class ViewPort;
 class Pane;
-class IDataProvider;
+class Series;
 
 class QTRADINGVIEW_EXPORT CrosshairRenderer
 {
@@ -48,7 +48,7 @@ public:
     void setFont(const QFont& font);
 
     void render(QPainter* painter, const QPointF& position, const ViewPort& viewport,
-                const Pane* pane, IDataProvider* dataProvider, double xAxisY = -1.0);
+                const Pane* pane, const Series* series, double xAxisY = -1.0);
 
 private:
     QColor m_crosshairColor;

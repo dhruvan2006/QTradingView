@@ -26,23 +26,25 @@
 #include <QRectF>
 #include <vector>
 #include <memory>
-#include "series/ISeries.h"
+#include "series/Series.h"
 #include "scale/IScale.h"
 #include "Viewport.h"
 #include "QTradingView/qtradingview_global.h"
 
 namespace QTradingView {
 
+enum class ScaleType;
+
 class QTRADINGVIEW_EXPORT Pane
 {
 public:
     Pane();
 
-    void addSeries(std::shared_ptr<ISeries> series);
-    void removeSeries(std::shared_ptr<ISeries> series);
-    const std::vector<std::shared_ptr<ISeries>>& series() const;
+    void addSeries(std::shared_ptr<Series> series);
+    void removeSeries(std::shared_ptr<Series> series);
+    const std::vector<std::shared_ptr<Series>>& series() const;
 
-    void setScale(std::shared_ptr<IScale> scale);
+    void setScale(ScaleType type);
     IScale* scale() const;
 
     void setHeightRatio(double ratio);
@@ -63,7 +65,7 @@ public:
     void render(QPainter *painter, const ViewPort &viewport);
 
 private:
-    std::vector<std::shared_ptr<ISeries>> m_series;
+    std::vector<std::shared_ptr<Series>> m_series;
     std::shared_ptr<IScale> m_scale;
     double m_heightRatio;
     QRectF m_rect;

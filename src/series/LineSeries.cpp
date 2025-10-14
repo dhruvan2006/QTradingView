@@ -20,47 +20,81 @@
 
 #include "QTradingView/series/LineSeries.h"
 
+#include <QPen>
+#include <QPainter>
+#include <QPointF>
+
+#include "QTradingView/Data.h"
+#include "QTradingView/ViewPort.h"
+#include "QTradingView/scale/IScale.h"
+
 namespace QTradingView {
 
-    LineSeries::LineSeries(std::shared_ptr<IDataProvider> data)
-        : m_data(std::move(data)) {
+    LineSeries::LineSeries(const QList<DataPoint> &data)
+        : Series(SeriesType::Line)
+        , m_data(data)
+        , m_color(Qt::blue)
+        , m_width(2.0)
+        , m_lineStyle(Qt::SolidLine)
+        , m_antialiasing(true) {
     }
 
     LineSeries::~LineSeries() = default;
 
-    QString LineSeries::type() const {
-        return QStringLiteral("LinearSeries");
+    void LineSeries::setData(const QList<DataPoint> &data) {
+        m_data = data;
     }
 
-    std::shared_ptr<IDataProvider> LineSeries::dataProvider() const {
+    const QList<DataPoint>& LineSeries::data() const {
         return m_data;
     }
 
-    void LineSeries::setStyle(const SeriesStyle &style) {
-        auto lineStyle = dynamic_cast<const LineStyle*>(&style);
-        if (lineStyle)
-            m_style = *lineStyle;
+    QDateTime LineSeries::timestampAt(int index) const {
+        if (index < 0 || index >= m_data.size()) {
+            return QDateTime();
+        }
+        return m_data[index].time;
+    }
+
+    int LineSeries::dataCount() const {
+        return m_data.size();
+    }
+
+    void LineSeries::setColor(const QColor &color) {
+        m_color = color;
+    }
+
+    void LineSeries::setLineWidth(double width) {
+        m_width = width;
+    }
+
+    void LineSeries::setLineStyle(Qt::PenStyle style) {
+        m_lineStyle = style;
+    }
+
+    void LineSeries::setAntialiasing(bool enabled) {
+        m_antialiasing = enabled;
     }
 
     void LineSeries::render(QPainter *painter, const ViewPort& viewport, IScale* scale) {
-        if (!painter || !m_data || !scale) return;
+        if (!painter || !scale) return;
 
-        int count = m_data->count();
+        int count = m_data.count();
         if (count < 2) return;
 
         int start = std::max(viewport.startIndex(), 0);
         int end = std::min(viewport.endIndex(), count - 1);
         if (start >= end) return;
 
-        QPen pen(m_style.color, m_style.width, m_style.style);
+        QPen pen(m_color, m_width, m_lineStyle);
         painter->setPen(pen);
-        painter->setRenderHint(QPainter::Antialiasing, true); // TODO: Wth is antialiasing
+        painter->setRenderHint(QPainter::Antialiasing, m_antialiasing);
 
         QPointF prevPoint;
         bool first = true;
 
         for (int i = start; i <= end; ++i) {
-            double value = m_data->valueAt(i).toDouble();
+            double value = m_data[i].value;
             double x = viewport.indexToPixel(i);
             double y = scale->dataToPixel(value);
 
@@ -75,9 +109,7 @@ namespace QTradingView {
     }
 
     bool LineSeries::hitTest(const QPointF &point, int &outIndex) const {
-        if (!m_data) return false;
-
-        int count = m_data->count();
+        int count = m_data.size();
         if (count == 0) return false;
 
         double minDist = std::numeric_limits<double>::max();
@@ -105,11 +137,8 @@ namespace QTradingView {
         // Initialize with invalid markers
         outMin = std::numeric_limits<double>::max();
         outMax = std::numeric_limits<double>::lowest();
-        
-        if (!m_data)
-            return;
 
-        int count = m_data->count();
+        int count = m_data.count();
         if (count == 0)
             return;
 
@@ -125,11 +154,10 @@ namespace QTradingView {
 
 
         for (int i = startIndex; i <= endIndex; ++i) {
-            double v = m_data->valueAt(i).toDouble();
+            double v = m_data[i].value;
             outMin = std::min(outMin, v);
             outMax = std::max(outMax, v);
         }
     }
-
 
 } // namespace QTradingView

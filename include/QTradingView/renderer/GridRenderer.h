@@ -33,8 +33,8 @@ namespace QTradingView {
 
 class Pane;
 class ViewPort;
-class IDataProvider;
 class AxisRenderer;
+class Series;
 
 class QTRADINGVIEW_EXPORT GridRenderer
 {
@@ -46,7 +46,7 @@ public:
     void setHorizontalGridEnabled(bool enabled);
 
     void render(QPainter* painter, const Pane* pane, const ViewPort& viewport,
-                IDataProvider* dataProvider, const AxisRenderer* axisRenderer);
+                const Series* dataProvider, const AxisRenderer* axisRenderer);
 
 private:
     QColor m_gridColor;

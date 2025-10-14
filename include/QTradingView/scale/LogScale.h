@@ -42,6 +42,9 @@ namespace QTradingView {
         void setRange(double minPixel, double maxPixel) override;
         std::vector<double> getTicks(int approxCount) const override;
 
+        void applyPadding(double &minValue, double &maxValue, double paddingRatio) const override;
+        void zoomDomain(double &minValue, double &maxValue, double zoomFactor, double anchorValue) const override;
+
         void setLinearThreshold(double threshold);
         double getLinearThreshold() const;
 
