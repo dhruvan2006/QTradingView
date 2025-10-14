@@ -25,33 +25,47 @@
 
 #include <QColor>
 #include <memory>
-#include "ISeries.h"
-#include "../data/IDataProvider.h"
-#include "../style/SeriesStyle.h"
-#include "../style/LineStyle.h"
-#include "../ViewPort.h"
-#include "QTradingView/scale/IScale.h"
+#include "Series.h"
 #include "QTradingView/qtradingview_global.h"
+
+class QPainter;
 
 namespace QTradingView {
 
-class QTRADINGVIEW_EXPORT LineSeries : public ISeries
+struct DataPoint;
+class Viewport;
+class IScale;
+
+class QTRADINGVIEW_EXPORT LineSeries : public Series
 {
 public:
-    explicit LineSeries(std::shared_ptr<IDataProvider> data);
+    explicit LineSeries(const QList<DataPoint>& data = {});
     ~LineSeries() override;
 
-    [[nodiscard]] QString type() const override;
-    [[nodiscard]] std::shared_ptr<IDataProvider> dataProvider() const override;
+    // Data
+    void setData(const QList<DataPoint>& data);
+    const QList<DataPoint>& data() const;
+    QDateTime timestampAt(int index) const override;
+    int dataCount() const override;
 
-    void setStyle(const SeriesStyle& style) override;
+    // Style
+    void setColor(const QColor& color);
+    void setLineWidth(double width);
+    void setLineStyle(Qt::PenStyle style);
+    void setAntialiasing(bool enabled);
+
+    // Rendering
     void render(QPainter* painter, const ViewPort& viewport, IScale* scale) override;
     bool hitTest(const QPointF& point, int& outIndex) const override;
     void calculateRange(int startIndex, int endIndex, double& outMin, double& outMax) const override;
 
 private:
-    std::shared_ptr<IDataProvider> m_data;
-    LineStyle m_style;
+    QList<DataPoint> m_data;
+
+    QColor m_color;
+    double m_width;
+    Qt::PenStyle m_lineStyle;
+    bool m_antialiasing;
 };
 
 } // namespace QTradingView

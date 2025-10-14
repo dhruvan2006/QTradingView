@@ -23,34 +23,47 @@
 #ifndef QTRADINGVIEW_BARSERIES_H
 #define QTRADINGVIEW_BARSERIES_H
 
-#include <memory>
-#include "ISeries.h"
-#include "../data/IDataProvider.h"
-#include "../style/SeriesStyle.h"
-#include "../style/BarStyle.h"
-#include "../ViewPort.h"
-#include "QTradingView/scale/IScale.h"
+#include <QColor>
+#include <QList>
+
+#include "Series.h"
+#include "QTradingView/Data.h"
 #include "QTradingView/qtradingview_global.h"
 
 namespace QTradingView {
 
-class QTRADINGVIEW_EXPORT BarSeries : public ISeries
+class QTRADINGVIEW_EXPORT BarSeries : public Series
 {
 public:
-    explicit BarSeries(std::shared_ptr<IDataProvider> data);
+    explicit BarSeries(const QList<DataPoint>& data = {});
     ~BarSeries() override;
 
-    [[nodiscard]] QString type() const override;
-    [[nodiscard]] std::shared_ptr<IDataProvider> dataProvider() const override;
+    // Data
+    void setData(const QList<DataPoint>& data);
+    const QList<DataPoint>& data() const;
+    QDateTime timestampAt(int index) const override;
+    int dataCount() const override;
 
-    void setStyle(const SeriesStyle& style) override;
+    // Style
+    void setUpColor(const QColor& color);
+    void setDownColor(const QColor& color);
+    void setBarWidthRatio(double ratio);
+    void setLineWidth(double width);
+    void setAntialiasing(bool enabled);
+
+    // Rendering
     void render(QPainter* painter, const ViewPort& viewport, IScale* scale) override;
     bool hitTest(const QPointF& point, int& outIndex) const override;
     void calculateRange(int startIndex, int endIndex, double& outMin, double& outMax) const override;
 
 private:
-    std::shared_ptr<IDataProvider> m_data;
-    BarStyle m_style;
+    QList<DataPoint> m_data;
+
+    QColor m_upColor;
+    QColor m_downColor;
+    double m_barWidthRatio;
+    double m_lineWidth;
+    bool m_antialiasing;
 };
 
 } // namespace QTradingView

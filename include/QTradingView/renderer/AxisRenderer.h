@@ -27,9 +27,10 @@
 #include <QRectF>
 #include <QColor>
 #include <memory>
+#include <QDateTime>
+
 #include "QTradingView/ViewPort.h"
 #include "QTradingView/Pane.h"
-#include "QTradingView/data/IDataProvider.h"
 #include "QTradingView/qtradingview_global.h"
 
 namespace QTradingView {
@@ -52,13 +53,13 @@ public:
     void setAxisWidth(int width);
 
     void drawXAxis(QPainter* painter, const QRectF& axisRect,
-                   const ViewPort& viewport, IDataProvider* dataProvider);
+                   const ViewPort& viewport, const Series* series);
 
     void drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
                    const QRectF& rightAxisRect, const Pane* pane);
 
     std::vector<double> calculateYAxisTicks(double minValue, double maxValue, int approxTickCount) const;
-    std::vector<TimeLabel> calculateXAxisLabels(const ViewPort& viewport, IDataProvider* dataProvider) const;
+    std::vector<TimeLabel> calculateXAxisLabels(const ViewPort& viewport, const Series* series) const;
 
 private:
     QColor m_textColor;

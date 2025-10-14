@@ -109,6 +109,9 @@ namespace QTradingView {
         std::vector<double> ticks;
         if (approxCount <= 0) return ticks;
 
+        // Limit maximum ticks to prevent performance issues
+        const int maxTicks = std::min(approxCount * 3, 100);
+
         double symlogMin = symlog(m_minValue);
         double symlogMax = symlog(m_maxValue);
         double symlogRange = symlogMax - symlogMin;
@@ -125,17 +128,21 @@ namespace QTradingView {
                 int minPower = static_cast<int>(std::ceil(std::log10(m_linearThreshold)));
                 int maxPower = static_cast<int>(std::ceil(std::log10(m_maxValue)));
 
-                for (int power = minPower; power <= maxPower; ++power) {
+                for (int power = minPower; power <= maxPower && ticks.size() < maxTicks; ++power) {
                     double tickValue = std::pow(10.0, power);
                     if (tickValue <= m_maxValue) {
                         ticks.push_back(tickValue);
                     }
                 }
-            } else {
-                // Linear ticks in positive region
-                double step = m_linearThreshold / 4.0;
-                for (double v = step; v <= m_maxValue; v += step) {
-                    ticks.push_back(v);
+            } else if (m_maxValue > 0) {
+                // Linear ticks in positive region - limit count
+                int numSteps = std::min(approxCount / 2, 10);
+                double step = m_maxValue / numSteps;
+                for (int i = 1; i <= numSteps && ticks.size() < maxTicks; ++i) {
+                    double v = i * step;
+                    if (v <= m_maxValue) {
+                        ticks.push_back(v);
+                    }
                 }
             }
 
@@ -144,17 +151,21 @@ namespace QTradingView {
                 int minPower = static_cast<int>(std::ceil(std::log10(m_linearThreshold)));
                 int maxPower = static_cast<int>(std::ceil(std::log10(-m_minValue)));
 
-                for (int power = minPower; power <= maxPower; ++power) {
+                for (int power = minPower; power <= maxPower && ticks.size() < maxTicks; ++power) {
                     double tickValue = -std::pow(10.0, power);
                     if (tickValue >= m_minValue) {
                         ticks.push_back(tickValue);
                     }
                 }
             } else if (m_minValue < 0) {
-                // Linear ticks in negative region
-                double step = m_linearThreshold / 4.0;
-                for (double v = -step; v >= m_minValue; v -= step) {
-                    ticks.push_back(v);
+                // Linear ticks in negative region - limit count
+                int numSteps = std::min(approxCount / 2, 10);
+                double step = -m_minValue / numSteps;
+                for (int i = 1; i <= numSteps && ticks.size() < maxTicks; ++i) {
+                    double v = -i * step;
+                    if (v >= m_minValue) {
+                        ticks.push_back(v);
+                    }
                 }
             }
         } else if (m_minValue > 0 && m_maxValue > 0) {
@@ -164,15 +175,15 @@ namespace QTradingView {
                 int minPower = static_cast<int>(std::floor(std::log10(m_minValue)));
                 int maxPower = static_cast<int>(std::ceil(std::log10(m_maxValue)));
 
-                for (int power = minPower; power <= maxPower; ++power) {
+                for (int power = minPower; power <= maxPower && ticks.size() < maxTicks; ++power) {
                     double tickValue = std::pow(10.0, power);
                     if (tickValue >= m_minValue && tickValue <= m_maxValue) {
                         ticks.push_back(tickValue);
                     }
 
                     // Add intermediate ticks if there's space
-                    if (maxPower - minPower <= 2) {
-                        for (int mult = 2; mult <= 9; ++mult) {
+                    if (maxPower - minPower <= 2 && ticks.size() < maxTicks) {
+                        for (int mult = 2; mult <= 9 && ticks.size() < maxTicks; ++mult) {
                             double intermediateValue = mult * std::pow(10.0, power);
                             if (intermediateValue >= m_minValue && intermediateValue <= m_maxValue) {
                                 ticks.push_back(intermediateValue);
@@ -181,10 +192,12 @@ namespace QTradingView {
                     }
                 }
             } else {
-                // Mixed linear and logarithmic
-                double step = m_linearThreshold / 4.0;
-                for (double v = 0; v <= m_maxValue; v += step) {
-                    if (v >= m_minValue) {
+                // Mixed linear and logarithmic - use fixed number of steps
+                int numSteps = std::min(approxCount, 15);
+                double step = (m_maxValue - m_minValue) / numSteps;
+                for (int i = 0; i <= numSteps && ticks.size() < maxTicks; ++i) {
+                    double v = m_minValue + i * step;
+                    if (v >= m_minValue && v <= m_maxValue) {
                         ticks.push_back(v);
                     }
                 }
@@ -196,17 +209,19 @@ namespace QTradingView {
                 int minPower = static_cast<int>(std::floor(std::log10(-m_maxValue)));
                 int maxPower = static_cast<int>(std::ceil(std::log10(-m_minValue)));
 
-                for (int power = minPower; power <= maxPower; ++power) {
+                for (int power = minPower; power <= maxPower && ticks.size() < maxTicks; ++power) {
                     double tickValue = -std::pow(10.0, power);
                     if (tickValue >= m_minValue && tickValue <= m_maxValue) {
                         ticks.push_back(tickValue);
                     }
                 }
             } else {
-                // Mixed linear and logarithmic (negative)
-                double step = m_linearThreshold / 4.0;
-                for (double v = 0; v >= m_minValue; v -= step) {
-                    if (v <= m_maxValue) {
+                // Mixed linear and logarithmic (negative) - use fixed number of steps
+                int numSteps = std::min(approxCount, 15);
+                double step = (m_maxValue - m_minValue) / numSteps;
+                for (int i = 0; i <= numSteps && ticks.size() < maxTicks; ++i) {
+                    double v = m_minValue + i * step;
+                    if (v >= m_minValue && v <= m_maxValue) {
                         ticks.push_back(v);
                     }
                 }
@@ -217,5 +232,38 @@ namespace QTradingView {
         std::sort(ticks.begin(), ticks.end());
 
         return ticks;
+    }
+    void LogScale::applyPadding(double &minValue, double &maxValue, double paddingRatio) const {
+        if (minValue <= 0.0) minValue = std::max(minValue, 1e-12);
+
+        double logMin = symlog(minValue);
+        double logMax = symlog(maxValue);
+        double padding = (logMax - logMin) * paddingRatio;
+
+        logMin -= padding;
+        logMax += padding;
+
+        minValue = invsymlog(logMin);
+        maxValue = invsymlog(logMax);
+    }
+
+    void LogScale::zoomDomain(double &minValue, double &maxValue, double zoomFactor, double anchorValue) const {
+        if (minValue <= 0.0) minValue = 1e-12;
+        if (maxValue <= 0.0) maxValue = 1e-12;
+        if (anchorValue <= 0.0) anchorValue = 1e-12;
+
+        double logMin = symlog(minValue);
+        double logMax = symlog(maxValue);
+        double logAnchor = symlog(anchorValue);
+
+        double logRange = logMax - logMin;
+        double newLogRange = logRange * zoomFactor;
+        double anchorRatio = (logAnchor - logMin) / logRange;
+
+        double newLogMin = logAnchor - anchorRatio * newLogRange;
+        double newLogMax = logAnchor + (1.0 - anchorRatio) * newLogRange;
+
+        minValue = invsymlog(newLogMin);
+        maxValue = invsymlog(newLogMax);
     }
 } // namespace QTradingView

@@ -21,7 +21,7 @@
 #include "QTradingView/renderer/CrosshairRenderer.h"
 #include "QTradingView/ViewPort.h"
 #include "QTradingView/Pane.h"
-#include "QTradingView/data/IDataProvider.h"
+#include "QTradingView/series/Series.h"
 #include "QTradingView/scale/IScale.h"
 #include <QPainter>
 #include <QPen>
@@ -54,7 +54,7 @@ void CrosshairRenderer::setFont(const QFont& font) {
 }
 
 void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const ViewPort& viewport,
-                                const Pane* pane, IDataProvider* dataProvider, double xAxisY) {
+                                const Pane* pane, const Series* series, double xAxisY) {
     if (!painter || !pane) return;
 
     QRectF paneRect = pane->rect();
@@ -90,9 +90,9 @@ void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const
     }
 
     // Draw time label (X-axis) and data value tooltip
-    if (dataProvider) {
-        if (dataIndex >= 0 && dataIndex < dataProvider->count()) {
-            QDateTime dt = dataProvider->timeAt(dataIndex).timestamp();
+    if (series) {
+        if (dataIndex >= 0 && dataIndex < series->dataCount()) {
+            QDateTime dt = series->timestampAt(dataIndex);
             QString timeStr = dt.toString("yyyy-MM-dd");
             // Use the provided xAxisY position if valid, otherwise use pane bottom
             double labelY = (xAxisY >= 0) ? xAxisY : paneRect.bottom();

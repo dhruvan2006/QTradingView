@@ -19,11 +19,15 @@
 // SOFTWARE.
 
 #include "QTradingView/Pane.h"
-#include "QTradingView/series/ISeries.h"
+#include "QTradingView/series/Series.h"
 #include "QTradingView/scale/IScale.h"
 #include <QPainter>
 #include <algorithm>
 #include <limits>
+
+#include "QTradingView/scale/LinearScale.h"
+#include "QTradingView/scale/LogScale.h"
+#include "QTradingView/scale/ScaleType.h"
 
 namespace QTradingView {
 
@@ -32,14 +36,15 @@ namespace QTradingView {
           , m_minValue(0.0)
           , m_maxValue(0.0)
           , m_autoRange(true) {
+        m_scale = std::make_unique<LinearScale>();
     }
 
-    void Pane::addSeries(std::shared_ptr<ISeries> series) {
+    void Pane::addSeries(std::shared_ptr<Series> series) {
         if (!series) return;
         m_series.push_back(std::move(series));
     }
 
-    void Pane::removeSeries(std::shared_ptr<ISeries> series) {
+    void Pane::removeSeries(std::shared_ptr<Series> series) {
         if (!series) return;
         auto it = std::find(m_series.begin(), m_series.end(), series);
         if (it != m_series.end()) {
@@ -47,12 +52,22 @@ namespace QTradingView {
         }
     }
 
-    const std::vector<std::shared_ptr<ISeries> > &Pane::series() const {
+    const std::vector<std::shared_ptr<Series> > &Pane::series() const {
         return m_series;
     }
 
-    void Pane::setScale(std::shared_ptr<IScale> scale) {
-        m_scale = std::move(scale);
+    void Pane::setScale(ScaleType type) {
+        switch (type) {
+            case ScaleType::Linear:
+                m_scale = std::make_unique<LinearScale>();
+                break;
+            case ScaleType::Logarithmic:
+                m_scale = std::make_unique<LogScale>();
+                break;
+            default:
+                m_scale = std::make_unique<LinearScale>();
+                break;
+        }
     }
 
     IScale* Pane::scale() const {
@@ -104,9 +119,9 @@ namespace QTradingView {
         }
 
         // Add 5% padding to top and bottom
-        double padding = (m_maxValue - m_minValue) * 0.05;
-        m_minValue -= padding;
-        m_maxValue += padding;
+        if (m_scale) {
+            m_scale->applyPadding(m_minValue, m_maxValue, 0.05);
+        }
     }
 
     double Pane::minValue() const {
@@ -124,18 +139,13 @@ namespace QTradingView {
     }
 
     void Pane::zoomYAxis(double zoomFactor, double anchorValue) {
-        // Zoom centered on the anchor value
-        double range = m_maxValue - m_minValue;
-        double newRange = range * zoomFactor;
-
-        // Calculate the anchor's position in the current range (0 to 1)
-        double anchorRatio = (anchorValue - m_minValue) / range;
-
-        // Apply zoom while keeping the anchor point fixed
-        m_minValue = anchorValue - anchorRatio * newRange;
-        m_maxValue = anchorValue + (1.0 - anchorRatio) * newRange;
-
-        m_autoRange = false;
+        if (m_scale) {
+            double min = m_minValue;
+            double max = m_maxValue;
+            m_scale->zoomDomain(min, max, zoomFactor, anchorValue);
+            setManualRange(min, max);
+            m_autoRange = false;
+        }
     }
 
     void Pane::resetAutoRange() {

@@ -76,8 +76,8 @@ void AxisRenderer::setAxisWidth(int width) {
 }
 
 void AxisRenderer::drawXAxis(QPainter* painter, const QRectF& axisRect,
-                                  const ViewPort& viewport, IDataProvider* dataProvider) {
-    if (!painter || !dataProvider) return;
+                                  const ViewPort& viewport, const Series* series) {
+    if (!painter) return;
 
     painter->save();
 
@@ -91,7 +91,7 @@ void AxisRenderer::drawXAxis(QPainter* painter, const QRectF& axisRect,
     painter->setPen(m_textColor);
     painter->setFont(QFont("Arial", 9));
 
-    auto labels = calculateXAxisLabels(viewport, dataProvider);
+    auto labels = calculateXAxisLabels(viewport, series);
 
     for (const auto& label : labels) {
         double x = viewport.indexToPixel(label.dataIndex);
@@ -144,13 +144,21 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
     QFont labelFont = QFont("Arial", 9);
     painter->setFont(labelFont);
 
-    auto ticks = calculateYAxisTicks(minValue, maxValue, 5);
+    auto ticks = scale->getTicks();
 
     int availableWidth = static_cast<int>(leftAxisRect.width() - 10);
+
+    const int labelMargin = 5;
 
     for (double value : ticks) {
         double y = scale->dataToPixel(value);
         int pixelY = qRound(y);
+
+        // Check if label is too close to top or bottom edge
+        if (pixelY - 5 < leftAxisRect.top() + labelMargin ||
+            pixelY + 5 > leftAxisRect.bottom() - labelMargin) {
+            continue;
+        }
 
         QString label = formatYAxisLabel(value, minValue, maxValue, availableWidth, labelFont);
 
@@ -174,53 +182,23 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
     painter->restore();
 }
 
-std::vector<double> AxisRenderer::calculateYAxisTicks(double minValue, double maxValue, int approxTickCount) const {
-    std::vector<double> ticks;
-
-    if (maxValue <= minValue) return ticks;
-
-    // Add padding to the range to make sure label's dont stick to the edges
-    double rangePadding = (maxValue - minValue) * 0.05;
-    double paddedMin = minValue + rangePadding;
-    double paddedMax = maxValue - rangePadding;
-
-    if (paddedMax <= paddedMin) {
-        // If padding makes range invalid, fall back to original range
-        paddedMin = minValue;
-        paddedMax = maxValue;
-    }
-
-    double range = niceNumber(paddedMax - paddedMin, false);
-    double tickSpacing = niceNumber(range / (approxTickCount - 1), true);
-    double niceMin = std::floor(paddedMin / tickSpacing) * tickSpacing;
-    double niceMax = std::ceil(paddedMax / tickSpacing) * tickSpacing;
-
-    for (double value = niceMin; value <= niceMax + 0.5 * tickSpacing; value += tickSpacing) {
-        if (value >= minValue && value <= maxValue) {
-            ticks.push_back(value);
-        }
-    }
-
-    return ticks;
-}
-
 // TODO: We assume dataProvider provides daily data. Adjust logic for different timeframes if needed.
-std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewport, IDataProvider* dataProvider) const {
+std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewport, const Series* series) const {
     std::vector<TimeLabel> labels;
 
-    if (dataProvider->count() == 0) {
+    if (!series || series->dataCount() == 0) {
         return labels; // No data, no labels
     }
 
     int visibleCount = viewport.visibleCount();
     QDateTime lastLabelDate = QDateTime::fromMSecsSinceEpoch(0);
-    int dataCount = dataProvider->count();
+    int dataCount = series->dataCount();
 
     // Calculate the time interval between data points (assume uniform spacing)
     qint64 timeIntervalMs = 86400000;
     if (dataCount >= 2) {
-        QDateTime t0 = dataProvider->timeAt(0).timestamp();
-        QDateTime t1 = dataProvider->timeAt(1).timestamp();
+        QDateTime t0 = series->timestampAt(0);
+        QDateTime t1 = series->timestampAt(1);
         timeIntervalMs = t0.msecsTo(t1);
     }
 
@@ -231,16 +209,16 @@ std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewpo
         // Calculate datetime for this index (even if outside data range)
         if (dataIndex >= 0 && dataIndex < dataCount) {
             // Within data range - use actual data
-            dt = dataProvider->timeAt(dataIndex).timestamp();
+            dt = series->timestampAt(dataIndex);
         } else if (dataCount > 0) {
             // Outside data range - extrapolate from first or last known time
             if (dataIndex < 0) {
                 // Before data starts - extrapolate backwards from first point
-                QDateTime firstTime = dataProvider->timeAt(0).timestamp();
+                QDateTime firstTime = series->timestampAt(0);
                 dt = firstTime.addMSecs(dataIndex * timeIntervalMs);
             } else {
                 // After data ends - extrapolate forwards from last point
-                QDateTime lastTime = dataProvider->timeAt(dataCount - 1).timestamp();
+                QDateTime lastTime = series->timestampAt(dataCount - 1);
                 qint64 offsetFromLast = (dataIndex - (dataCount - 1)) * timeIntervalMs;
                 dt = lastTime.addMSecs(offsetFromLast);
             }

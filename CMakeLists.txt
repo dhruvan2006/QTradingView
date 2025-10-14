@@ -42,28 +42,16 @@ file(GLOB HEADER_FILES
         include/QTradingView/renderer/GridRenderer.h
         include/QTradingView/renderer/CrosshairRenderer.h
 
-        include/QTradingView/data/TimePoint.h
-        include/QTradingView/data/DataPoint.h
-        include/QTradingView/data/CandleStick.h
-        include/QTradingView/data/Bar.h
-        include/QTradingView/data/IDataProvider.h
-        include/QTradingView/data/DataProvider.h
-        include/QTradingView/data/CandleStickProvider.h
-        include/QTradingView/data/BarProvider.h
-
         include/QTradingView/scale/IScale.h
         include/QTradingView/scale/LinearScale.h
         include/QTradingView/scale/LogScale.h
+        include/QTradingView/scale/ScaleType.h
 
-        include/QTradingView/series/ISeries.h
+        include/QTradingView/series/Series.h
         include/QTradingView/series/LineSeries.h
         include/QTradingView/series/CandleStickSeries.h
         include/QTradingView/series/BarSeries.h
 
-        include/QTradingView/style/SeriesStyle.h
-        include/QTradingView/style/LineStyle.h
-        include/QTradingView/style/CandleStickStyle.h
-        include/QTradingView/style/BarStyle.h
         include/QTradingView/style/ChartTheme.h
 )
 file(GLOB SOURCE_FILES
@@ -75,14 +63,6 @@ file(GLOB SOURCE_FILES
         src/renderer/AxisRenderer.cpp
         src/renderer/GridRenderer.cpp
         src/renderer/CrosshairRenderer.cpp
-
-        src/data/TimePoint.cpp
-        src/data/DataPoint.cpp
-        src/data/DataProvider.cpp
-        src/data/CandleStick.cpp
-        src/data/CandleStickProvider.cpp
-        src/data/Bar.cpp
-        src/data/BarProvider.cpp
 
         src/scale/LinearScale.cpp
         src/scale/LogScale.cpp

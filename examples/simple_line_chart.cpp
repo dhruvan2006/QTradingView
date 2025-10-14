@@ -23,12 +23,31 @@
 #include <QVBoxLayout>
 #include <QDateTime>
 #include "QTradingView/Chart.h"
-#include "QTradingView/data/DataProvider.h"
-#include "QTradingView/data/DataPoint.h"
+#include "QTradingView/Data.h"
 #include "QTradingView/series/LineSeries.h"
 #include "QTradingView/scale/LinearScale.h"
 #include <cmath>
 #include <random>
+#include <QFile>
+#include <QTextStream>
+#include "QTradingView/scale/ScaleType.h"
+
+QList<QTradingView::DataPoint> loadClosePrices(const QString& csvPath) {
+    QList<QTradingView::DataPoint> data;
+    QFile file(csvPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return data;
+    QTextStream in(&file);
+    in.readLine(); // Skip header
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        auto fields = line.split(',');
+        if (fields.size() < 5) continue;
+        QDateTime time = QDateTime::fromString(fields[0], "yyyy-MM-dd HH:mm:ss+00:00");
+        double close = fields[4].toDouble();
+        data.push_back({time, close});
+    }
+    return data;
+}
 
 int main(int argc, char *argv[])
 {
@@ -36,77 +55,30 @@ int main(int argc, char *argv[])
 
     // Create main window
     QMainWindow window;
-    window.setWindowTitle("QTradingView - Enhanced Chart Example");
-    window.resize(1400, 700);
+    window.setWindowTitle("QTradingView Line Chart Example");
+    window.resize(800, 499);
 
-    // Create chart widget
+    // Chart widget
     auto chart = new QTradingView::Chart(&window);
     window.setCentralWidget(chart);
 
-    // Generate more realistic sample data (price-like movement with trend and noise)
-    QList<QTradingView::DataPoint> data;
-    QDateTime startTime = QDateTime::currentDateTime().addDays(-500);
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<> noise(0, 1.5);
-    std::normal_distribution<> trendNoise(0, 0.3);
-
-    double basePrice = 100.0;
-    double price = basePrice;
-    double momentum = 0.0;
-
-    for (int i = 0; i < 500; ++i) {
-        QDateTime time = startTime.addSecs(i * 86400); // 1 day intervals
-
-        // Add momentum-based trend (creates realistic trending behavior)
-        momentum += trendNoise(gen);
-        momentum *= 0.95; // Decay momentum slightly
-
-        // Apply momentum and random walk to price
-        price += momentum + noise(gen);
-
-        // Ensure price doesn't go negative
-        if (price < 10.0) {
-            price = 10.0 + std::abs(noise(gen));
-            momentum = std::abs(momentum); // Reverse momentum
-        }
-
-        QTradingView::TimePoint timePoint(time, i);
-        data.append(QTradingView::DataPoint(timePoint, price));
-    }
-
-    // Create data provider
-    auto dataProvider = std::make_shared<QTradingView::DataProvider>(data);
-
-    // Get chart and setup
-    chart->setDataProvider(dataProvider);
+    // Data
+    QString csvPath = QCoreApplication::applicationDirPath() + "/btc-usd.csv";
+    QList<QTradingView::DataPoint> data = loadClosePrices(csvPath);
 
     // Create main pane
     auto mainPane = chart->addPane(1.0);
+    mainPane->setScale(QTradingView::ScaleType::Logarithmic);
 
-    // Create and configure scale
-    auto scale = std::make_shared<QTradingView::LinearScale>();
-    mainPane->setScale(scale);
-
-    // Create line series with enhanced styling
-    auto lineSeries = std::make_shared<QTradingView::LineSeries>(dataProvider);
-
-    // Customize line style for a professional TradingView appearance
-    QTradingView::LineStyle lineStyle;
-    lineStyle.color = QColor(42, 162, 255);  // Bright TradingView blue
-    lineStyle.width = 2.5;
-    lineStyle.style = Qt::SolidLine;
-    lineSeries->setStyle(lineStyle);
-
-    // Add series to pane
+    // Create line series and add to pane
+    auto lineSeries = std::make_shared<QTradingView::LineSeries>(data);
+    lineSeries->setColor(0xff6900);
     mainPane->addSeries(lineSeries);
 
-    // Use the dark theme for a professional look
+    // Optional: Set theme
     chart->setTheme(QTradingView::ChartTheme::tradingViewDark());
+    chart->fitToData();
 
-    // Show window
     window.show();
-
     return app.exec();
 }

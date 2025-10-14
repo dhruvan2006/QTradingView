@@ -22,39 +22,84 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include <QPainter>
+
+#include "QTradingView/ViewPort.h"
+#include "QTradingView/scale/IScale.h"
 
 namespace QTradingView {
-    CandleStickSeries::CandleStickSeries(std::shared_ptr<IDataProvider> data)
-        : m_data(std::move(data)) {
+    CandleStickSeries::CandleStickSeries(const QList<CandleStick> &data)
+        : Series(SeriesType::CandleStick)
+          , m_data(data)
+          , m_bullColor(Qt::green)
+          , m_bearColor(Qt::red)
+          , m_borderColor(Qt::transparent)
+          , m_borderWidth(1.0)
+          , m_bodyWidthRatio(0.7)
+          , m_maxBodyWidthPx(100.0)
+          , m_antialiasing(true) {
     }
 
     CandleStickSeries::~CandleStickSeries() = default;
 
-    QString CandleStickSeries::type() const {
-        return QStringLiteral("CandleStickSeries");
+    void CandleStickSeries::setData(const QList<CandleStick> &data) {
+        m_data = data;
     }
 
-    std::shared_ptr<IDataProvider> CandleStickSeries::dataProvider() const {
+    const QList<CandleStick> & CandleStickSeries::data() const {
         return m_data;
     }
 
-    void CandleStickSeries::setStyle(const SeriesStyle &style) {
-        if (auto cs = dynamic_cast<const CandleStickStyle*>(&style)) {
-            m_style = *cs;
+    QDateTime CandleStickSeries::timestampAt(int index) const {
+        if (index < 0 || index >= m_data.size()) {
+            return QDateTime();
         }
+        return m_data[index].time;
+    }
+
+    int CandleStickSeries::dataCount() const {
+        return m_data.size();
+    }
+
+    void CandleStickSeries::setBullColor(const QColor &color) {
+        m_bullColor = color;
+    }
+
+    void CandleStickSeries::setBearColor(const QColor &color) {
+        m_bearColor = color;
+    }
+
+    void CandleStickSeries::setBorderColor(const QColor &color) {
+        m_borderColor = color;
+    }
+
+    void CandleStickSeries::setBorderWidth(double width) {
+        m_borderWidth = width;
+    }
+
+    void CandleStickSeries::setBodyWithRatio(double ratio) {
+        m_bodyWidthRatio = ratio;
+    }
+
+    void CandleStickSeries::setMaxBodyWidth(double maxWidth) {
+        m_maxBodyWidthPx = maxWidth;
+    }
+
+    void CandleStickSeries::setAntialiasing(bool enabled) {
+        m_antialiasing = enabled;
     }
 
     void CandleStickSeries::render(QPainter *painter, const ViewPort &viewport, IScale *scale) {
-        if (!painter || !m_data || !scale) return;
+        if (!painter || !scale) return;
 
-        const int count = m_data->count();
+        const int count = m_data.size();
         if (count <= 0) return;
 
         int start = std::max(viewport.startIndex(), 0);
         int end = std::min(viewport.endIndex(), count - 1);
         if (start > end) return;
 
-        painter->setRenderHint(QPainter::Antialiasing, false);
+        painter->setRenderHint(QPainter::Antialiasing, m_antialiasing);
 
         // Estimate per index horizontal step
         double stepX = 5.0;
@@ -64,57 +109,42 @@ namespace QTradingView {
             stepX = std::max(1.0, (pxEnd - pxStart) / static_cast<double>(end - start));
         }
 
-        double bodyW = std::clamp(stepX * m_style.bodyWidthRatio, 1.0, m_style.maxBodyWidthPx);
+        double bodyW = std::clamp(stepX * m_bodyWidthRatio, 1.0, m_maxBodyWidthPx);
 
-        QPen borderPen(m_style.borderColor, 1.0, Qt::SolidLine, Qt::SquareCap);
+        QPen borderPen(m_borderColor, 1.0, Qt::SolidLine, Qt::SquareCap);
 
         for (int i = start; i <= end; ++i) {
-            const QVariant v = m_data->valueAt(i);
-            if (!v.isValid() || !v.canConvert<QVariantMap>()) continue;
-
-            const QVariantMap map = v.toMap();
-            const double open = mapOr(map, "open");
-            const double high = mapOr(map, "high");
-            const double low = mapOr(map, "low");
-            const double close = mapOr(map, "close");
+            const CandleStick& candle = m_data[i];
 
             const double x = viewport.indexToPixel(i);
-
-            const double yH = scale->dataToPixel(high);
-            const double yL = scale->dataToPixel(low);
-            const double yO = scale->dataToPixel(open);
-            const double yC = scale->dataToPixel(close);
+            const double yH = scale->dataToPixel(candle.high);
+            const double yL = scale->dataToPixel(candle.low);
+            const double yO = scale->dataToPixel(candle.open);
+            const double yC = scale->dataToPixel(candle.close);
 
             // Color
-            const bool bullish = (close >= open);
-            const QColor color = bullish ? m_style.bullishColor : m_style.bearishColor;
+            const bool bullish = (candle.close >= candle.open);
+            const QColor color = bullish ? m_bullColor : m_bearColor;
 
             // Wick
-            QPen wickPen(color, m_style.wickWidth, Qt::SolidLine, Qt::FlatCap);
+            QPen wickPen(color, 1.0);
             painter->setPen(wickPen);
             painter->drawLine(QPointF(x, yH), QPointF(x, yL));
 
             // Body
             const double topY = std::min(yO, yC);
-            double bodyH = std::abs(yC - yO);
-            if (bodyH < m_style.minBodyHeight) bodyH = m_style.minBodyHeight;
-
+            const double bodyH = std::abs(yC - yO);
             QRectF bodyRect(x - bodyW * 0.5, topY, bodyW, bodyH);
-            if (bullish && m_style.hollowCandles) {
-                painter->setBrush(Qt::NoBrush);
-                painter->setPen(QPen(color, 1.0));
-                painter->drawRect(bodyRect);
-            } else {
-                painter->setBrush(color);
-                painter->setPen(Qt::NoPen);
-                painter->drawRect(bodyRect);
-            }
+
+            painter->setBrush(color);
+            QPen borderPen(m_borderColor, m_borderWidth, Qt::SolidLine, Qt::SquareCap);
+            painter->setPen(borderPen);
+            painter->drawRect(bodyRect);
         }
     }
 
     bool CandleStickSeries::hitTest(const QPointF& point, int& outIndex) const {
-        if (!m_data) return false;
-        const int count = m_data->count();
+        const int count = m_data.size();
         if (count <= 0) return false;
 
         double minDist = std::numeric_limits<double>::max();
@@ -137,8 +167,7 @@ namespace QTradingView {
         outMin = std::numeric_limits<double>::max();
         outMax = std::numeric_limits<double>::lowest();
 
-        if (!m_data) return;
-        const int count = m_data->count();
+        const int count = m_data.size();
         if (count <= 0) return;
 
         if (endIndex < 0 || startIndex >= count) return;
@@ -147,15 +176,9 @@ namespace QTradingView {
         endIndex   = std::clamp(endIndex,   0, count - 1);
 
         for (int i = startIndex; i <= endIndex; ++i) {
-            const QVariant v = m_data->valueAt(i);
-            if (!v.isValid() || !v.canConvert<QVariantMap>()) continue;
-            const QVariantMap m = v.toMap();
-
-            const double h = mapOr(m, "high");
-            const double l = mapOr(m, "low");
-
-            if (std::isfinite(h)) outMax = std::max(outMax, h);
-            if (std::isfinite(l)) outMin = std::min(outMin, l);
+            const CandleStick& candle = m_data[i];
+            outMin = std::min(outMin, candle.low);
+            outMax = std::max(outMax, candle.high);
         }
     }
 } // namespace QTradingView

@@ -20,35 +20,45 @@
  * SOFTWARE.
  */
 
-#ifndef QTRADINGVIEW_BARPROVIDER_H
-#define QTRADINGVIEW_BARPROVIDER_H
+#ifndef QTRADINGVIEW_ISERIES_H
+#define QTRADINGVIEW_ISERIES_H
 
-#include <QList>
-#include "IDataProvider.h"
-#include "Bar.h"
 #include "QTradingView/qtradingview_global.h"
+
+class QPainter;
+class QPointF;
+class QDateTime;
 
 namespace QTradingView {
 
-class QTRADINGVIEW_EXPORT BarProvider : public IDataProvider
+class IScale;
+class ViewPort;
+
+enum class SeriesType {
+    Line,
+    Bar,
+    CandleStick
+};
+
+class QTRADINGVIEW_EXPORT Series
 {
 public:
-    explicit BarProvider(const QList<Bar> &data = QList<Bar>());
-    ~BarProvider() override = default;
+    explicit Series(SeriesType type) : m_type(type) {}
+    virtual ~Series() = default;
 
-    [[nodiscard]] int count() const override;
-    [[nodiscard]] TimePoint timeAt(int index) const override;
-    [[nodiscard]] QVariant valueAt(int index) const override;
-    void getRange(int start, int end, QVariantList &out) const override;
+    SeriesType type() const { return m_type; }
 
-    void setData(const QList<Bar> &data);
-    const QList<Bar>& data() const;
+    virtual QDateTime timestampAt(int index) const = 0;
+    virtual int dataCount() const = 0;
 
-private:
-    QList<Bar> m_data;
+    virtual void render(QPainter* painter, const ViewPort& viewport, IScale* scale) = 0;
+    virtual bool hitTest(const QPointF& point, int& outIndex) const = 0;
+    virtual void calculateRange(int startIndex, int endIndex, double& outMin, double& outMax) const = 0;
+
+protected:
+    SeriesType m_type;
 };
 
 } // namespace QTradingView
 
-#endif // QTRADINGVIEW_BARPROVIDER_H
-
+#endif // QTRADINGVIEW_ISERIES_H

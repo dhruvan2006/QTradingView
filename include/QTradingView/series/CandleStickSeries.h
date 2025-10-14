@@ -23,34 +23,49 @@
 #ifndef QTRADINGVIEW_CANDLESTICKSERIES_H
 #define QTRADINGVIEW_CANDLESTICKSERIES_H
 
-#include "QTradingView/series/ISeries.h"
-#include "QTradingView/style/CandleStickStyle.h"
+#include <QColor>
+#include "QTradingView/Data.h"
+#include "QTradingView/series/Series.h"
 #include "QTradingView/qtradingview_global.h"
 
 namespace QTradingView {
 
-class QTRADINGVIEW_EXPORT CandleStickSeries : public ISeries
+class QTRADINGVIEW_EXPORT CandleStickSeries : public Series
 {
 public:
-    explicit CandleStickSeries(std::shared_ptr<IDataProvider> data);
+    explicit CandleStickSeries(const QList<CandleStick>& data);
     ~CandleStickSeries() override;
 
-    [[nodiscard]] QString type() const override;
-    [[nodiscard]] std::shared_ptr<IDataProvider> dataProvider() const override;
+    // Data
+    void setData(const QList<CandleStick>& data = {});
+    const QList<CandleStick>& data() const;
+    QDateTime timestampAt(int index) const override;
+    int dataCount() const override;
 
-    void setStyle(const SeriesStyle& style) override;
+    // Style
+    void setBullColor(const QColor& color);
+    void setBearColor(const QColor& color);
+    void setBorderColor(const QColor& color);
+    void setBorderWidth(double width);
+    void setBodyWithRatio(double ratio);
+    void setMaxBodyWidth(double maxWidth);
+    void setAntialiasing(bool enabled);
+
+    // Rendering
     void render(QPainter* painter, const ViewPort& viewport, IScale* scale) override;
     bool hitTest(const QPointF& point, int& outIndex) const override;
     void calculateRange(int startIndex, int endIndex, double& outMin, double& outMax) const override;
 
 private:
-    std::shared_ptr<IDataProvider> m_data;
-    CandleStickStyle m_style;
+    QList<CandleStick> m_data;
 
-    static double mapOr(const QVariantMap& m, const char* key, double def = 0.0) {
-        auto it = m.find(QLatin1String(key));
-        return it == m.end() ? def : it->toDouble();
-    }
+    QColor m_bullColor;
+    QColor m_bearColor;
+    QColor m_borderColor;
+    double m_borderWidth;
+    double m_bodyWidthRatio;
+    double m_maxBodyWidthPx;
+    bool m_antialiasing;
 };
 
 } // namespace QTradingView
