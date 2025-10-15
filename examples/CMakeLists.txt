@@ -134,8 +134,10 @@ add_custom_command(TARGET multi_pane_chart POST_BUILD
 )
 
 if(EMSCRIPTEN)
+    target_compile_options(multi_pane_chart PRIVATE -O2 --profiling)
     target_link_options(multi_pane_chart PRIVATE
             -lembind
             --bind
+#            -O2 --profiling
     )
 endif()

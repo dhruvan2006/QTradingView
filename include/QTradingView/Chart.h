@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QRectF>
+#include <QTimer>
 #include <QPointF>
 #include <QEvent>
 #include <QMouseEvent>
@@ -41,6 +42,7 @@
 #include "QTradingView/ViewPort.h"
 #include "QTradingView/qtradingview_global.h"
 #include "QTradingView/style/ChartTheme.h"
+#include "renderer/AxisRenderer.h"
 #include "renderer/AxisRenderer.h"
 #include "renderer/GridRenderer.h"
 #include "renderer/CrosshairRenderer.h"
@@ -117,6 +119,12 @@ private:
     QPoint m_lastMousePos;
     int m_lastMouseIndex;
     double m_initialVisibleCount;
+    double m_wheelDeltaAccumulator = 0;
+#ifdef EMSCRIPTEN
+    static constexpr int WHEEL_THRESHOLD = 72;
+#else
+    static constexpr int WHEEL_THRESHOLD = 120;
+#endif
 
     enum class DragMode { None, ChartPan, YAxisZoom, XAxisZoom, PaneResize };
     DragMode m_dragMode;
@@ -137,6 +145,14 @@ private:
     // Crosshair state
     bool m_crosshairVisible;
     QPointF m_crosshairPosition;
+
+    // Update throttling
+    QTimer m_updateTimer;
+    bool m_pendingUpdate = false;
+    static constexpr int UPDATE_INTERVAL_MS = 16; // ~60 FPS (1000/60 ≈ 16ms)
+    void setupUpdateTimer();
+    void onUpdateTimerTick();
+    void scheduleUpdate();
 };
 
 } // namespace QTradingView

@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QMainWindow window;
-    window.setWindowTitle("QTradingView - Multi-Pane Complex Example");
+    window.setWindowTitle("QTradingView Multi-Pane Complex Example");
     window.resize(1600, 900);
 
     auto chart = new QTradingView::Chart(&window);
@@ -131,8 +131,6 @@ int main(int argc, char *argv[])
         histogramBars.append(QTradingView::DataPoint{timePoints[i], histValue});
     }
 
-    // === Setup Chart ===
-    chart->fitToData();
 
     // Pane 1: Price
     auto pricePane = chart->addPane(2.0);
@@ -178,7 +176,7 @@ int main(int argc, char *argv[])
 
     chart->setTheme(QTradingView::ChartTheme::tradingViewDark());
     chart->fitToData();
-    window.showMaximized();
 
+    window.show();
     return app.exec();
 }
