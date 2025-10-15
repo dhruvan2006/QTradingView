@@ -21,27 +21,71 @@
 #include "QTradingView/renderer/AxisRenderer.h"
 #include <QFont>
 #include <QDateTime>
+#include <QTimeZone>
 
 namespace {
-    // Helper to round to nice numbers (1, 2, 5, 10, 20, 50, etc.)
-    double niceNumber(double range, bool round) {
-        double exponent = std::floor(std::log10(range));
-        double fraction = range / std::pow(10, exponent);
-        double niceFraction;
+    // Constants for time calculations (milliseconds)
+    constexpr qint64 MS_PER_DAY = 86400000LL;
+    constexpr qint64 MS_PER_HOUR = 3600000LL;
 
-        if (round) {
-            if (fraction < 1.5) niceFraction = 1;
-            else if (fraction < 3) niceFraction = 2;
-            else if (fraction < 7) niceFraction = 5;
-            else niceFraction = 10;
-        } else {
-            if (fraction <= 1) niceFraction = 1;
-            else if (fraction <= 2) niceFraction = 2;
-            else if (fraction <= 5) niceFraction = 5;
-            else niceFraction = 10;
+    // Cache for date components to avoid repeated QDateTime creation
+    struct DateComponents {
+        int year;
+        int month;
+        int day;
+
+        bool operator!=(const DateComponents& other) const {
+            return year != other.year || month != other.month || day != other.day;
         }
+    };
 
-        return niceFraction * std::pow(10, exponent);
+    // Fast date component extraction from timestamp
+    inline DateComponents getDateComponents(qint64 timestampMs) {
+        // Convert to days since epoch
+        qint64 days = timestampMs / MS_PER_DAY;
+
+        // Algorithm to get year, month, day from days since epoch
+        // This is faster than QDateTime creation
+        qint64 z = days + 719468; // Adjust for epoch difference
+        qint64 era = (z >= 0 ? z : z - 146096) / 146097;
+        qint64 doe = z - era * 146097;
+        qint64 yoe = (doe - doe/1460 + doe/36524 - doe/146096) / 365;
+        qint64 y = yoe + era * 400;
+        qint64 doy = doe - (365*yoe + yoe/4 - yoe/100);
+        qint64 mp = (5*doy + 2)/153;
+
+        int day = static_cast<int>(doy - (153*mp+2)/5 + 1);
+        int month = static_cast<int>(mp < 10 ? mp+3 : mp-9);
+        int year = static_cast<int>(y + (month <= 2));
+
+        return {year, month, day};
+    }
+
+    // Fast check if day matches specific day of month
+    inline bool isDayOfMonth(qint64 timestampMs, int targetDay) {
+        qint64 days = timestampMs / MS_PER_DAY;
+        qint64 z = days + 719468;
+        qint64 era = (z >= 0 ? z : z - 146096) / 146097;
+        qint64 doe = z - era * 146097;
+        qint64 yoe = (doe - doe/1460 + doe/36524 - doe/146096) / 365;
+        qint64 doy = doe - (365*yoe + yoe/4 - yoe/100);
+        qint64 mp = (5*doy + 2)/153;
+        int day = static_cast<int>(doy - (153*mp+2)/5 + 1);
+        return day == targetDay;
+    }
+
+    // Cache QTimeZone::utc() result
+    static const QTimeZone& utcZone() {
+        static const QTimeZone tz = QTimeZone::UTC;
+        return tz;
+    }
+
+    // Format date string with minimal QDateTime usage
+    QString formatDate(qint64 timestampMs, const QString& format) {
+        static QDateTime dt;
+        dt.setMSecsSinceEpoch(timestampMs);
+        dt.setTimeZone(utcZone());
+        return dt.toString(format);
     }
 }
 
@@ -185,42 +229,38 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
 // TODO: We assume dataProvider provides daily data. Adjust logic for different timeframes if needed.
 std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewport, const Series* series) const {
     std::vector<TimeLabel> labels;
-
     if (!series || series->dataCount() == 0) {
         return labels; // No data, no labels
     }
 
     int visibleCount = viewport.visibleCount();
-    QDateTime lastLabelDate = QDateTime::fromMSecsSinceEpoch(0);
+    DateComponents lastLabelDate = {0, 0, 0};
     int dataCount = series->dataCount();
 
-    // Calculate the time interval between data points (assume uniform spacing)
+    // Estimate time interval
     qint64 timeIntervalMs = 86400000;
     if (dataCount >= 2) {
-        QDateTime t0 = series->timestampAt(0);
-        QDateTime t1 = series->timestampAt(1);
-        timeIntervalMs = t0.msecsTo(t1);
+        timeIntervalMs = series->timestampAt(1) - series->timestampAt(0);
     }
 
     for (int i = 0; i < visibleCount; ++i) {
         int dataIndex = viewport.startIndex() + i;
-        QDateTime dt;
+        qint64 timestamp = 0;
 
         // Calculate datetime for this index (even if outside data range)
         if (dataIndex >= 0 && dataIndex < dataCount) {
             // Within data range - use actual data
-            dt = series->timestampAt(dataIndex);
+            timestamp = series->timestampAt(dataIndex);
         } else if (dataCount > 0) {
             // Outside data range - extrapolate from first or last known time
             if (dataIndex < 0) {
                 // Before data starts - extrapolate backwards from first point
-                QDateTime firstTime = series->timestampAt(0);
-                dt = firstTime.addMSecs(dataIndex * timeIntervalMs);
+                qint64 first = series->timestampAt(0);
+                timestamp = first + dataIndex * timeIntervalMs;
             } else {
                 // After data ends - extrapolate forwards from last point
-                QDateTime lastTime = series->timestampAt(dataCount - 1);
-                qint64 offsetFromLast = (dataIndex - (dataCount - 1)) * timeIntervalMs;
-                dt = lastTime.addMSecs(offsetFromLast);
+                qint64 last = series->timestampAt(dataCount - 1);
+                timestamp = last + (dataIndex - (dataCount - 1)) * timeIntervalMs;
             }
         } else {
             continue;
@@ -231,45 +271,50 @@ std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewpo
 
         if (visibleCount <= 30) {
             // Show every 5 days
-            if (dt.date().day() == 1 || dt.date().day() == 5 ||
-                dt.date().day() == 10 || dt.date().day() == 15 ||
-                dt.date().day() == 20 || dt.date().day() == 25) {
-                label = dt.toString("d MMM");
+            DateComponents date = getDateComponents(timestamp);
+            int day = date.day;
+            if (day == 1 || day == 5 || day == 10 || day == 15 || day == 20 || day == 25) {
+                label = formatDate(timestamp, "d MMM");
                 shouldLabel = true;
             }
         } else if (visibleCount <= 90) {
             // Show month starts
-            if (dt.date().day() == 1) {
-                label = dt.toString("MMM");
+            if (isDayOfMonth(timestamp, 1)) {
+                label = formatDate(timestamp, "MMM");
                 shouldLabel = true;
             }
-        } else if (visibleCount <= 365) {
+        }  else if (visibleCount <= 365) {
             // Show months, format: "Feb", "Mar", "Apr"
-            if (dt.date().day() == 1 && dt.date().month() != lastLabelDate.date().month()) {
-                label = dt.toString("MMM");
+            DateComponents date = getDateComponents(timestamp);
+            if (date.day == 1 && date.month != lastLabelDate.month) {
+                label = formatDate(timestamp, "MMM");
                 shouldLabel = true;
+                lastLabelDate = date;
             }
         } else if (visibleCount <= 730) {
             // Show year at Jan, then months
-            if (dt.date().day() == 1 && dt.date().month() != lastLabelDate.date().month()) {
-                if (dt.date().month() == 1) {
-                    label = dt.toString("yyyy");
+            DateComponents date = getDateComponents(timestamp);
+            if (date.day == 1 && date.month != lastLabelDate.month) {
+                if (date.month == 1) {
+                    label = formatDate(timestamp, "yyyy");
                 } else {
-                    label = dt.toString("MMM");
+                    label = formatDate(timestamp, "MMM");
                 }
                 shouldLabel = true;
+                lastLabelDate = date;
             }
         } else {
             // Show years only
-            if (dt.date().year() != lastLabelDate.date().year()) {
-                label = dt.toString("yyyy");
+            DateComponents date = getDateComponents(timestamp);
+            if (date.year != lastLabelDate.year) {
+                label = formatDate(timestamp, "yyyy");
                 shouldLabel = true;
+                lastLabelDate = date;
             }
         }
 
         if (shouldLabel) {
-            labels.push_back({dt, label, dataIndex});
-            lastLabelDate = dt;
+            labels.push_back({timestamp, label, dataIndex});
         }
     }
 

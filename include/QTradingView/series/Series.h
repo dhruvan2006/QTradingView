@@ -48,7 +48,7 @@ public:
 
     SeriesType type() const { return m_type; }
 
-    virtual QDateTime timestampAt(int index) const = 0;
+    virtual qint64 timestampAt(int index) const = 0;
     virtual int dataCount() const = 0;
 
     virtual void render(QPainter* painter, const ViewPort& viewport, IScale* scale) = 0;

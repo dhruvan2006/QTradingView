@@ -27,7 +27,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # Simple Line Chart Example
-add_executable(simple_line_chart
+qt_add_executable(simple_line_chart
     simple_line_chart.cpp
 )
 
@@ -57,8 +57,15 @@ add_custom_command(TARGET simple_line_chart POST_BUILD
         $<TARGET_FILE_DIR:simple_line_chart>/btc-usd.csv
 )
 
+if(EMSCRIPTEN)
+    target_link_options(simple_line_chart PRIVATE
+            -lembind
+            --bind
+    )
+endif()
+
 # Candlestick Chart Example
-add_executable(candlestick_chart
+qt_add_executable(candlestick_chart
     candlestick_chart.cpp
 )
 
@@ -82,14 +89,21 @@ if(WIN32)
     )
 endif()
 
-add_custom_command(TARGET simple_line_chart POST_BUILD
+add_custom_command(TARGET candlestick_chart POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_SOURCE_DIR}/examples/btc-usd.csv
-        $<TARGET_FILE_DIR:simple_line_chart>/btc-usd.csv
+        $<TARGET_FILE_DIR:candlestick_chart>/btc-usd.csv
 )
 
+if(EMSCRIPTEN)
+    target_link_options(candlestick_chart PRIVATE
+            -lembind
+            --bind
+    )
+endif()
+
 # Multi-Pane Chart Example
-add_executable(multi_pane_chart
+qt_add_executable(multi_pane_chart
     multi_pane_chart.cpp
 )
 
@@ -113,8 +127,17 @@ if(WIN32)
     )
 endif()
 
-add_custom_command(TARGET simple_line_chart POST_BUILD
+add_custom_command(TARGET multi_pane_chart POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_SOURCE_DIR}/examples/btc-usd.csv
-        $<TARGET_FILE_DIR:simple_line_chart>/btc-usd.csv
+        $<TARGET_FILE_DIR:multi_pane_chart>/btc-usd.csv
 )
+
+if(EMSCRIPTEN)
+    target_compile_options(multi_pane_chart PRIVATE -O2 --profiling)
+    target_link_options(multi_pane_chart PRIVATE
+            -lembind
+            --bind
+#            -O2 --profiling
+    )
+endif()

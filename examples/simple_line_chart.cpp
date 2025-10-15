@@ -44,7 +44,7 @@ QList<QTradingView::DataPoint> loadClosePrices(const QString& csvPath) {
         if (fields.size() < 5) continue;
         QDateTime time = QDateTime::fromString(fields[0], "yyyy-MM-dd HH:mm:ss+00:00");
         double close = fields[4].toDouble();
-        data.push_back({time, close});
+        data.push_back({time.toMSecsSinceEpoch(), close});
     }
     return data;
 }

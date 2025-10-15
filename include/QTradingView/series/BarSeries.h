@@ -41,7 +41,7 @@ public:
     // Data
     void setData(const QList<DataPoint>& data);
     const QList<DataPoint>& data() const;
-    QDateTime timestampAt(int index) const override;
+    qint64 timestampAt(int index) const override;
     int dataCount() const override;
 
     // Style

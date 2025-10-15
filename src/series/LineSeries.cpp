@@ -36,7 +36,12 @@ namespace QTradingView {
         , m_color(Qt::blue)
         , m_width(2.0)
         , m_lineStyle(Qt::SolidLine)
-        , m_antialiasing(true) {
+    #ifdef EMSCRIPTEN
+          , m_antialiasing(false)
+    #else
+          , m_antialiasing(true)
+    #endif
+    {
     }
 
     LineSeries::~LineSeries() = default;
@@ -49,11 +54,11 @@ namespace QTradingView {
         return m_data;
     }
 
-    QDateTime LineSeries::timestampAt(int index) const {
+    qint64 LineSeries::timestampAt(int index) const {
         if (index < 0 || index >= m_data.size()) {
-            return QDateTime();
+            return -1;
         }
-        return m_data[index].time;
+        return m_data[index].timeMsecs;
     }
 
     int LineSeries::dataCount() const {
@@ -79,34 +84,34 @@ namespace QTradingView {
     void LineSeries::render(QPainter *painter, const ViewPort& viewport, IScale* scale) {
         if (!painter || !scale) return;
 
-        int count = m_data.count();
+        const int count = m_data.count();
         if (count < 2) return;
 
         int start = std::max(viewport.startIndex(), 0);
-        int end = std::min(viewport.endIndex(), count - 1);
+        int end   = std::min(viewport.endIndex(), count - 1);
         if (start >= end) return;
+
+        QVector<QPointF> points;
+        points.reserve(end - start + 1);
+
+        for (int i = start; i <= end; ++i) {
+            double x = viewport.indexToPixel(i);
+            double y = scale->dataToPixel(m_data[i].value);
+            if (!std::isfinite(x) || !std::isfinite(y))
+                continue;                         // Skip bad coordinates
+            points.append(QPointF(x, y));
+        }
+
+        if (points.size() < 2)
+            return;
 
         QPen pen(m_color, m_width, m_lineStyle);
         painter->setPen(pen);
         painter->setRenderHint(QPainter::Antialiasing, m_antialiasing);
 
-        QPointF prevPoint;
-        bool first = true;
-
-        for (int i = start; i <= end; ++i) {
-            double value = m_data[i].value;
-            double x = viewport.indexToPixel(i);
-            double y = scale->dataToPixel(value);
-
-            QPointF pt(x, y);
-            if (!first) {
-                painter->drawLine(prevPoint, pt);
-            } else {
-                first = false;
-            }
-            prevPoint = pt;
-        }
+        painter->drawPolyline(points.constData(), points.size());
     }
+
 
     bool LineSeries::hitTest(const QPointF &point, int &outIndex) const {
         int count = m_data.size();

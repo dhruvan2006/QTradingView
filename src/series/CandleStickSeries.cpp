@@ -37,7 +37,12 @@ namespace QTradingView {
           , m_borderWidth(1.0)
           , m_bodyWidthRatio(0.7)
           , m_maxBodyWidthPx(100.0)
-          , m_antialiasing(true) {
+    #ifdef EMSCRIPTEN
+          , m_antialiasing(false)
+    #else
+          , m_antialiasing(true)
+    #endif
+    {
     }
 
     CandleStickSeries::~CandleStickSeries() = default;
@@ -50,11 +55,11 @@ namespace QTradingView {
         return m_data;
     }
 
-    QDateTime CandleStickSeries::timestampAt(int index) const {
+    qint64 CandleStickSeries::timestampAt(int index) const {
         if (index < 0 || index >= m_data.size()) {
-            return QDateTime();
+            return -1;
         }
-        return m_data[index].time;
+        return m_data[index].timeMsecs;
     }
 
     int CandleStickSeries::dataCount() const {
@@ -111,35 +116,60 @@ namespace QTradingView {
 
         double bodyW = std::clamp(stepX * m_bodyWidthRatio, 1.0, m_maxBodyWidthPx);
 
-        QPen borderPen(m_borderColor, 1.0, Qt::SolidLine, Qt::SquareCap);
+        // Batching containers
+        QVector<QLineF> bullWicks, bearWicks;
+        QVector<QRectF> bullBodies, bearBodies;
 
         for (int i = start; i <= end; ++i) {
             const CandleStick& candle = m_data[i];
-
             const double x = viewport.indexToPixel(i);
             const double yH = scale->dataToPixel(candle.high);
             const double yL = scale->dataToPixel(candle.low);
             const double yO = scale->dataToPixel(candle.open);
             const double yC = scale->dataToPixel(candle.close);
 
-            // Color
             const bool bullish = (candle.close >= candle.open);
-            const QColor color = bullish ? m_bullColor : m_bearColor;
-
-            // Wick
-            QPen wickPen(color, 1.0);
-            painter->setPen(wickPen);
-            painter->drawLine(QPointF(x, yH), QPointF(x, yL));
-
-            // Body
             const double topY = std::min(yO, yC);
             const double bodyH = std::abs(yC - yO);
             QRectF bodyRect(x - bodyW * 0.5, topY, bodyW, bodyH);
+            QLineF wickLine(QPointF(x, yH), QPointF(x, yL));
 
-            painter->setBrush(color);
+            if (bullish) {
+                bullWicks.append(wickLine);
+                bullBodies.append(bodyRect);
+            } else {
+                bearWicks.append(wickLine);
+                bearBodies.append(bodyRect);
+            }
+        }
+
+        // Draw bullish wicks
+        if (!bullWicks.isEmpty()) {
+            QPen wickPen(m_bullColor, 1.0);
+            painter->setPen(wickPen);
+            painter->setBrush(Qt::NoBrush);
+            painter->drawLines(bullWicks);
+        }
+        // Draw bearish wicks
+        if (!bearWicks.isEmpty()) {
+            QPen wickPen(m_bearColor, 1.0);
+            painter->setPen(wickPen);
+            painter->setBrush(Qt::NoBrush);
+            painter->drawLines(bearWicks);
+        }
+        // Draw bullish bodies
+        if (!bullBodies.isEmpty()) {
+            painter->setBrush(m_bullColor);
             QPen borderPen(m_borderColor, m_borderWidth, Qt::SolidLine, Qt::SquareCap);
             painter->setPen(borderPen);
-            painter->drawRect(bodyRect);
+            painter->drawRects(bullBodies);
+        }
+        // Draw bearish bodies
+        if (!bearBodies.isEmpty()) {
+            painter->setBrush(m_bearColor);
+            QPen borderPen(m_borderColor, m_borderWidth, Qt::SolidLine, Qt::SquareCap);
+            painter->setPen(borderPen);
+            painter->drawRects(bearBodies);
         }
     }
 

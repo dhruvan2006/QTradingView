@@ -1,17 +1,17 @@
 #ifndef QTRADINGVIEW_DATA_H
 #define QTRADINGVIEW_DATA_H
 
-#include <QDateTime>
+#include <QtGlobal>
 
 namespace QTradingView {
 
 struct DataPoint {
-    QDateTime time;
+    qint64 timeMsecs;
     double value;
 };
 
 struct CandleStick {
-    QDateTime time;
+    qint64 timeMsecs;
     double open;
     double high;
     double low;

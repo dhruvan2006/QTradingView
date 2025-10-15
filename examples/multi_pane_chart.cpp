@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QMainWindow window;
-    window.setWindowTitle("QTradingView - Multi-Pane Complex Example");
+    window.setWindowTitle("QTradingView Multi-Pane Complex Example");
     window.resize(1600, 900);
 
     auto chart = new QTradingView::Chart(&window);
@@ -64,13 +64,13 @@ int main(int argc, char *argv[])
     double lastClose = basePrice;
 
     std::vector<double> prices;
-    std::vector<QDateTime> timePoints;
+    std::vector<qint64> timePoints;
     const int ema12Period = 12;
     const int ema26Period = 26;
     const int signalPeriod = 9;
 
     for (int i = 0; i < 300; ++i) {
-        QDateTime time = startTime.addSecs(i * 86400);
+        qint64 time = startTime.addSecs(i * 86400).toMSecsSinceEpoch();
 
         double open = lastClose;
         double priceChange = priceMove(gen);
@@ -131,8 +131,6 @@ int main(int argc, char *argv[])
         histogramBars.append(QTradingView::DataPoint{timePoints[i], histValue});
     }
 
-    // === Setup Chart ===
-    chart->fitToData();
 
     // Pane 1: Price
     auto pricePane = chart->addPane(2.0);
@@ -144,13 +142,13 @@ int main(int argc, char *argv[])
     QList<QTradingView::DataPoint> smaData;
     const int smaPeriod = 20;
     for (int i = 0; i < smaPeriod - 1; ++i) {
-        smaData.append(QTradingView::DataPoint{candles[i].time, std::nan("")});
+        smaData.append(QTradingView::DataPoint{candles[i].timeMsecs, std::nan("")});
     }
     for (int i = smaPeriod - 1; i < candles.size(); ++i) {
         double sum = 0;
         for (int j = 0; j < smaPeriod; ++j) sum += candles[i - j].close;
         double sma = sum / smaPeriod;
-        smaData.append(QTradingView::DataPoint{candles[i].time, sma});
+        smaData.append(QTradingView::DataPoint{candles[i].timeMsecs, sma});
     }
     auto smaSeries = std::make_shared<QTradingView::LineSeries>(smaData);
     smaSeries->setColor(QColor(255, 152, 0));
@@ -178,7 +176,7 @@ int main(int argc, char *argv[])
 
     chart->setTheme(QTradingView::ChartTheme::tradingViewDark());
     chart->fitToData();
-    window.showMaximized();
 
+    window.show();
     return app.exec();
 }

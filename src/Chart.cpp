@@ -38,6 +38,7 @@ namespace QTradingView {
           , m_dragStartValue(0.0)
           , m_resizingBorderIndex(-1)
           , m_minPaneHeight(50.0) {
+
         setMinimumSize(400, 300);
         setMouseTracking(true);
         setFocusPolicy(Qt::StrongFocus);
@@ -59,6 +60,9 @@ namespace QTradingView {
         m_crosshairRenderer.setLabelBackgroundColor(m_theme.axisBackgroundColor);
         m_crosshairRenderer.setLabelTextColor(m_theme.axisTextColor);
         m_crosshairRenderer.setFont(m_theme.textFont);
+
+        // Setup update timer for throttling
+        setupUpdateTimer();
     }
 
     Chart::~Chart() = default;
@@ -348,15 +352,27 @@ namespace QTradingView {
     void Chart::wheelEvent(QWheelEvent *event) {
         int mouseX = event->position().x();
         int anchorIndex = m_viewport.pixelToIndex(mouseX);
-        int zoomDelta = event->angleDelta().y() / 120; // Standard wheel step is 120
 
-        // make zoom proportional to visible data count
-        int visibleCount = m_viewport.visibleCount();
-        double zoomSensitivity = std::max(2.0, visibleCount * 0.05); // Scale with visible count, minimum 2
-        int indexDelta = static_cast<int>(zoomDelta * zoomSensitivity);
+        double wheelDelta = event->angleDelta().y();
 
-        zoom(indexDelta, anchorIndex);
-        update();
+        // accumulate the wheel delta
+        m_wheelDeltaAccumulator += wheelDelta;
+
+        if (std::abs(m_wheelDeltaAccumulator) >= WHEEL_THRESHOLD) {
+            int zoomSteps = m_wheelDeltaAccumulator / WHEEL_THRESHOLD;
+            m_wheelDeltaAccumulator = std::fmod(m_wheelDeltaAccumulator, WHEEL_THRESHOLD);
+
+            // make zoom proportional to visible data count
+            int visibleCount = m_viewport.visibleCount();
+            double zoomSensitivity = std::max(2.0, visibleCount * 0.05); // Scale with visible count, minimum 2
+            int indexDelta = static_cast<int>(zoomSteps * zoomSensitivity);
+
+            if (indexDelta != 0) {
+                zoom(indexDelta, anchorIndex);
+                update();
+            }
+        }
+
         event->accept();
     }
 
@@ -454,7 +470,7 @@ namespace QTradingView {
                 calculateLayout();
 
                 m_lastMousePos = event->pos();
-                update();
+                scheduleUpdate();
                 event->accept();
             }
         } else if (m_dragMode == DragMode::YAxisZoom && m_dragPane) {
@@ -463,7 +479,7 @@ namespace QTradingView {
             m_dragPane->zoomYAxis(zoomFactor, m_dragStartValue);
 
             m_lastMousePos = event->pos();
-            update();
+            scheduleUpdate();
             event->accept();
         } else if (m_dragMode == DragMode::XAxisZoom) {
             int deltaX = event->pos().x() - m_lastMousePos.x();
@@ -477,7 +493,7 @@ namespace QTradingView {
             }
 
             m_lastMousePos = event->pos();
-            update();
+            scheduleUpdate();
             event->accept();
         } else if (m_dragMode == DragMode::ChartPan && m_isPanning) {
             int currentIndex = m_viewport.pixelToIndex(event->pos().x());
@@ -508,7 +524,7 @@ namespace QTradingView {
             if (m_crosshairVisible)
                 setCrosshairPosition(event->pos());
 
-            update();
+            scheduleUpdate();
             event->accept();
         } else {
             QPointF pos = event->pos();
@@ -517,20 +533,20 @@ namespace QTradingView {
             if (borderIndex >= 0) {
                 setCrosshairVisible(false);
                 setCursor(Qt::SplitVCursor);
-                update();
+                scheduleUpdate();
             } else if (leftAxisRect().contains(pos) || rightAxisRect().contains(pos)) {
                 setCrosshairVisible(false);
                 setCursor(Qt::SizeVerCursor);
-                update();
+                scheduleUpdate();
             } else if (xAxisRect().contains(pos)) {
                 setCrosshairVisible(false);
                 setCursor(Qt::SizeHorCursor);
-                update();
+                scheduleUpdate();
             } else {
                 setCursor(Qt::ArrowCursor);
                 setCrosshairVisible(true);
                 setCrosshairPosition(event->pos());
-                update();
+                scheduleUpdate();
             }
         }
     }
@@ -554,14 +570,14 @@ namespace QTradingView {
                     QRectF paneRect = pane->rect();
                     if (pos.y() >= paneRect.top() && pos.y() <= paneRect.bottom()) {
                         pane->resetAutoRange();
-                        update();
+                        scheduleUpdate();
                         event->accept();
                         return;
                     }
                 }
             } else if (xAxisRect().contains(pos)) {
                 fitToData();
-                update();
+                scheduleUpdate();
                 event->accept();
                 return;
             }
@@ -570,7 +586,7 @@ namespace QTradingView {
 
     void Chart::leaveEvent(QEvent *event) {
         setCrosshairVisible(false);
-        update();
+        scheduleUpdate();
         QWidget::leaveEvent(event);
     }
 
@@ -631,7 +647,7 @@ namespace QTradingView {
 
             if (indexDelta != 0) {
                 zoom(indexDelta, anchorIndex);
-                update();
+                scheduleUpdate();
             }
         }
     }
@@ -650,9 +666,27 @@ namespace QTradingView {
 
                 if (indexDelta != 0) {
                     pan(indexDelta);
-                    update();
+                    scheduleUpdate();
                 }
             }
         }
+    }
+
+    void Chart::setupUpdateTimer() {
+        m_updateTimer.setInterval(UPDATE_INTERVAL_MS);
+        connect(&m_updateTimer, &QTimer::timeout, this, &Chart::onUpdateTimerTick);
+        m_updateTimer.start();
+    }
+
+    void Chart::onUpdateTimerTick() {
+        if (m_pendingUpdate) {
+            QWidget::update();
+            m_pendingUpdate = false;
+        }
+    }
+
+    void Chart::scheduleUpdate() {
+        // m_pendingUpdate = true;
+        update();
     }
 } // namespace QTradingView

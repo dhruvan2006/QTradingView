@@ -36,9 +36,13 @@ namespace QTradingView {
     , m_downColor(Qt::red)
     , m_barWidthRatio(0.7)
     , m_lineWidth(1.0)
-    , m_antialiasing(true) {
+    #ifdef EMSCRIPTEN
+          , m_antialiasing(false)
+    #else
+          , m_antialiasing(true)
+    #endif
+    {
     }
-
 
     BarSeries::~BarSeries() = default;
 
@@ -50,11 +54,11 @@ namespace QTradingView {
         return m_data;
     }
 
-    QDateTime BarSeries::timestampAt(int index) const {
+    qint64 BarSeries::timestampAt(int index) const {
         if (index < 0 || index >= m_data.size()) {
-            return QDateTime();
+            return -1;
         }
-        return m_data[index].time;
+        return m_data[index].timeMsecs;
     }
 
     int BarSeries::dataCount() const {
@@ -107,27 +111,33 @@ namespace QTradingView {
         // Get baseline (zero line) in pixel coordinates
         const double baselineY = scale->dataToPixel(0.0);
 
+        QList<QRectF> upRects;
+        QList<QRectF> downRects;
+
         for (int i = start; i <= end; ++i) {
             double value = m_data[i].value;
 
             const double x = viewport.indexToPixel(i);
             const double valueY = scale->dataToPixel(value);
 
-            // Determine bar color
-            QColor fillColor = (value >= 0.0) ? m_upColor : m_downColor;
-
             // Calculate bar rectangle
             const double barTop = std::min(baselineY, valueY);
             const double barHeight = std::abs(valueY - baselineY);
 
-            QRectF barRect(x - barWidth * 0.5, barTop, barWidth, barHeight);
-
-            // Draw bar
-            painter->setBrush(fillColor);
-            QPen pen(fillColor, m_lineWidth);
-            painter->setPen(pen);
-            painter->drawRect(barRect);
+            if (value >= 0.0) {
+                upRects.emplace_back(x - barWidth * 0.5, barTop, barWidth, barHeight);
+            } else {
+                downRects.emplace_back(x - barWidth * 0.5, barTop, barWidth, barHeight);
+            }
         }
+
+        // Draw bars
+        painter->setBrush(m_upColor);
+        painter->setPen(Qt::NoPen);
+        painter->drawRects(upRects);
+
+        painter->setBrush(m_downColor);
+        painter->drawRects(downRects);
     }
 
     bool BarSeries::hitTest(const QPointF& point, int& outIndex) const {

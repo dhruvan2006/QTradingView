@@ -28,7 +28,7 @@
 #include <memory>
 #include "series/Series.h"
 #include "scale/IScale.h"
-#include "Viewport.h"
+#include "QTradingView/ViewPort.h"
 #include "QTradingView/qtradingview_global.h"
 
 namespace QTradingView {
