@@ -24,7 +24,7 @@
 #define QTRADINGVIEW_LINEARSCALE_H
 
 #include <vector>
-#include "Iscale.h"
+#include "QTradingView/scale/IScale.h"
 #include "QTradingView/qtradingview_global.h"
 
 namespace QTradingView {

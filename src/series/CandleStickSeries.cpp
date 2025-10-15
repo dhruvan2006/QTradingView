@@ -50,11 +50,11 @@ namespace QTradingView {
         return m_data;
     }
 
-    QDateTime CandleStickSeries::timestampAt(int index) const {
+    qint64 CandleStickSeries::timestampAt(int index) const {
         if (index < 0 || index >= m_data.size()) {
-            return QDateTime();
+            return -1;
         }
-        return m_data[index].time;
+        return m_data[index].timeMsecs;
     }
 
     int CandleStickSeries::dataCount() const {

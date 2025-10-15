@@ -50,11 +50,11 @@ namespace QTradingView {
         return m_data;
     }
 
-    QDateTime BarSeries::timestampAt(int index) const {
+    qint64 BarSeries::timestampAt(int index) const {
         if (index < 0 || index >= m_data.size()) {
-            return QDateTime();
+            return -1;
         }
-        return m_data[index].time;
+        return m_data[index].timeMsecs;
     }
 
     int BarSeries::dataCount() const {

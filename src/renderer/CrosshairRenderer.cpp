@@ -26,6 +26,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QDateTime>
+#include <QTimeZone>
 
 namespace QTradingView {
 
@@ -92,8 +93,8 @@ void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const
     // Draw time label (X-axis) and data value tooltip
     if (series) {
         if (dataIndex >= 0 && dataIndex < series->dataCount()) {
-            QDateTime dt = series->timestampAt(dataIndex);
-            QString timeStr = dt.toString("yyyy-MM-dd");
+            qint64 timestamp = series->timestampAt(dataIndex);
+            QString timeStr = QDateTime::fromMSecsSinceEpoch(timestamp, QTimeZone::UTC).toString("yyyy-MM-dd");
             // Use the provided xAxisY position if valid, otherwise use pane bottom
             double labelY = (xAxisY >= 0) ? xAxisY : paneRect.bottom();
             drawTimeLabel(painter, snappedX, timeStr, paneRect, labelY);
@@ -161,7 +162,7 @@ void CrosshairRenderer::drawTimeLabel(QPainter* painter, double x, const QString
 }
 
 void CrosshairRenderer::drawCrosshairMarker(QPainter* painter, const QPointF& position) {
-    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setRenderHint(QPainter::Antialiasing, false);
 
     // Draw a thick "+" marker at the mouse position with a brighter white color
     QPen markerPen(QColor(255, 255, 255), 3, Qt::SolidLine, Qt::RoundCap);

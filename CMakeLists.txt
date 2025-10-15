@@ -76,10 +76,17 @@ file(GLOB SOURCE_FILES
         src/style/ChartTheme.cpp
 )
 
-add_library(QTradingView SHARED
-        ${HEADER_FILES}
-        ${SOURCE_FILES}
-)
+if(EMSCRIPTEN)
+    add_library(QTradingView STATIC
+            ${HEADER_FILES}
+            ${SOURCE_FILES}
+    )
+else()
+    add_library(QTradingView SHARED
+            ${HEADER_FILES}
+            ${SOURCE_FILES}
+    )
+endif()
 
 add_library(QTradingView::QTradingView ALIAS QTradingView)
 

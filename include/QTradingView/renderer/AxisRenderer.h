@@ -36,7 +36,7 @@
 namespace QTradingView {
 
 struct TimeLabel {
-    QDateTime dateTime;
+    qint64 msSecsSinceEpoch;
     QString label;
     int dataIndex;
 };

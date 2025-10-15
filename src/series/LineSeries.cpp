@@ -49,11 +49,11 @@ namespace QTradingView {
         return m_data;
     }
 
-    QDateTime LineSeries::timestampAt(int index) const {
+    qint64 LineSeries::timestampAt(int index) const {
         if (index < 0 || index >= m_data.size()) {
-            return QDateTime();
+            return -1;
         }
-        return m_data[index].time;
+        return m_data[index].timeMsecs;
     }
 
     int LineSeries::dataCount() const {
