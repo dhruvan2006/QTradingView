@@ -29,6 +29,7 @@ set(CMAKE_AUTORCC ON)
 # Simple Line Chart Example
 qt_add_executable(simple_line_chart
     simple_line_chart.cpp
+    resources.qrc
 )
 
 target_link_libraries(simple_line_chart
@@ -51,12 +52,6 @@ if(WIN32)
     )
 endif()
 
-add_custom_command(TARGET simple_line_chart POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/examples/btc-usd.csv
-        $<TARGET_FILE_DIR:simple_line_chart>/btc-usd.csv
-)
-
 if(EMSCRIPTEN)
     target_link_options(simple_line_chart PRIVATE
             -lembind
@@ -67,6 +62,7 @@ endif()
 # Candlestick Chart Example
 qt_add_executable(candlestick_chart
     candlestick_chart.cpp
+    resources.qrc
 )
 
 target_link_libraries(candlestick_chart
@@ -89,12 +85,6 @@ if(WIN32)
     )
 endif()
 
-add_custom_command(TARGET candlestick_chart POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/examples/btc-usd.csv
-        $<TARGET_FILE_DIR:candlestick_chart>/btc-usd.csv
-)
-
 if(EMSCRIPTEN)
     target_link_options(candlestick_chart PRIVATE
             -lembind
@@ -105,6 +95,7 @@ endif()
 # Multi-Pane Chart Example
 qt_add_executable(multi_pane_chart
     multi_pane_chart.cpp
+    resources.qrc
 )
 
 target_link_libraries(multi_pane_chart
@@ -126,12 +117,6 @@ if(WIN32)
         $<TARGET_FILE_DIR:multi_pane_chart>
     )
 endif()
-
-add_custom_command(TARGET multi_pane_chart POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/examples/btc-usd.csv
-        $<TARGET_FILE_DIR:multi_pane_chart>/btc-usd.csv
-)
 
 if(EMSCRIPTEN)
     target_compile_options(multi_pane_chart PRIVATE -O2 --profiling)

@@ -284,6 +284,29 @@ namespace QTradingView {
         }
     }
 
+    void Chart::showLastNPoints(int n) {
+        if (m_panes.empty()) return;
+
+        Pane* pane = mainPane();
+        if (!pane || pane->series().empty()) return;
+
+        int count = pane->series()[0]->dataCount();
+        if (count <= 0) return;
+
+        // Ensure n is not greater than total points
+        if (n > count) n = count;
+
+        int startIndex = count - n;
+        int endIndex = count - 1;
+
+        m_viewport.setVisibleRange(startIndex, endIndex);
+        scheduleUpdate();
+    }
+
+    void Chart::show() {
+        showLastNPoints(300);
+    }
+
     void Chart::setCrosshairVisible(bool visible) {
         m_crosshairVisible = visible;
     }

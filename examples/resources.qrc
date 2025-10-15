@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>btc-usd.csv</file>
+    </qresource>
+</RCC>

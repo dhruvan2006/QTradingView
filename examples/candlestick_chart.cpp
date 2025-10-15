@@ -28,27 +28,8 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "utils.h"
 #include "QTradingView/scale/ScaleType.h"
-
-QList<QTradingView::CandleStick> loadCandles(const QString &csvPath) {
-    QList<QTradingView::CandleStick> candles;
-    QFile file(csvPath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return candles;
-    QTextStream in(&file);
-    in.readLine(); // Skip header
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        auto fields = line.split(',');
-        if (fields.size() < 5) continue;
-        QDateTime time = QDateTime::fromString(fields[0], "yyyy-MM-dd HH:mm:ss+00:00");
-        double open = fields[1].toDouble();
-        double high = fields[2].toDouble();
-        double low = fields[3].toDouble();
-        double close = fields[4].toDouble();
-        candles.append(QTradingView::CandleStick{time, open, high, low, close});
-    }
-    return candles;
-}
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -57,8 +38,7 @@ int main(int argc, char *argv[]) {
     window.setWindowTitle("QTradingView Candlestick Chart Example");
     window.resize(1400, 700);
 
-    QString csvPath = QCoreApplication::applicationDirPath() + "/btc-usd.csv";
-    QList<QTradingView::CandleStick> candles = loadCandles(csvPath);
+    QList<QTradingView::CandleStick> candles = Utils::loadCandles(":/btc-usd.csv");
 
     auto chart = new QTradingView::Chart(&window);
     window.setCentralWidget(chart);

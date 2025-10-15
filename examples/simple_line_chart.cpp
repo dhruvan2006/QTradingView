@@ -31,23 +31,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "QTradingView/scale/ScaleType.h"
-
-QList<QTradingView::DataPoint> loadClosePrices(const QString& csvPath) {
-    QList<QTradingView::DataPoint> data;
-    QFile file(csvPath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return data;
-    QTextStream in(&file);
-    in.readLine(); // Skip header
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        auto fields = line.split(',');
-        if (fields.size() < 5) continue;
-        QDateTime time = QDateTime::fromString(fields[0], "yyyy-MM-dd HH:mm:ss+00:00");
-        double close = fields[4].toDouble();
-        data.push_back({time.toMSecsSinceEpoch(), close});
-    }
-    return data;
-}
+#include "utils.h"
 
 int main(int argc, char *argv[])
 {
@@ -63,8 +47,7 @@ int main(int argc, char *argv[])
     window.setCentralWidget(chart);
 
     // Data
-    QString csvPath = QCoreApplication::applicationDirPath() + "/btc-usd.csv";
-    QList<QTradingView::DataPoint> data = loadClosePrices(csvPath);
+    QList<QTradingView::DataPoint> data = Utils::loadClosePrices(":/btc-usd.csv");
 
     // Create main pane
     auto mainPane = chart->addPane(1.0);

@@ -78,6 +78,8 @@ public:
     void pan(int indexDelta);
     void zoom(int indexDelta, int anchorIndex);
     void fitToData();
+    void showLastNPoints(int n);
+    void show();
 
     void setCrosshairVisible(bool visible);
     bool isCrosshairVisible() const;
