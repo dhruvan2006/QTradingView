@@ -32,7 +32,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets)
 
 file(GLOB HEADER_FILES
-        include/QTradingView/QTradingView.h
+        include/QTradingView.h
         include/QTradingView/qtradingview_global.h
         include/QTradingView/Chart.h
         include/QTradingView/ViewPort.h
@@ -114,6 +114,11 @@ install(TARGETS QTradingView
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# Explicitly install the main umbrella header to a more convenient location
+# This allows #include <QTradingView.h> or #include <QTradingView/QTradingView.h>
+install(FILES include/QTradingView.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Export targets for find_package
 install(EXPORT QTradingViewTargets

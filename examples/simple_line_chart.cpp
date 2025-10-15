@@ -20,17 +20,7 @@
 
 #include <QApplication>
 #include <QMainWindow>
-#include <QVBoxLayout>
-#include <QDateTime>
-#include "QTradingView/Chart.h"
-#include "QTradingView/Data.h"
-#include "QTradingView/series/LineSeries.h"
-#include "QTradingView/scale/LinearScale.h"
-#include <cmath>
-#include <random>
-#include <QFile>
-#include <QTextStream>
-#include "QTradingView/scale/ScaleType.h"
+#include <QTradingView.h>
 #include "utils.h"
 
 int main(int argc, char *argv[])
