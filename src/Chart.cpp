@@ -264,6 +264,8 @@ namespace QTradingView {
             newVisibleCount = 1;
         }
 
+        if (newVisibleCount > MAX_VISIBLE_BARS) return;
+
         double anchorRatio = static_cast<double>(anchorIndex - m_viewport.startIndex()) / visibleCount;
 
         int newStart = anchorIndex - static_cast<int>(anchorRatio * newVisibleCount);
@@ -272,7 +274,7 @@ namespace QTradingView {
         m_viewport.setVisibleRange(newStart, newEnd);
     }
 
-    void Chart:: fitToData() {
+    void Chart::fitToData() {
         if (m_panes.empty()) return;
 
         Pane* pane = mainPane();
@@ -280,7 +282,16 @@ namespace QTradingView {
 
         int count = pane->series()[0]->dataCount();
         if (count > 0) {
-            m_viewport.setVisibleRange(0, count - 1);
+            int start = 0;
+            int end = count - 1;
+
+            // If there are more bars than MAX_VISIBLE_BARS, show the last MAX_VISIBLE_BARS
+            if (count > MAX_VISIBLE_BARS) {
+                start = count - MAX_VISIBLE_BARS;
+                end = count - 1;
+            }
+
+            m_viewport.setVisibleRange(start, end);
         }
     }
 
@@ -292,6 +303,8 @@ namespace QTradingView {
 
         int count = pane->series()[0]->dataCount();
         if (count <= 0) return;
+
+        n = std::clamp(n, 1, MAX_VISIBLE_BARS);
 
         // Ensure n is not greater than total points
         if (n > count) n = count;

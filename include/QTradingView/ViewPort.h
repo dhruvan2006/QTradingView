@@ -28,6 +28,8 @@
 
 namespace QTradingView {
 
+constexpr int MAX_VISIBLE_BARS = 1500;
+
 class QTRADINGVIEW_EXPORT ViewPort
 {
 public:
