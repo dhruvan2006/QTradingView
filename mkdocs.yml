@@ -1,5 +1,40 @@
-site_name: QTradingView Docs
+site_name: QTradingView
+site_url: https://dhruvan2006.github.io/QTradingView
+repo_url: https://github.com/dhruvan2006/QTradingView
+repo_name: GitHub
+site_description: Lightweight, high-performance C++ & Qt charting library inspired by TradingView.
 theme:
   name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: orange
+    - scheme: slate
+      primary: blue
+      accent: orange
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - instant
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
 nav:
   - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - API Reference: api/index.html
+  - Architecture: architecture.md
+  - Examples:
+      - Candlestick Chart: examples/candlestick.md
+      - Multi-Pane Chart: examples/multi-pane.md
+      - Line Chart: examples/line-chart.md
