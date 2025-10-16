@@ -29,20 +29,76 @@
 
 namespace QTradingView {
 
+/**
+ * @class LinearScale
+ * @brief Linear scale implementation for chart axes.
+ *
+ * Provides conversion between data values and pixel positions using a linear scale.
+ */
 class QTRADINGVIEW_EXPORT LinearScale : public IScale
 {
 public:
+    /**
+     * @brief Constructs a LinearScale with default domain and range.
+     */
     LinearScale();
+    /**
+     * @brief Constructs a LinearScale with specified domain and range.
+     * @param minValue Minimum data value.
+     * @param maxValue Maximum data value.
+     * @param minPixel Minimum pixel position.
+     * @param maxPixel Maximum pixel position.
+     */
     LinearScale(double minValue, double maxValue, double minPixel, double maxPixel);
+    /**
+     * @brief Destructor.
+     */
     ~LinearScale() override = default;
 
+    /**
+     * @brief Converts a data value to a pixel position.
+     * @param value The data value to convert.
+     * @return The corresponding pixel position.
+     */
     double dataToPixel(double value) const override;
+    /**
+     * @brief Converts a pixel position to a data value.
+     * @param pixel The pixel position to convert.
+     * @return The corresponding data value.
+     */
     double pixelToData(double pixel) const override;
+    /**
+     * @brief Sets the data domain for the scale.
+     * @param minValue Minimum data value.
+     * @param maxValue Maximum data value.
+     */
     void setDomain(double minValue, double maxValue) override;
+    /**
+     * @brief Sets the pixel range for the scale.
+     * @param minPixel Minimum pixel position.
+     * @param maxPixel Maximum pixel position.
+     */
     void setRange(double minPixel, double maxPixel) override;
+    /**
+     * @brief Returns tick positions for the scale.
+     * @param approxCount Approximate number of ticks desired.
+     * @return Vector of tick positions in data coordinates.
+     */
     std::vector<double> getTicks(int approxCount) const override;
-
+    /**
+     * @brief Applies padding to the data domain.
+     * @param minValue Reference to minimum value to pad.
+     * @param maxValue Reference to maximum value to pad.
+     * @param paddingRatio Ratio of padding to apply.
+     */
     void applyPadding(double &minValue, double &maxValue, double paddingRatio) const override;
+    /**
+     * @brief Zooms the data domain by a factor around an anchor value.
+     * @param minValue Reference to minimum value to zoom.
+     * @param maxValue Reference to maximum value to zoom.
+     * @param zoomFactor Zoom factor to apply.
+     * @param anchorValue Value to anchor the zoom.
+     */
     void zoomDomain(double &minValue, double &maxValue, double zoomFactor, double anchorValue) const override;
 
 private:

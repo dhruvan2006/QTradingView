@@ -51,49 +51,160 @@ class QPainter;
 
 namespace QTradingView {
 
-class QTRADINGVIEW_EXPORT Chart : public QWidget
+/**
+ * @class Chart
+ * @brief Top level chart container for QTradingView.
+ *
+ * @details
+ * The Chart class manages multiple panes, handles zoom/pan interactions,
+ * crosshair rendering, and coordinate all series rendering.
+ * It provides a high-performance, interactive charting experience
+ * similar to TradingView lightweight charts.
+ *
+ * @code
+ * QApplication app(argc, argv);
+ * auto chart = new QTradingView::Chart();
+ * auto pane = chart->addPane(1.0);
+ * pane->addSeries(std::make_shared<QTradingView::CandleStickSeries>(data));
+ * chart->show();
+ * app.exec();
+ * @endcode
+ */
+// TODO: Fix the shared in the @code
+    class QTRADINGVIEW_EXPORT Chart : public QWidget
 {
     Q_OBJECT
 
 public:
+    /**
+     * @brief Constructs a Chart object.
+     * @param parent Optional parent widget.
+     */
     explicit Chart(QWidget *parent = nullptr);
+
+    /**
+     * @brief Destroys the Chart object.
+     */
     ~Chart() override;
 
+    /**
+     * @brief Adds a new pane to the chart.
+     * @param heightRatio Relative weight of the pane compared to others (default 1.0).
+     * @return Pointer to the newly created Pane.
+     */
     Pane* addPane(double heightRatio = 1.0);
+
+    /**
+     * @brief Removes a pane from the chart.
+     * @param pane Pointer to the pane to remove.
+     */
     void removePane(Pane* pane);
+
+    /**
+     * @brief Returns the main (first) pane of the chart.
+     * @return Pointer to the main Pane.
+     */
     Pane* mainPane();
-    const std::vector<std::shared_ptr<Pane>>& panes() const;
 
+    /**
+     * @brief Returns all the panes in the chart.
+     * @return Vector of pointers to all panes.
+     */
+    std::vector<Pane*> panes() const;
+
+    /**
+     * @brief Access the chart's viewport.
+     * @return Reference to the ViewPort object.
+     */
     ViewPort& viewport();
-    const ViewPort& viewport() const;
 
-    void setSize(int width, int height);
-
+    /**
+     * @brief Sets the chart theme.
+     * @param theme ChartTheme object defining colors and styles.
+     */
     void setTheme(const ChartTheme& theme);
+
+    /**
+     * @brief Gets the current chart theme.
+     * @return Reference to the current ChartTheme.
+     */
     const ChartTheme& theme() const;
 
+    /**
+     * @brief Recalculates the layout of all panes and axes based on the current chart size.
+     */
     void calculateLayout();
-    void render(QPainter* painter);
 
+    /**
+     * @brief Pans the chart horizontally by a number of data points.
+     * @param indexDelta Number of indices to pan (positive for right, negative for left).
+     */
     void pan(int indexDelta);
+
+    /**
+     * @brief Zooms the chart horizontally by changing the number of visible data points.
+     * @param indexDelta Change in the number of visible indices (positive to zoom out, negative to zoom in).
+     * @param anchorIndex Data index to anchor the zoom operation.
+     */
     void zoom(int indexDelta, int anchorIndex);
+
+    /**
+     * @brief Fits the chart view to show all available data, capped by the maximum allowed bars.
+     */
     void fitToData();
+
+    /**
+     * @brief Shows the last N data points in the main pane, capped by the maximum allowed bars.
+     * @param n Number of points to display.
+     */
     void showLastNPoints(int n);
+
+    /**
+     * @brief Shows the chart with the default number of data points (e.g., last 300).
+     */
     void show();
 
+    /**
+     * @brief Sets the crosshair visibility.
+     * @param visible True to show the crosshair, false to hide.
+     */
     void setCrosshairVisible(bool visible);
+
+    /**
+     * @brief Checks if the crosshair is currently visible.
+     * @return True if the crosshair is visible, false otherwise.
+     */
     bool isCrosshairVisible() const;
+
+    /**
+     * @brief Sets the crosshair position in chart coordinates.
+     * @param position Position in pixels relative to the chart widget.
+     */
     void setCrosshairPosition(const QPointF& position);
+
+    /**
+     * @brief Gets the current crosshair position in chart coordinates.
+     * @return Position in pixels relative to the chart widget.
+     */
     QPointF crosshairPosition() const;
 
-    // Axis region helpers
-    QRectF leftAxisRect() const;
-    QRectF rightAxisRect() const;
-    QRectF xAxisRect() const;
-    Pane* paneAtPosition(const QPointF& position) const;
+    /**
+     * @brief Access the axis renderer for customization.
+     * @return Reference to the axis renderer.
+     */
+    AxisRenderer& axis();
 
-    // Pane border detection
-    int paneBorderAtPosition(const QPointF& position, double threshold = 5.0) const;
+    /**
+     * @brief Access the grid renderer for customization.
+     * @return Reference to the grid renderer.
+     */
+    GridRenderer& grid();
+
+    /**
+     * @brief Access the crosshair renderer for customization.
+     * @return Reference to the crosshair renderer.
+     */
+    CrosshairRenderer& crosshair();
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -108,11 +219,24 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
+    // Gesture handling
     void handlePinchGesture(QPinchGesture* gesture);
     void handlePanGesture(QPanGesture* gesture);
 
+    // Render
+    void render(QPainter* painter);
+
+    // Axis region helpers
+    QRectF leftAxisRect() const;
+    QRectF rightAxisRect() const;
+    QRectF xAxisRect() const;
+
+    // Pane helpers
+    Pane* paneAtPosition(const QPointF& position) const;
+    int paneBorderAtPosition(const QPointF& position, double threshold = 5.0) const;
+
     // Chart logic members
-    std::vector<std::shared_ptr<Pane>> m_panes;
+    std::vector<std::unique_ptr<Pane>> m_panes;
     ViewPort m_viewport;
     ChartTheme m_theme;
 

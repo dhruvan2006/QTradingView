@@ -84,3 +84,4 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 /cmake-build-*/
+/docs/api/

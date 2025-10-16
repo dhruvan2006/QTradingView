@@ -28,26 +28,86 @@
 
 namespace QTradingView {
 
-constexpr int MAX_VISIBLE_BARS = 1500;
+constexpr int MAX_VISIBLE_BARS = 1500; ///< Maximum number of bars visible in the viewport
 
+/**
+ * @brief Manages the visible range and pixel mapping for chart bars.
+ *
+ * ViewPort controls which data indices are visible, their pixel positions, and the bar width for rendering. It provides conversion between data indices and pixel coordinates, and supports dynamic resizing and zooming.
+ */
 class QTRADINGVIEW_EXPORT ViewPort
 {
 public:
+    /**
+     * @brief Constructs an empty ViewPort.
+     */
     ViewPort();
+
+    /**
+     * @brief Constructs a ViewPort with specified range, pixel rectangle, and bar width.
+     * @param startIndex Index of the first visible bar.
+     * @param endIndex Index of the last visible bar.
+     * @param pixelRect Rectangle area in pixels for the viewport.
+     * @param barWidth Width of each bar in pixels (default 8.0).
+     */
     ViewPort(int startIndex, int endIndex, const QRectF &pixelRect, double barWidth = 8.0);
 
+    /**
+     * @brief Sets the visible range of bar indices.
+     * @param start Index of the first visible bar.
+     * @param end Index of the last visible bar.
+     */
     void setVisibleRange(int start, int end);
+
+    /**
+     * @brief Returns the index of the first visible bar.
+     */
     int startIndex() const;
+
+    /**
+     * @brief Returns the index of the last visible bar.
+     */
     int endIndex() const;
+
+    /**
+     * @brief Returns the number of visible bars in the viewport.
+     */
     int visibleCount() const;
 
+    /**
+     * @brief Sets the pixel rectangle for the viewport area.
+     * @param rect Rectangle area in pixels.
+     */
     void setPixelRect(const QRectF &rect);
+
+    /**
+     * @brief Returns the pixel rectangle of the viewport.
+     */
     QRectF pixelRect() const;
 
+    /**
+     * @brief Converts a bar index to its pixel position within the viewport.
+     * @param index Bar index to convert.
+     * @return Pixel position corresponding to the index.
+     */
     double indexToPixel(int index) const;
+
+    /**
+     * @brief Converts a pixel position to the corresponding bar index.
+     * @param pixel Pixel position to convert.
+     * @return Bar index corresponding to the pixel position.
+     */
     int pixelToIndex(double pixel) const;
 
+    /**
+     * @brief Sets the width of each bar in pixels.
+     * @param width Bar width in pixels.
+     */
     void setBarWidth(double width);
+
+    /**
+     * @brief Returns the width of each bar in pixels.
+     */
     double barWidth() const;
 
 private:

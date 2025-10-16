@@ -36,15 +36,42 @@ class ViewPort;
 class AxisRenderer;
 class Series;
 
+/**
+ * @class GridRenderer
+ * @brief Renders grid lines on the chart background.
+ */
 class QTRADINGVIEW_EXPORT GridRenderer
 {
 public:
+    /**
+     * @brief Constructs a GridRenderer with default settings.
+     */
     GridRenderer();
 
+    /**
+     * @brief Sets the color of the grid lines.
+     * @param color The grid color.
+     */
     void setGridColor(const QColor& color);
+    /**
+     * @brief Enables or disables vertical grid lines.
+     * @param enabled True to enable, false to disable.
+     */
     void setVerticalGridEnabled(bool enabled);
+    /**
+     * @brief Enables or disables horizontal grid lines.
+     * @param enabled True to enable, false to disable.
+     */
     void setHorizontalGridEnabled(bool enabled);
 
+    /**
+     * @brief Renders the grid on the chart pane.
+     * @param painter The QPainter instance used for drawing.
+     * @param pane The pane being rendered.
+     * @param viewport The current viewport settings.
+     * @param dataProvider The data series providing grid data.
+     * @param axisRenderer The axis renderer for tick positions.
+     */
     void render(QPainter* painter, const Pane* pane, const ViewPort& viewport,
                 const Series* dataProvider, const AxisRenderer* axisRenderer);
 

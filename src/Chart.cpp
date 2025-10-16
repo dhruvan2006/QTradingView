@@ -48,7 +48,7 @@ namespace QTradingView {
 
         // Initialize axis renderer with theme colors
         m_axisRenderer.setTextColor(m_theme.axisTextColor);
-        m_axisRenderer.setGridColor(m_theme.gridColor);
+        m_axisRenderer.setTickColor(m_theme.gridColor);
         m_axisRenderer.setBorderColor(m_theme.borderColor);
         m_axisRenderer.setBackgroundColor(m_theme.axisBackgroundColor);
 
@@ -68,7 +68,7 @@ namespace QTradingView {
     Chart::~Chart() = default;
 
     Pane *Chart::addPane(double heightRatio) {
-        auto pane = std::make_shared<Pane>();
+        auto pane = std::make_unique<Pane>();
         pane->setHeightRatio(heightRatio);
         m_panes.push_back(pane);
         return pane.get();
@@ -87,20 +87,17 @@ namespace QTradingView {
         return m_panes.empty() ? nullptr : m_panes[0].get();
     }
 
-    const std::vector<std::shared_ptr<Pane> > &Chart::panes() const {
-        return m_panes;
+    std::vector<Pane*> Chart::panes() const {
+        std::vector<Pane*> result;
+        result.reserve(m_panes.size());
+        for (const auto& pane : m_panes) {
+            result.push_back(pane.get());
+        }
+        return result;
     }
 
     ViewPort &Chart::viewport() {
         return m_viewport;
-    }
-
-    const ViewPort &Chart::viewport() const {
-        return m_viewport;
-    }
-
-    void Chart::setSize(int width, int height) {
-        calculateLayout();
     }
 
     void Chart::calculateLayout() {
@@ -128,7 +125,7 @@ namespace QTradingView {
     void Chart::setTheme(const ChartTheme &theme) {
         m_theme = theme;
         m_axisRenderer.setTextColor(m_theme.axisTextColor);
-        m_axisRenderer.setGridColor(m_theme.gridColor);
+        m_axisRenderer.setTickColor(m_theme.gridColor);
         m_axisRenderer.setBorderColor(m_theme.borderColor);
         m_axisRenderer.setBackgroundColor(m_theme.axisBackgroundColor);
 
@@ -322,6 +319,10 @@ namespace QTradingView {
 
     void Chart::setCrosshairVisible(bool visible) {
         m_crosshairVisible = visible;
+    }
+
+    AxisRenderer& Chart::axis() {
+        return m_axisRenderer;
     }
 
     bool Chart::isCrosshairVisible() const {
@@ -721,8 +722,8 @@ namespace QTradingView {
         }
     }
 
-    void Chart::scheduleUpdate() {
-        // m_pendingUpdate = true;
-        update();
+
+    void Chart::setAxisTickColor(const QColor& color) {
+        m_axisRenderer.setTickColor(color);
     }
 } // namespace QTradingView

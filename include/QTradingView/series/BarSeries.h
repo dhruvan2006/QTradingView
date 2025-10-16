@@ -32,23 +32,70 @@
 
 namespace QTradingView {
 
+/**
+ * @brief Represents a bar chart series in QTradingView.
+ *
+ * BarSeries manages a collection of bar data and renders them as a bar chart. Supports data updates and style customization.
+ */
 class QTRADINGVIEW_EXPORT BarSeries : public Series
 {
 public:
+    /**
+     * @brief Constructs a BarSeries with optional initial data.
+     * @param data List of DataPoint objects.
+     */
     explicit BarSeries(const QList<DataPoint>& data = {});
+    /**
+     * @brief Destroys the BarSeries object.
+     */
     ~BarSeries() override;
 
-    // Data
+    /**
+     * @brief Sets the bar data for the series.
+     * @param data List of DataPoint objects.
+     */
     void setData(const QList<DataPoint>& data);
+    /**
+     * @brief Returns the current bar data.
+     * @return List of DataPoint objects.
+     */
     const QList<DataPoint>& data() const;
+    /**
+     * @brief Returns the timestamp for the bar at the given index.
+     * @param index Bar index.
+     * @return Timestamp in milliseconds.
+     */
     qint64 timestampAt(int index) const override;
+    /**
+     * @brief Returns the number of bars in the series.
+     * @return Bar count.
+     */
     int dataCount() const override;
 
-    // Style
+    /**
+     * @brief Sets the color for upward bars.
+     * @param color Upward bar color.
+     */
     void setUpColor(const QColor& color);
+    /**
+     * @brief Sets the color for downward bars.
+     * @param color Downward bar color.
+     */
     void setDownColor(const QColor& color);
+    /**
+     * @brief Sets the width ratio for bars.
+     * @param ratio Ratio of bar width to total width.
+     */
     void setBarWidthRatio(double ratio);
+    /**
+     * @brief Sets the line width for the bars.
+     * @param width Line width in pixels.
+     */
     void setLineWidth(double width);
+    /**
+     * @brief Enables or disables antialiasing for bar rendering.
+     * @param enabled Antialiasing flag.
+     */
     void setAntialiasing(bool enabled);
 
     // Rendering

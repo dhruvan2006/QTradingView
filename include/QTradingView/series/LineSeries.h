@@ -36,16 +36,44 @@ struct DataPoint;
 class Viewport;
 class IScale;
 
+/**
+ * @brief Represents a line chart series in QTradingView.
+ *
+ * LineSeries manages a collection of data points and renders them as a line chart. Supports data updates and style customization.
+ */
 class QTRADINGVIEW_EXPORT LineSeries : public Series
 {
 public:
+    /**
+     * @brief Constructs a LineSeries with optional initial data.
+     * @param data List of DataPoint objects.
+     */
     explicit LineSeries(const QList<DataPoint>& data = {});
+    /**
+     * @brief Destroys the LineSeries object.
+     */
     ~LineSeries() override;
 
-    // Data
+    /**
+     * @brief Sets the data points for the series.
+     * @param data List of DataPoint objects.
+     */
     void setData(const QList<DataPoint>& data);
+    /**
+     * @brief Returns the current data points.
+     * @return List of DataPoint objects.
+     */
     const QList<DataPoint>& data() const;
+    /**
+     * @brief Returns the timestamp for the data point at the given index.
+     * @param index Data point index.
+     * @return Timestamp in milliseconds.
+     */
     qint64 timestampAt(int index) const override;
+    /**
+     * @brief Returns the number of data points in the series.
+     * @return Data point count.
+     */
     int dataCount() const override;
 
     // Style
