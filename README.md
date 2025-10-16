@@ -2,7 +2,7 @@
 
 [![Build](https://img.shields.io/github/actions/workflow/status/dhruvan2006/QTradingView/build.yml?branch=main)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
-[![Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://dhruvan2006.github.io/QTradingView/)
+[![Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://dhruvan2006.github.io/QTradingView/demo)
 [![C++](https://img.shields.io/badge/C++-17-blue)]()
 [![Qt](https://img.shields.io/badge/Qt-6-green)]()
 
@@ -10,7 +10,7 @@ A **lightweight, high-performance charting library** built with **C++ and Qt**. 
 
 Built from scratch to deliver **interactive and scalable visualization** for financial data.
 
-Try it live in your browser: [QTradingView Demo](https://dhruvan2006.github.io/QTradingView/)
+Try it live in your browser: [QTradingView Demo](https://dhruvan2006.github.io/QTradingView/demo)
 
 <p align="center">
   <img src="screenshot.png" alt="QTradingView Demo" width="600"/>
@@ -74,19 +74,22 @@ More detailed examples can be found in the `examples/` directory.
 ## Demo
 
 Check out the live demo built with **WebAssembly + Qt**:  
-[https://dhruvan2006.github.io/QTradingView/](https://dhruvan2006.github.io/QTradingView/)
+[https://dhruvan2006.github.io/QTradingView/demo](https://dhruvan2006.github.io/QTradingView/demo)
 
 Interact with multi-pane candlestick charts directly in your browser.
 
-## Architecture Overview
+# Architecture Overview
 
-QTradingView follows a **pane centered architecture**, where the `Chart` acts as the root container that manages the `Viewport` and multiple `Pane` objects.  
-Each pane encapsulates its own **series** and **scale**, allowing independent rendering and data transformations.
+QTradingView uses a pane-based architecture inspired by TradingView.
+Each Chart owns multiple Pane objects, each rendering independent series (candlestick, line, etc.).
 
-This modular design enables:
-- Efficient rendering of large datasets by updating only affected panes
-- Independent control of scales (e.g., linear or logarithmic per pane)
-- Easy extension with custom series or scale types
+- **Chart** — top-level container managing layout and input.
+- **Pane** — isolated rendering unit with its own Y-scale.
+- **Series** — modular data renderer (e.g., CandleStickSeries, LineSeries).
+- **Viewport** — tracks zoom/pan state and coordinates.
+
+This modular design allows partial redraws and efficient updates even with 10k+ data points.
+
 ```mermaid
 classDiagram
     %% =========================
