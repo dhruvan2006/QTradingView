@@ -49,6 +49,14 @@ target_link_libraries(MyApp PRIVATE QTradingView::QTradingView)
 ```
 This automatically downloads, builds, and links QTradingView into your project.
 
+Alternatively, if you installed the prebuilt binaries from the releases, you can use `find_package`:
+
+```cmake
+find_package(QTradingView CONFIG REQUIRED)
+
+add_executable(MyApp main.cpp)
+target_link_libraries(MyApp PRIVATE QTradingView::QTradingView)
+```
 ## Usage
 
 Creating charts is simple and modular. Start with a `Chart` add one or more `Panes` and attach series:

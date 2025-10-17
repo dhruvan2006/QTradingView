@@ -29,12 +29,14 @@ target_link_libraries(MyApp PRIVATE QTradingView::QTradingView)
 
 This downloads, builds, and links QTradingView into your project.
 
-## Option B — add_subdirectory
+## Option B — Find package (prebuilt binaries)
 
-If you prefer to keep the repository as a submodule or as part of your source tree, use `add_subdirectory`:
+If you installed the prebuilt binaries from the releases, you can use `find_package`:
+
+Usage:
 
 ```cmake
-add_subdirectory(path/to/QTradingView)
+find_package(QTradingView CONFIG REQUIRED)
 add_executable(MyApp main.cpp)
 target_link_libraries(MyApp PRIVATE QTradingView::QTradingView)
 ```
