@@ -129,7 +129,12 @@ Installation</h1>
 <div class="line">add_executable(MyApp main.cpp)</div>
 <div class="line">target_link_libraries(MyApp PRIVATE QTradingView::QTradingView)</div>
 </div><!-- fragment --><p> This automatically downloads, builds, and links QTradingView into your project.</p>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<p>Alternatively, if you installed the prebuilt binaries from the releases, you can use <code>find_package</code>:</p>
+<div class="fragment"><div class="line">find_package(QTradingView CONFIG REQUIRED)</div>
+<div class="line"> </div>
+<div class="line">add_executable(MyApp main.cpp)</div>
+<div class="line">target_link_libraries(MyApp PRIVATE QTradingView::QTradingView)</div>
+</div><!-- fragment --> <h1><a class="anchor" id="autotoc_md3"></a>
 Usage</h1>
 <p>Creating charts is simple and modular. Start with a <code>Chart</code> add one or more <code>Panes</code> and attach series:</p>
 <div class="fragment"><div class="line"> ++</div>

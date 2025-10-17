@@ -466,9 +466,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#option-b-add_subdirectory" class="md-nav__link">
+  <a href="#option-b-find-package-prebuilt-binaries" class="md-nav__link">
     <span class="md-ellipsis">
-      Option B — add_subdirectory
+      Option B — Find package (prebuilt binaries)
     </span>
   </a>
   
@@ -746,9 +746,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#option-b-add_subdirectory" class="md-nav__link">
+  <a href="#option-b-find-package-prebuilt-binaries" class="md-nav__link">
     <span class="md-ellipsis">
-      Option B — add_subdirectory
+      Option B — Find package (prebuilt binaries)
     </span>
   </a>
   
@@ -833,9 +833,10 @@
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyApp</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">QTradingView::QTradingView</span><span class="p">)</span>
 </code></pre></div>
 <p>This downloads, builds, and links QTradingView into your project.</p>
-<h2 id="option-b-add_subdirectory">Option B — add_subdirectory<a class="headerlink" href="#option-b-add_subdirectory" title="Permanent link">&para;</a></h2>
-<p>If you prefer to keep the repository as a submodule or as part of your source tree, use <code>add_subdirectory</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">path/to/QTradingView</span><span class="p">)</span>
+<h2 id="option-b-find-package-prebuilt-binaries">Option B — Find package (prebuilt binaries)<a class="headerlink" href="#option-b-find-package-prebuilt-binaries" title="Permanent link">&para;</a></h2>
+<p>If you installed the prebuilt binaries from the releases, you can use <code>find_package</code>:</p>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">find_package</span><span class="p">(</span><span class="s">QTradingView</span><span class="w"> </span><span class="s">CONFIG</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 <span class="nb">add_executable</span><span class="p">(</span><span class="s">MyApp</span><span class="w"> </span><span class="s">main.cpp</span><span class="p">)</span>
 <span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">MyApp</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">QTradingView::QTradingView</span><span class="p">)</span>
 </code></pre></div>
