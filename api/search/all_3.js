@@ -6,6 +6,7 @@ var searchData=
   ['dataindex_3',['dataIndex',['../structQTradingView_1_1TimeLabel.html#adffe020c0c53ddf89ac9b481f581df55',1,'QTradingView::TimeLabel']]],
   ['datapoint_4',['DataPoint',['../structQTradingView_1_1DataPoint.html',1,'QTradingView']]],
   ['datatopixel_5',['datatopixel',['../classQTradingView_1_1IScale.html#aefc0f04802521ecfed3677a6b563f0a3',1,'QTradingView::IScale::dataToPixel()'],['../classQTradingView_1_1LinearScale.html#a64b27030356430ebd708b3aae2020c54',1,'QTradingView::LinearScale::dataToPixel()'],['../classQTradingView_1_1LogScale.html#aa573cbd42bf22be348c55416d0df674a',1,'QTradingView::LogScale::dataToPixel()']]],
-  ['drawxaxis_6',['drawXAxis',['../classQTradingView_1_1AxisRenderer.html#a3477e730cf06397d3e9830efe8fcb916',1,'QTradingView::AxisRenderer']]],
-  ['drawyaxis_7',['drawYAxis',['../classQTradingView_1_1AxisRenderer.html#a0f7c574f5b4716ad16c510be0920b537',1,'QTradingView::AxisRenderer']]]
+  ['demo_6',['Demo',['../index.html#autotoc_md4',1,'']]],
+  ['drawxaxis_7',['drawXAxis',['../classQTradingView_1_1AxisRenderer.html#a3477e730cf06397d3e9830efe8fcb916',1,'QTradingView::AxisRenderer']]],
+  ['drawyaxis_8',['drawYAxis',['../classQTradingView_1_1AxisRenderer.html#a0f7c574f5b4716ad16c510be0920b537',1,'QTradingView::AxisRenderer']]]
 ];

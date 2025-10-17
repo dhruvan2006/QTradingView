@@ -25,6 +25,12 @@
 var NAVTREE =
 [
   [ "QTradingView", "index.html", [
+    [ "Highlights", "index.html#autotoc_md1", null ],
+    [ "Installation", "index.html#autotoc_md2", null ],
+    [ "Usage", "index.html#autotoc_md3", null ],
+    [ "Demo", "index.html#autotoc_md4", null ],
+    [ "Architecture Overview", "index.html#autotoc_md5", null ],
+    [ "License", "index.html#autotoc_md6", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
