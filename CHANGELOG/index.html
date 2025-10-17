@@ -10,13 +10,9 @@
       
       
       
-        <link rel="canonical" href="https://dhruvan2006.github.io/QTradingView/usage/">
+        <link rel="canonical" href="https://dhruvan2006.github.io/QTradingView/CHANGELOG/">
       
       
-        <link rel="prev" href="../installation/">
-      
-      
-        <link rel="next" href="../api/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -24,7 +20,7 @@
     
     
       
-        <title>Usage - QTradingView</title>
+        <title>Changelog - QTradingView</title>
       
     
     
@@ -76,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#usage" class="md-skip">
+        <a href="#changelog" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Usage
+              Changelog
             
           </span>
         </div>
@@ -249,11 +245,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../usage/" class="md-tabs__link">
         
   
   
@@ -417,32 +411,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Usage
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
         
   
   
@@ -453,80 +425,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#basic-chart-minimal-qt-app" class="md-nav__link">
-    <span class="md-ellipsis">
-      Basic Chart (minimal Qt app)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-format-candlestick-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data format (candlestick example)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      API overview
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#themes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Themes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      Common tasks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -719,54 +617,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#basic-chart-minimal-qt-app" class="md-nav__link">
+  <a href="#100-2025-10-17" class="md-nav__link">
     <span class="md-ellipsis">
-      Basic Chart (minimal Qt app)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#data-format-candlestick-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Data format (candlestick example)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      API overview
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#themes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Themes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-tasks" class="md-nav__link">
-    <span class="md-ellipsis">
-      Common tasks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      Examples
+      [1.0.0] - 2025-10-17
     </span>
   </a>
   
@@ -791,72 +644,12 @@
   
 
 
-<h1 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h1>
-<p>This page provides practical usage patterns and small examples to get you started with QTradingView.</p>
-<h2 id="basic-chart-minimal-qt-app">Basic Chart (minimal Qt app)<a class="headerlink" href="#basic-chart-minimal-qt-app" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QApplication&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QTradingView&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">QApplication</span><span class="w"> </span><span class="n">app</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span>
-
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">chart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QTradingView</span><span class="o">::</span><span class="n">Chart</span><span class="p">();</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">pane</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">chart</span><span class="o">-&gt;</span><span class="n">addPane</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span>
-
-<span class="w">    </span><span class="c1">// `data` should be provided in the format expected by the series (see examples)</span>
-<span class="w">    </span><span class="n">pane</span><span class="o">-&gt;</span><span class="n">addSeries</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">QTradingView</span><span class="o">::</span><span class="n">CandleStickSeries</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
-
-<span class="w">    </span><span class="n">chart</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">app</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>
-<h2 id="data-format-candlestick-example">Data format (candlestick example)<a class="headerlink" href="#data-format-candlestick-example" title="Permanent link">&para;</a></h2>
-<p>QTradingView uses simple structs for data points. For candlesticks, provide a container of <code>CandleStick</code> items (timestamp, open, high, low, close, volume). See the generated API docs under <code>docs/api/</code> for exact struct fields.</p>
-<h2 id="api-overview">API overview<a class="headerlink" href="#api-overview" title="Permanent link">&para;</a></h2>
+<h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<h2 id="100-2025-10-17">[1.0.0] - 2025-10-17<a class="headerlink" href="#100-2025-10-17" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Chart</li>
-<li><code>addPane(heightRatio)</code> — create and return a <code>Pane</code>.</li>
-<li><code>viewport()</code> — access the shared viewport for controlling visible range and bar width.</li>
-<li><code>setTheme(theme)</code> — set built-in themes (light/dark).</li>
-<li>
-<p><code>fitToData()</code> — adjust viewport to fit currently attached series.</p>
-</li>
-<li>
-<p>Pane</p>
-</li>
-<li><code>addSeries(shared_ptr&lt;Series&gt;)</code> — attach a series to a pane.</li>
-<li>
-<p><code>setScale(ScaleType)</code> — choose linear or logarithmic scales.</p>
-</li>
-<li>
-<p>Series</p>
-</li>
-<li>
-<p>Derived series classes such as <code>CandleStickSeries</code>, <code>LineSeries</code>, and <code>BarSeries</code> expose constructors that accept containers of data.</p>
-</li>
-<li>
-<p>ViewPort</p>
-</li>
-<li><code>setVisibleRange(startIndex, endIndex)</code> — manually set which range of bars is visible.</li>
-<li><code>startIndex()</code> / <code>endIndex()</code> — query visible indices.</li>
+<li>Initial public release: core charting primitives, candlestick/line/bar series, basic themes and demo</li>
 </ul>
-<h2 id="themes">Themes<a class="headerlink" href="#themes" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="n">chart</span><span class="o">-&gt;</span><span class="n">setTheme</span><span class="p">(</span><span class="n">QTradingView</span><span class="o">::</span><span class="n">ChartTheme</span><span class="o">::</span><span class="n">tradingViewDark</span><span class="p">());</span>
-<span class="n">chart</span><span class="o">-&gt;</span><span class="n">setTheme</span><span class="p">(</span><span class="n">QTradingView</span><span class="o">::</span><span class="n">ChartTheme</span><span class="o">::</span><span class="n">tradingViewLight</span><span class="p">());</span>
-</code></pre></div>
-<h2 id="common-tasks">Common tasks<a class="headerlink" href="#common-tasks" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Fit the chart to current data:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="n">chart</span><span class="o">-&gt;</span><span class="n">fitToData</span><span class="p">();</span>
-</code></pre></div>
-<ul>
-<li>Update series data:</li>
-</ul>
-<p>Replace the underlying container and trigger a repaint or call the series' update/refresh API (see the series class documentation in <code>docs/api/</code>).</p>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<p>See <code>docs/examples/</code> for a ready-to-run candlestick example and instructions to run the examples in this repository.</p>
-<p>If you need a snippet not covered here, check the API docs generated under <code>docs/api/</code> or open an issue describing what you want to do.</p>
 
 
 
