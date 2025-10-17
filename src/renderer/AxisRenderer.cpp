@@ -26,7 +26,6 @@
 namespace {
     // Constants for time calculations (milliseconds)
     constexpr qint64 MS_PER_DAY = 86400000LL;
-    constexpr qint64 MS_PER_HOUR = 3600000LL;
 
     // Cache for date components to avoid repeated QDateTime creation
     struct DateComponents {
@@ -61,8 +60,8 @@ namespace {
         return {year, month, day};
     }
 
-    // Fast check if day matches specific day of month
-    inline bool isDayOfMonth(qint64 timestampMs, int targetDay) {
+    // Fast check if a timestamp is the first day of a month
+    inline bool isFirstOfMonth(qint64 timestampMs) {
         qint64 days = timestampMs / MS_PER_DAY;
         qint64 z = days + 719468;
         qint64 era = (z >= 0 ? z : z - 146096) / 146097;
@@ -71,12 +70,15 @@ namespace {
         qint64 doy = doe - (365*yoe + yoe/4 - yoe/100);
         qint64 mp = (5*doy + 2)/153;
         int day = static_cast<int>(doy - (153*mp+2)/5 + 1);
-        return day == targetDay;
+        return day == 1;
     }
 
     // Cache QTimeZone::utc() result
-    static const QTimeZone& utcZone() {
-        static const QTimeZone tz = QTimeZone::UTC;
+    const QTimeZone& utcZone() {
+        // Construct from the "UTC" ID which works across Qt versions and
+        // platforms (avoids referencing QTimeZone::UTC or QTimeZone::utc()
+        // directly, which differ between builds).
+        static const QTimeZone tz = QTimeZone(QByteArrayLiteral("UTC"));
         return tz;
     }
 
@@ -86,6 +88,35 @@ namespace {
         dt.setMSecsSinceEpoch(timestampMs);
         dt.setTimeZone(utcZone());
         return dt.toString(format);
+    }
+
+    // Format Y-axis label (translation-unit helper)
+    static QString formatYAxisLabel(double value, double minValue, double maxValue, int availableWidth,
+        const QFont &font) {
+        double range = maxValue - minValue;
+
+        if (std::abs(value) >= 1000000) {
+            return QString::number(value / 1000000.0, 'f', 1) + "M";
+        } else if (std::abs(value) >= 1000) {
+            return QString::number(value / 1000.0, 'f', 1) + "K";
+        }
+
+        int precision = 2;
+        if (range < 1.0) precision = 4;
+        else if (range < 10.0) precision = 3;
+
+        QString label = QString::number(value, 'f', precision);
+
+        QFontMetrics fm(font);
+        int textWidth = fm.horizontalAdvance(label);
+
+        while (textWidth > availableWidth && precision > 0) {
+            precision--;
+            label = QString::number(value, 'f', precision);
+            textWidth = fm.horizontalAdvance(label);
+        }
+
+        return label;
     }
 }
 
@@ -170,7 +201,6 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
     painter->fillRect(leftAxisRect, m_backgroundColor);
     painter->fillRect(rightAxisRect, m_backgroundColor);
 
-    QRectF paneRect = pane->rect();
     double minValue = pane->minValue();
     double maxValue = pane->maxValue();
 
@@ -227,7 +257,7 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
 }
 
 // TODO: We assume dataProvider provides daily data. Adjust logic for different timeframes if needed.
-std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewport, const Series* series) const {
+std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewport, const Series* series) {
     std::vector<TimeLabel> labels;
     if (!series || series->dataCount() == 0) {
         return labels; // No data, no labels
@@ -279,7 +309,7 @@ std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewpo
             }
         } else if (visibleCount <= 90) {
             // Show month starts
-            if (isDayOfMonth(timestamp, 1)) {
+            if (isFirstOfMonth(timestamp)) {
                 label = formatDate(timestamp, "MMM");
                 shouldLabel = true;
             }
@@ -321,31 +351,4 @@ std::vector<TimeLabel> AxisRenderer::calculateXAxisLabels(const ViewPort& viewpo
     return labels;
 }
 
-QString AxisRenderer::formatYAxisLabel(double value, double minValue, double maxValue, int availableWidth,
-    const QFont &font) const {
-    double range = maxValue - minValue;
-
-    if (std::abs(value) >= 1000000) {
-        return QString::number(value / 1000000.0, 'f', 1) + "M";
-    } else if (std::abs(value) >= 1000) {
-        return QString::number(value / 1000.0, 'f', 1) + "K";
-    }
-
-    int precision = 2;
-    if (range < 1.0) precision = 4;
-    else if (range < 10.0) precision = 3;
-
-    QString label = QString::number(value, 'f', precision);
-
-    QFontMetrics fm(font);
-    int textWidth = fm.horizontalAdvance(label);
-
-    while (textWidth > availableWidth && precision > 0) {
-        precision--;
-        label = QString::number(value, 'f', precision);
-        textWidth = fm.horizontalAdvance(label);
-    }
-
-    return label;
-}
 } // namespace QTradingView

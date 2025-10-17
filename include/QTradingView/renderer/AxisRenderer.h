@@ -26,7 +26,6 @@
 #include <QPainter>
 #include <QRectF>
 #include <QColor>
-#include <memory>
 #include <QDateTime>
 
 #include "QTradingView/ViewPort.h"
@@ -124,7 +123,7 @@ public:
      * @param series The data series being displayed.
      * @return A vector of TimeLabel structures containing label information.
      */
-    std::vector<TimeLabel> calculateXAxisLabels(const ViewPort& viewport, const Series* series) const;
+    static std::vector<TimeLabel> calculateXAxisLabels(const ViewPort& viewport, const Series* series);
 
 private:
     QColor m_textColor;
@@ -132,8 +131,6 @@ private:
     QColor m_borderColor;
     QColor m_backgroundColor;
     int m_axisWidth;
-
-    QString formatYAxisLabel(double value, double minValue, double maxValue, int availableWidth, const QFont& font) const;
 };
 
 } // namespace QTradingView

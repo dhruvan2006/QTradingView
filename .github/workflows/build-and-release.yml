@@ -77,7 +77,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          arch: ${{ matrix.cmake_platform == 'arm64' && 'mac_arm64' || 'mac_x64' }}
+          arch: ${{ matrix.qt_arch }}
           cache: 'true'
 
       - name: Install Qt (Linux)
@@ -154,9 +154,6 @@ jobs:
           cpack -C Release -G DEB
           cpack -C Release -G RPM
           cpack -C Release -G TGZ
-
-      - name: List artifacts
-        run: Get-ChildItem ${{ github.workspace }}/build/ -Force | Format-List
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

@@ -28,6 +28,14 @@
 #include <QDateTime>
 #include <QTimeZone>
 
+namespace {
+    // Portable UTC QTimeZone helper
+    const QTimeZone& utcZone() {
+        static const QTimeZone tz = QTimeZone(QByteArrayLiteral("UTC"));
+        return tz;
+    }
+}
+
 namespace QTradingView {
 
 CrosshairRenderer::CrosshairRenderer()
@@ -94,12 +102,15 @@ void CrosshairRenderer::render(QPainter* painter, const QPointF& position, const
     if (series) {
         if (dataIndex >= 0 && dataIndex < series->dataCount()) {
             qint64 timestamp = series->timestampAt(dataIndex);
-            QString timeStr = QDateTime::fromMSecsSinceEpoch(timestamp, QTimeZone::UTC).toString("yyyy-MM-dd");
-            // Use the provided xAxisY position if valid, otherwise use pane bottom
-            double labelY = (xAxisY >= 0) ? xAxisY : paneRect.bottom();
-            drawTimeLabel(painter, snappedX, timeStr, paneRect, labelY);
-        }
-    }
+            QDateTime dt;
+            dt.setMSecsSinceEpoch(timestamp);
+            dt.setTimeZone(utcZone());
+            QString timeStr = dt.toString("yyyy-MM-dd");
+             // Use the provided xAxisY position if valid, otherwise use pane bottom
+             double labelY = (xAxisY >= 0) ? xAxisY : paneRect.bottom();
+             drawTimeLabel(painter, snappedX, timeStr, paneRect, labelY);
+         }
+     }
 
     painter->restore();
 }
