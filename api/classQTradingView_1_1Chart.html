@@ -119,9 +119,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>~Chart</b> () override</td></tr>
 <tr class="memdesc:ad89935f7cfa0d3a7706e4e87f1600080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the <a class="el" href="classQTradingView_1_1Chart.html" title="Top level chart container for QTradingView.">Chart</a> object. <br /></td></tr>
 <tr class="separator:ad89935f7cfa0d3a7706e4e87f1600080"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad436d6c57611504b8aab009aa03c006a" id="r_ad436d6c57611504b8aab009aa03c006a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classQTradingView_1_1Pane.html">Pane</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Chart.html#ad436d6c57611504b8aab009aa03c006a">addPane</a> (double heightRatio=1.0)</td></tr>
-<tr class="memdesc:ad436d6c57611504b8aab009aa03c006a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new pane to the chart.  <br /></td></tr>
-<tr class="separator:ad436d6c57611504b8aab009aa03c006a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2765e379b321bf2088a3cf8c9a7dfbf" id="r_ac2765e379b321bf2088a3cf8c9a7dfbf"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Pane.html">Pane</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Chart.html#ac2765e379b321bf2088a3cf8c9a7dfbf">addPane</a> (double heightRatio=1.0)</td></tr>
+<tr class="memdesc:ac2765e379b321bf2088a3cf8c9a7dfbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a new pane to the chart.  <br /></td></tr>
+<tr class="separator:ac2765e379b321bf2088a3cf8c9a7dfbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ef0823c844fc62e6ff01a27633b462c" id="r_a9ef0823c844fc62e6ff01a27633b462c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Chart.html#a9ef0823c844fc62e6ff01a27633b462c">removePane</a> (<a class="el" href="classQTradingView_1_1Pane.html">Pane</a> *pane)</td></tr>
 <tr class="memdesc:a9ef0823c844fc62e6ff01a27633b462c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a pane from the chart.  <br /></td></tr>
 <tr class="separator:a9ef0823c844fc62e6ff01a27633b462c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -225,7 +225,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressEvent</b> (QK
 <div class="line">pane-&gt;addSeries(std::make_shared&lt;QTradingView::CandleStickSeries&gt;(data));</div>
 <div class="line">chart-&gt;show();</div>
 <div class="line">app.exec();</div>
-<div class="ttc" id="aclassQTradingView_1_1Chart_html"><div class="ttname"><a href="classQTradingView_1_1Chart.html">QTradingView::Chart</a></div><div class="ttdoc">Top level chart container for QTradingView.</div><div class="ttdef"><b>Definition</b> Chart.h:75</div></div>
+<div class="ttc" id="aclassQTradingView_1_1Chart_html"><div class="ttname"><a href="classQTradingView_1_1Chart.html">QTradingView::Chart</a></div><div class="ttdoc">Top level chart container for QTradingView.</div><div class="ttdef"><b>Definition</b> Chart.h:74</div></div>
 </div><!-- fragment --> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac2b70fd2789ebf0b8455abf7c312c4c4" name="ac2b70fd2789ebf0b8455abf7c312c4c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac2b70fd2789ebf0b8455abf7c312c4c4">&#9670;&#160;</a></span>Chart()</h2>
@@ -262,14 +262,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressEvent</b> (QK
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad436d6c57611504b8aab009aa03c006a" name="ad436d6c57611504b8aab009aa03c006a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad436d6c57611504b8aab009aa03c006a">&#9670;&#160;</a></span>addPane()</h2>
+<a id="ac2765e379b321bf2088a3cf8c9a7dfbf" name="ac2765e379b321bf2088a3cf8c9a7dfbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2765e379b321bf2088a3cf8c9a7dfbf">&#9670;&#160;</a></span>addPane()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classQTradingView_1_1Pane.html">Pane</a> * QTradingView::Chart::addPane </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Pane.html">Pane</a> &gt; QTradingView::Chart::addPane </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>heightRatio</em> = <code>1.0</code></td><td>)</td>
@@ -285,7 +285,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressEvent</b> (QK
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to the newly created <a class="el" href="classQTradingView_1_1Pane.html" title="Represents a chart pane that contains one or more data series.">Pane</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Shared pointer to the newly created <a class="el" href="classQTradingView_1_1Pane.html" title="Represents a chart pane that contains one or more data series.">Pane</a>. </dd></dl>
 
 </div>
 </div>

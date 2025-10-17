@@ -2,7 +2,7 @@ var classQTradingView_1_1Chart =
 [
     [ "Chart", "classQTradingView_1_1Chart.html#ac2b70fd2789ebf0b8455abf7c312c4c4", null ],
     [ "~Chart", "classQTradingView_1_1Chart.html#ad89935f7cfa0d3a7706e4e87f1600080", null ],
-    [ "addPane", "classQTradingView_1_1Chart.html#ad436d6c57611504b8aab009aa03c006a", null ],
+    [ "addPane", "classQTradingView_1_1Chart.html#ac2765e379b321bf2088a3cf8c9a7dfbf", null ],
     [ "axis", "classQTradingView_1_1Chart.html#a4bec0c3344baf14948b86746f7d314df", null ],
     [ "calculateLayout", "classQTradingView_1_1Chart.html#a164fa4241c3aba123884a05817deafd7", null ],
     [ "crosshair", "classQTradingView_1_1Chart.html#a1e2d9be821df0360a129546ccf476175", null ],
