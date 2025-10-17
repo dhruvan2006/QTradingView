@@ -29,9 +29,17 @@
 
 namespace QTradingView {
 
+/**
+ * @brief Defines the color and font theme for chart rendering.
+ *
+ * ChartTheme provides color and font settings for chart backgrounds, grids, axes, crosshairs, and series.
+ */
 class QTRADINGVIEW_EXPORT ChartTheme
 {
 public:
+    /**
+     * @brief Constructs a ChartTheme with default settings.
+     */
     ChartTheme();
 
     // Background colors
@@ -58,9 +66,25 @@ public:
     QColor defaultSeriesColor;
 
     // Static factory methods for predefined themes
+    /**
+     * @brief Returns a predefined dark theme similar to TradingView.
+     * @return ChartTheme instance with dark colors.
+     */
     static ChartTheme tradingViewDark();
+    /**
+     * @brief Returns a predefined light theme similar to TradingView.
+     * @return ChartTheme instance with light colors.
+     */
     static ChartTheme tradingViewLight();
+    /**
+     * @brief Returns a generic dark theme.
+     * @return ChartTheme instance with dark colors.
+     */
     static ChartTheme dark();
+    /**
+     * @brief Returns a generic light theme.
+     * @return ChartTheme instance with light colors.
+     */
     static ChartTheme light();
 };
 

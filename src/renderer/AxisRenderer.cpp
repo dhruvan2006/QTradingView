@@ -93,7 +93,7 @@ namespace QTradingView {
 
 AxisRenderer::AxisRenderer()
     : m_textColor(Qt::black)
-    , m_gridColor(Qt::gray)
+    , m_tickColor(Qt::gray)
     , m_borderColor(Qt::gray)
     , m_backgroundColor(Qt::white)
     , m_axisWidth(60) {
@@ -103,8 +103,8 @@ void AxisRenderer::setTextColor(const QColor& color) {
     m_textColor = color;
 }
 
-void AxisRenderer::setGridColor(const QColor& color) {
-    m_gridColor = color;
+void AxisRenderer::setTickColor(const QColor& color) {
+    m_tickColor = color;
 }
 
 void AxisRenderer::setBorderColor(const QColor& color) {
@@ -148,7 +148,7 @@ void AxisRenderer::drawXAxis(QPainter* painter, const QRectF& axisRect,
         int pixelX = qRound(x);
 
         // Draw tick marks with grid color
-        painter->setPen(QPen(m_gridColor, 1));
+        painter->setPen(QPen(m_tickColor, 1));
         painter->drawLine(QPointF(pixelX, axisRect.top()), QPointF(pixelX, axisRect.top() + 5));
 
         // Draw text with text color
@@ -207,7 +207,7 @@ void AxisRenderer::drawYAxis(QPainter* painter, const QRectF& leftAxisRect,
         QString label = formatYAxisLabel(value, minValue, maxValue, availableWidth, labelFont);
 
         // Draw tick marks with grid color
-        painter->setPen(QPen(m_gridColor, 1));
+        painter->setPen(QPen(m_tickColor, 1));
         painter->drawLine(QPointF(leftAxisRect.right() - 5, pixelY), QPointF(leftAxisRect.right(), pixelY));
         painter->drawLine(QPointF(rightAxisRect.left(), pixelY), QPointF(rightAxisRect.left() + 5, pixelY));
 

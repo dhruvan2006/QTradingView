@@ -30,25 +30,80 @@
 
 namespace QTradingView {
 
+/**
+ * @brief Represents a candlestick chart series in QTradingView.
+ *
+ * CandleStickSeries manages a collection of candlestick data and renders them as a candlestick chart. Supports data updates and style customization.
+ */
 class QTRADINGVIEW_EXPORT CandleStickSeries : public Series
 {
 public:
+    /**
+     * @brief Constructs a CandleStickSeries with initial data.
+     * @param data List of CandleStick objects.
+     */
     explicit CandleStickSeries(const QList<CandleStick>& data);
+    /**
+     * @brief Destroys the CandleStickSeries object.
+     */
     ~CandleStickSeries() override;
 
-    // Data
+    /**
+     * @brief Sets the candlestick data for the series.
+     * @param data List of CandleStick objects.
+     */
     void setData(const QList<CandleStick>& data = {});
+    /**
+     * @brief Returns the current candlestick data.
+     * @return List of CandleStick objects.
+     */
     const QList<CandleStick>& data() const;
+    /**
+     * @brief Returns the timestamp for the candlestick at the given index.
+     * @param index Candlestick index.
+     * @return Timestamp in milliseconds.
+     */
     qint64 timestampAt(int index) const override;
+    /**
+     * @brief Returns the number of candlesticks in the series.
+     * @return Candlestick count.
+     */
     int dataCount() const override;
 
-    // Style
+    /**
+     * @brief Sets the color for bullish candles.
+     * @param color Bullish candle color.
+     */
     void setBullColor(const QColor& color);
+    /**
+     * @brief Sets the color for bearish candles.
+     * @param color Bearish candle color.
+     */
     void setBearColor(const QColor& color);
+    /**
+     * @brief Sets the border color for candles.
+     * @param color Border color.
+     */
     void setBorderColor(const QColor& color);
+    /**
+     * @brief Sets the border width for candles.
+     * @param width Border width in pixels.
+     */
     void setBorderWidth(double width);
+    /**
+     * @brief Sets the body width ratio for candles.
+     * @param ratio Ratio of body width to total width.
+     */
     void setBodyWithRatio(double ratio);
+    /**
+     * @brief Sets the maximum body width for candles.
+     * @param maxWidth Maximum body width in pixels.
+     */
     void setMaxBodyWidth(double maxWidth);
+    /**
+     * @brief Enables or disables antialiasing for the series.
+     * @param enabled Antialiasing flag.
+     */
     void setAntialiasing(bool enabled);
 
     // Rendering

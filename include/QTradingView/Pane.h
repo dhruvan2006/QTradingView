@@ -35,33 +35,115 @@ namespace QTradingView {
 
 enum class ScaleType;
 
+/**
+ * @brief Represents a chart pane that contains one or more data series.
+ *
+ * Pane manages the layout, scaling, and rendering of its series. It supports automatic and manual Y-axis scaling, zooming, and custom height ratios for multi-pane charts.
+ */
 class QTRADINGVIEW_EXPORT Pane
 {
 public:
+    /**
+     * @brief Constructs an empty Pane.
+     */
     Pane();
 
+    /**
+     * @brief Adds a data series to the pane.
+     * @param series Shared pointer to the Series to add.
+     */
     void addSeries(std::shared_ptr<Series> series);
+
+    /**
+     * @brief Removes a data series from the pane.
+     * @param series Shared pointer to the Series to remove.
+     */
     void removeSeries(std::shared_ptr<Series> series);
+
+    /**
+     * @brief Returns the list of data series in the pane.
+     */
     const std::vector<std::shared_ptr<Series>>& series() const;
 
+    /**
+     * @brief Sets the Y-axis scale type for the pane.
+     * @param type The scale type (e.g., linear, logarithmic).
+     */
     void setScale(ScaleType type);
+
+    /**
+     * @brief Returns the current Y-axis scale object.
+     */
     IScale* scale() const;
 
+    /**
+     * @brief Sets the height ratio of the pane relative to other panes.
+     * @param ratio The height ratio (e.g., 1.0 for equal height).
+     */
     void setHeightRatio(double ratio);
+
+    /**
+     * @brief Returns the height ratio of the pane.
+     */
     double heightRatio() const;
 
+    /**
+     * @brief Sets the rectangle area for the pane in the chart.
+     * @param rect The rectangle area.
+     */
     void setRect(const QRectF &rect);
+
+    /**
+     * @brief Returns the rectangle area of the pane.
+     */
     QRectF rect() const;
 
+    /**
+     * @brief Calculates the visible value range for the given data indices.
+     * @param start Start index of the data range.
+     * @param end End index of the data range.
+     */
     void calculateRange(int start, int end);
+
+    /**
+     * @brief Returns the minimum value in the current range.
+     */
     double minValue() const;
+
+    /**
+     * @brief Returns the maximum value in the current range.
+     */
     double maxValue() const;
 
+    /**
+     * @brief Sets a manual value range for the Y-axis.
+     * @param minValue Minimum value.
+     * @param maxValue Maximum value.
+     */
     void setManualRange(double minValue, double maxValue);
+
+    /**
+     * @brief Zooms the Y-axis by a factor, anchored at a specific value.
+     * @param zoomFactor The zoom factor (>1 to zoom in, <1 to zoom out).
+     * @param anchorValue The value to anchor the zoom operation.
+     */
     void zoomYAxis(double zoomFactor, double anchorValue);
+
+    /**
+     * @brief Resets the Y-axis to automatic range calculation.
+     */
     void resetAutoRange();
+
+    /**
+     * @brief Returns true if the Y-axis is in auto-range mode.
+     */
     bool isAutoRange() const;
 
+    /**
+     * @brief Renders the pane and its series using the given painter and viewport.
+     * @param painter QPainter object for drawing.
+     * @param viewport The current viewport.
+     */
     void render(QPainter *painter, const ViewPort &viewport);
 
 private:
