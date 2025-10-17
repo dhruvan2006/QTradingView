@@ -78,7 +78,7 @@ Check out the live demo built with **WebAssembly + Qt**:
 
 Interact with multi-pane candlestick charts directly in your browser.
 
-# Architecture Overview
+## Architecture Overview
 
 QTradingView uses a pane-based architecture inspired by TradingView.
 Each Chart owns multiple Pane objects, each rendering independent series (candlestick, line, etc.).
