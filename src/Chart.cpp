@@ -23,7 +23,6 @@
 #include <algorithm>
 
 namespace QTradingView {
-#include "QTradingView/scale/LogScale.h"
 
     Chart::Chart(QWidget *parent)
         : QWidget(parent)
@@ -67,11 +66,11 @@ namespace QTradingView {
 
     Chart::~Chart() = default;
 
-    Pane *Chart::addPane(double heightRatio) {
-        auto pane = std::make_unique<Pane>();
+    std::shared_ptr<Pane> Chart::addPane(double heightRatio) {
+        auto pane = std::make_shared<Pane>();
         pane->setHeightRatio(heightRatio);
         m_panes.push_back(pane);
-        return pane.get();
+        return pane;
     }
 
     void Chart::removePane(Pane *pane) {
@@ -722,8 +721,7 @@ namespace QTradingView {
         }
     }
 
-
-    void Chart::setAxisTickColor(const QColor& color) {
-        m_axisRenderer.setTickColor(color);
+    void Chart::scheduleUpdate() {
+        m_pendingUpdate = true;
     }
 } // namespace QTradingView

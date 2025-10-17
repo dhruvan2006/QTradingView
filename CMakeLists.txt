@@ -28,6 +28,22 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_SKIP_RPATH OFF)
+set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
+
+# For Windows DLL exports
+if(WIN32)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+# Add version information
+configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/include/QTradingView/version.h"
+)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets)
 
@@ -90,9 +106,15 @@ endif()
 
 add_library(QTradingView::QTradingView ALIAS QTradingView)
 
+# Pass C++ standard macro for MSVC
+if(MSVC)
+    target_compile_options(QTradingView PRIVATE /Zc:__cplusplus)
+endif()
+
 target_include_directories(QTradingView
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -104,6 +126,12 @@ set_target_properties(QTradingView PROPERTIES
         VERSION ${PROJECT_VERSION}
         SOVERSION 1
 )
+
+
+get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(NOT isMultiConfig)
+    set(CMAKE_CONFIGURATION_TYPES "Release;Debug" CACHE STRING "" FORCE)
+endif()
 
 # Installation rules
 include(GNUInstallDirs)
@@ -146,6 +174,9 @@ install(FILES
         "${CMAKE_CURRENT_BINARY_DIR}/QTradingViewConfigVersion.cmake"
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QTradingView
 )
+
+# Packaging
+include(cmake/cpack.cmake)
 
 # Build examples (optional)
 option(BUILD_EXAMPLES "Build example applications" ON)

@@ -1,0 +1,215 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  CMAKE_VERSION: "3.28.0"
+  QT_VERSION: "6.9.3"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Windows MSVC builds
+          - name: "Windows MSVC 2022 x64"
+            os: windows-2022
+            preset: "windows-msvc-x64-release"
+            cmake_generator: "Visual Studio 17 2022"
+            cmake_platform: "x64"
+            qt_arch: "win64_msvc2022_64"
+            artifact_prefix: "windows-msvc-x64"
+
+          # macOS builds
+          - name: "macOS x86_64 (Intel)"
+            os: macos-13
+            preset: "macos-x64-release"
+            cmake_generator: "Ninja"
+            cmake_build_type: "Release"
+            qt_arch: "clang_64"
+            artifact_prefix: "macos-x64"
+
+          # Linux builds
+          - name: "Linux x64"
+            os: ubuntu-22.04
+            preset: "linux-x64-release"
+            cmake_generator: "Ninja"
+            cmake_build_type: "Release"
+            qt_arch: "linux_gcc_64"
+            artifact_prefix: "linux-x64"
+
+          # ARM Linux builds
+          - name: "ARM Linux (aarch64)"
+            os: ubuntu-22.04
+            preset: "linux-arm64-release"
+            cmake_generator: "Ninja"
+            cmake_build_type: "Release"
+            qt_arch: "linux_gcc_arm64"
+            artifact_prefix: "linux-arm64"
+
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Qt (Windows)
+        if: runner.os == 'Windows'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: ${{ matrix.qt_arch }}
+          cache: 'true'
+
+      - name: Install Qt (macOS)
+        if: runner.os == 'macOS'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: ${{ matrix.cmake_platform == 'arm64' && 'mac_arm64' || 'mac_x64' }}
+          cache: 'true'
+
+      - name: Install Qt (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-base-dev qt6-base-dev-tools
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install ninja cmake -y
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install ninja cmake
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build cmake build-essential libgl1-mesa-dev libglu1-mesa-dev libegl1-mesa-dev
+
+      - name: Create build directory
+        run: cmake -E make_directory ${{ github.workspace }}/build
+
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cd ${{ github.workspace }}/build
+          cmake -G "${{ matrix.cmake_generator }}" ^
+                 -A ${{ matrix.cmake_platform }} ^
+                 -DCMAKE_BUILD_TYPE=Release ^
+                 -DBUILD_EXAMPLES=ON ^
+                 -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/install" ^
+                 ..
+
+      - name: Configure CMake (non-Windows)
+        if: runner.os != 'Windows'
+        run: |
+          cd ${{ github.workspace }}/build
+          cmake -G "${{ matrix.cmake_generator }}" \
+                 -DCMAKE_BUILD_TYPE=${{ matrix.cmake_build_type }} \
+                 -DBUILD_EXAMPLES=ON \
+                 -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/install" \
+                 ..
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config Release --parallel
+
+      - name: Install
+        run: cmake --install ${{ github.workspace }}/build --config Release
+
+      - name: Create package (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cd ${{ github.workspace }}/build
+          cpack -C Release -G NSIS
+
+      - name: Create package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cd ${{ github.workspace }}/build
+          cpack -C Release -G DragNDrop
+          cpack -C Release -G TGZ
+
+      - name: Create package (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cd ${{ github.workspace }}/build
+          cpack -C Release -G DEB
+          cpack -C Release -G RPM
+          cpack -C Release -G TGZ
+
+      - name: List artifacts
+        run: Get-ChildItem ${{ github.workspace }}/build/ -Force | Format-List
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_prefix }}-packages
+          path: ${{ github.workspace }}/build/QTradingView-*
+          retention-days: 30
+
+      - name: Generate checksums (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Get-ChildItem -File "QTradingView-*" | ForEach-Object {
+          Get-FileHash $_.FullName -Algorithm SHA256 | 
+          ForEach-Object { $_.Hash | Out-File ($_.Path + ".sha256") -Encoding ascii }
+          }
+
+      - name: Generate checksums (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          cd ${{ github.workspace }}/build
+          find . -maxdepth 1 -name "QTradingView-*" -type f -exec sh -c 'sha256sum "$1" > "$1.sha256"' _ {} \;
+          
+
+      - name: Upload checksums
+#        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_prefix }}-checksums
+          path: ${{ github.workspace }}/build/*.sha256
+          retention-days: 30
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+#    if: startsWith(github.ref, 'refs/tags/')
+    name: Create Release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

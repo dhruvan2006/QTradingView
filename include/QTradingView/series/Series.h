@@ -52,7 +52,7 @@ public:
      * @brief Constructs a Series of the given type.
      * @param type Series type (Line, Bar, CandleStick).
      */
-    explicit Series(SeriesType type);
+    explicit Series(SeriesType type) : m_type(type) {};
 
     /**
      * @brief Virtual destructor for Series.

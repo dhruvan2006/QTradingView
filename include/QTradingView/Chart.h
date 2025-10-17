@@ -70,8 +70,7 @@ namespace QTradingView {
  * app.exec();
  * @endcode
  */
-// TODO: Fix the shared in the @code
-    class QTRADINGVIEW_EXPORT Chart : public QWidget
+class QTRADINGVIEW_EXPORT Chart : public QWidget
 {
     Q_OBJECT
 
@@ -90,9 +89,9 @@ public:
     /**
      * @brief Adds a new pane to the chart.
      * @param heightRatio Relative weight of the pane compared to others (default 1.0).
-     * @return Pointer to the newly created Pane.
+     * @return Shared pointer to the newly created Pane.
      */
-    Pane* addPane(double heightRatio = 1.0);
+    std::shared_ptr<Pane> addPane(double heightRatio = 1.0);
 
     /**
      * @brief Removes a pane from the chart.
@@ -236,7 +235,7 @@ private:
     int paneBorderAtPosition(const QPointF& position, double threshold = 5.0) const;
 
     // Chart logic members
-    std::vector<std::unique_ptr<Pane>> m_panes;
+    std::vector<std::shared_ptr<Pane>> m_panes;
     ViewPort m_viewport;
     ChartTheme m_theme;
 
