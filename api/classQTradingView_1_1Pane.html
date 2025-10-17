@@ -97,61 +97,360 @@ $(document).ready(function(){initNavTree('classQTradingView_1_1Pane.html',''); i
   <div class="headertitle"><div class="title">QTradingView::Pane Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a chart pane that contains one or more data series.  
+ <a href="classQTradingView_1_1Pane.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Pane_8h_source.html">Pane.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a15eaf45f800b2b0a78edf179fdd285c4" id="r_a15eaf45f800b2b0a78edf179fdd285c4"><td class="memItemLeft" align="right" valign="top"><a id="a15eaf45f800b2b0a78edf179fdd285c4" name="a15eaf45f800b2b0a78edf179fdd285c4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addSeries</b> (std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt; series)</td></tr>
+<tr class="memitem:acc4fabcf95641fd6e71a4b5c982338ed" id="r_acc4fabcf95641fd6e71a4b5c982338ed"><td class="memItemLeft" align="right" valign="top"><a id="acc4fabcf95641fd6e71a4b5c982338ed" name="acc4fabcf95641fd6e71a4b5c982338ed"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Pane</b> ()</td></tr>
+<tr class="memdesc:acc4fabcf95641fd6e71a4b5c982338ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="classQTradingView_1_1Pane.html" title="Represents a chart pane that contains one or more data series.">Pane</a>. <br /></td></tr>
+<tr class="separator:acc4fabcf95641fd6e71a4b5c982338ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15eaf45f800b2b0a78edf179fdd285c4" id="r_a15eaf45f800b2b0a78edf179fdd285c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a15eaf45f800b2b0a78edf179fdd285c4">addSeries</a> (std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt; <a class="el" href="classQTradingView_1_1Pane.html#ae6340cb2bbecb923d7a70091414cbd9a">series</a>)</td></tr>
+<tr class="memdesc:a15eaf45f800b2b0a78edf179fdd285c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a data series to the pane.  <br /></td></tr>
 <tr class="separator:a15eaf45f800b2b0a78edf179fdd285c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80a0beefafd9e2594e05d1c0d6e4bf57" id="r_a80a0beefafd9e2594e05d1c0d6e4bf57"><td class="memItemLeft" align="right" valign="top"><a id="a80a0beefafd9e2594e05d1c0d6e4bf57" name="a80a0beefafd9e2594e05d1c0d6e4bf57"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>removeSeries</b> (std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt; series)</td></tr>
+<tr class="memitem:a80a0beefafd9e2594e05d1c0d6e4bf57" id="r_a80a0beefafd9e2594e05d1c0d6e4bf57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a80a0beefafd9e2594e05d1c0d6e4bf57">removeSeries</a> (std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt; <a class="el" href="classQTradingView_1_1Pane.html#ae6340cb2bbecb923d7a70091414cbd9a">series</a>)</td></tr>
+<tr class="memdesc:a80a0beefafd9e2594e05d1c0d6e4bf57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a data series from the pane.  <br /></td></tr>
 <tr class="separator:a80a0beefafd9e2594e05d1c0d6e4bf57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6340cb2bbecb923d7a70091414cbd9a" id="r_ae6340cb2bbecb923d7a70091414cbd9a"><td class="memItemLeft" align="right" valign="top"><a id="ae6340cb2bbecb923d7a70091414cbd9a" name="ae6340cb2bbecb923d7a70091414cbd9a"></a>
 const std::vector&lt; std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>series</b> () const</td></tr>
+<tr class="memdesc:ae6340cb2bbecb923d7a70091414cbd9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the list of data series in the pane. <br /></td></tr>
 <tr class="separator:ae6340cb2bbecb923d7a70091414cbd9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a8d7ea642d77b09a83059ed1907ef70" id="r_a4a8d7ea642d77b09a83059ed1907ef70"><td class="memItemLeft" align="right" valign="top"><a id="a4a8d7ea642d77b09a83059ed1907ef70" name="a4a8d7ea642d77b09a83059ed1907ef70"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setScale</b> (ScaleType type)</td></tr>
+<tr class="memitem:a4a8d7ea642d77b09a83059ed1907ef70" id="r_a4a8d7ea642d77b09a83059ed1907ef70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a4a8d7ea642d77b09a83059ed1907ef70">setScale</a> (ScaleType type)</td></tr>
+<tr class="memdesc:a4a8d7ea642d77b09a83059ed1907ef70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Y-axis scale type for the pane.  <br /></td></tr>
 <tr class="separator:a4a8d7ea642d77b09a83059ed1907ef70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad05aade6654aafdbedd828149e3517f6" id="r_ad05aade6654aafdbedd828149e3517f6"><td class="memItemLeft" align="right" valign="top"><a id="ad05aade6654aafdbedd828149e3517f6" name="ad05aade6654aafdbedd828149e3517f6"></a>
 <a class="el" href="classQTradingView_1_1IScale.html">IScale</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>scale</b> () const</td></tr>
+<tr class="memdesc:ad05aade6654aafdbedd828149e3517f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current Y-axis scale object. <br /></td></tr>
 <tr class="separator:ad05aade6654aafdbedd828149e3517f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dee7d8cc166477d582d61d07039d947" id="r_a1dee7d8cc166477d582d61d07039d947"><td class="memItemLeft" align="right" valign="top"><a id="a1dee7d8cc166477d582d61d07039d947" name="a1dee7d8cc166477d582d61d07039d947"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setHeightRatio</b> (double ratio)</td></tr>
+<tr class="memitem:a1dee7d8cc166477d582d61d07039d947" id="r_a1dee7d8cc166477d582d61d07039d947"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a1dee7d8cc166477d582d61d07039d947">setHeightRatio</a> (double ratio)</td></tr>
+<tr class="memdesc:a1dee7d8cc166477d582d61d07039d947"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the height ratio of the pane relative to other panes.  <br /></td></tr>
 <tr class="separator:a1dee7d8cc166477d582d61d07039d947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ce7a4ff15d39e06c22526abfd486981" id="r_a8ce7a4ff15d39e06c22526abfd486981"><td class="memItemLeft" align="right" valign="top"><a id="a8ce7a4ff15d39e06c22526abfd486981" name="a8ce7a4ff15d39e06c22526abfd486981"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>heightRatio</b> () const</td></tr>
+<tr class="memdesc:a8ce7a4ff15d39e06c22526abfd486981"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the height ratio of the pane. <br /></td></tr>
 <tr class="separator:a8ce7a4ff15d39e06c22526abfd486981"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d5936c6c34ed4b3ab0d2425c5c67bfb" id="r_a2d5936c6c34ed4b3ab0d2425c5c67bfb"><td class="memItemLeft" align="right" valign="top"><a id="a2d5936c6c34ed4b3ab0d2425c5c67bfb" name="a2d5936c6c34ed4b3ab0d2425c5c67bfb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRect</b> (const QRectF &amp;rect)</td></tr>
+<tr class="memitem:a2d5936c6c34ed4b3ab0d2425c5c67bfb" id="r_a2d5936c6c34ed4b3ab0d2425c5c67bfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a2d5936c6c34ed4b3ab0d2425c5c67bfb">setRect</a> (const QRectF &amp;<a class="el" href="classQTradingView_1_1Pane.html#a6e913474ca98d6100796bcdbcb185038">rect</a>)</td></tr>
+<tr class="memdesc:a2d5936c6c34ed4b3ab0d2425c5c67bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the rectangle area for the pane in the chart.  <br /></td></tr>
 <tr class="separator:a2d5936c6c34ed4b3ab0d2425c5c67bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e913474ca98d6100796bcdbcb185038" id="r_a6e913474ca98d6100796bcdbcb185038"><td class="memItemLeft" align="right" valign="top"><a id="a6e913474ca98d6100796bcdbcb185038" name="a6e913474ca98d6100796bcdbcb185038"></a>
 QRectF&#160;</td><td class="memItemRight" valign="bottom"><b>rect</b> () const</td></tr>
+<tr class="memdesc:a6e913474ca98d6100796bcdbcb185038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the rectangle area of the pane. <br /></td></tr>
 <tr class="separator:a6e913474ca98d6100796bcdbcb185038"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9cd287f4403fa7d830de4860dec11e8" id="r_ab9cd287f4403fa7d830de4860dec11e8"><td class="memItemLeft" align="right" valign="top"><a id="ab9cd287f4403fa7d830de4860dec11e8" name="ab9cd287f4403fa7d830de4860dec11e8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>calculateRange</b> (int start, int end)</td></tr>
+<tr class="memitem:ab9cd287f4403fa7d830de4860dec11e8" id="r_ab9cd287f4403fa7d830de4860dec11e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#ab9cd287f4403fa7d830de4860dec11e8">calculateRange</a> (int start, int end)</td></tr>
+<tr class="memdesc:ab9cd287f4403fa7d830de4860dec11e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the visible value range for the given data indices.  <br /></td></tr>
 <tr class="separator:ab9cd287f4403fa7d830de4860dec11e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e59d733256697bf2498edd4c9350084" id="r_a8e59d733256697bf2498edd4c9350084"><td class="memItemLeft" align="right" valign="top"><a id="a8e59d733256697bf2498edd4c9350084" name="a8e59d733256697bf2498edd4c9350084"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>minValue</b> () const</td></tr>
+<tr class="memdesc:a8e59d733256697bf2498edd4c9350084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the minimum value in the current range. <br /></td></tr>
 <tr class="separator:a8e59d733256697bf2498edd4c9350084"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3858e37f044b96c4be6ab6567c9cdf57" id="r_a3858e37f044b96c4be6ab6567c9cdf57"><td class="memItemLeft" align="right" valign="top"><a id="a3858e37f044b96c4be6ab6567c9cdf57" name="a3858e37f044b96c4be6ab6567c9cdf57"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>maxValue</b> () const</td></tr>
+<tr class="memdesc:a3858e37f044b96c4be6ab6567c9cdf57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the maximum value in the current range. <br /></td></tr>
 <tr class="separator:a3858e37f044b96c4be6ab6567c9cdf57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68aafaad3b268703425985116ed4213b" id="r_a68aafaad3b268703425985116ed4213b"><td class="memItemLeft" align="right" valign="top"><a id="a68aafaad3b268703425985116ed4213b" name="a68aafaad3b268703425985116ed4213b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setManualRange</b> (double minValue, double maxValue)</td></tr>
+<tr class="memitem:a68aafaad3b268703425985116ed4213b" id="r_a68aafaad3b268703425985116ed4213b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a68aafaad3b268703425985116ed4213b">setManualRange</a> (double <a class="el" href="classQTradingView_1_1Pane.html#a8e59d733256697bf2498edd4c9350084">minValue</a>, double <a class="el" href="classQTradingView_1_1Pane.html#a3858e37f044b96c4be6ab6567c9cdf57">maxValue</a>)</td></tr>
+<tr class="memdesc:a68aafaad3b268703425985116ed4213b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a manual value range for the Y-axis.  <br /></td></tr>
 <tr class="separator:a68aafaad3b268703425985116ed4213b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5de66a7f1fe3dc897e8ebd724966b235" id="r_a5de66a7f1fe3dc897e8ebd724966b235"><td class="memItemLeft" align="right" valign="top"><a id="a5de66a7f1fe3dc897e8ebd724966b235" name="a5de66a7f1fe3dc897e8ebd724966b235"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>zoomYAxis</b> (double zoomFactor, double anchorValue)</td></tr>
+<tr class="memitem:a5de66a7f1fe3dc897e8ebd724966b235" id="r_a5de66a7f1fe3dc897e8ebd724966b235"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a5de66a7f1fe3dc897e8ebd724966b235">zoomYAxis</a> (double zoomFactor, double anchorValue)</td></tr>
+<tr class="memdesc:a5de66a7f1fe3dc897e8ebd724966b235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zooms the Y-axis by a factor, anchored at a specific value.  <br /></td></tr>
 <tr class="separator:a5de66a7f1fe3dc897e8ebd724966b235"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0b7c95fb04b623c2bee822eff6c3244" id="r_af0b7c95fb04b623c2bee822eff6c3244"><td class="memItemLeft" align="right" valign="top"><a id="af0b7c95fb04b623c2bee822eff6c3244" name="af0b7c95fb04b623c2bee822eff6c3244"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>resetAutoRange</b> ()</td></tr>
+<tr class="memdesc:af0b7c95fb04b623c2bee822eff6c3244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the Y-axis to automatic range calculation. <br /></td></tr>
 <tr class="separator:af0b7c95fb04b623c2bee822eff6c3244"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad734ab8a54bdd114db99cce18dfba636" id="r_ad734ab8a54bdd114db99cce18dfba636"><td class="memItemLeft" align="right" valign="top"><a id="ad734ab8a54bdd114db99cce18dfba636" name="ad734ab8a54bdd114db99cce18dfba636"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isAutoRange</b> () const</td></tr>
+<tr class="memdesc:ad734ab8a54bdd114db99cce18dfba636"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the Y-axis is in auto-range mode. <br /></td></tr>
 <tr class="separator:ad734ab8a54bdd114db99cce18dfba636"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a726c34c981a1f8a9af996073447d0518" id="r_a726c34c981a1f8a9af996073447d0518"><td class="memItemLeft" align="right" valign="top"><a id="a726c34c981a1f8a9af996073447d0518" name="a726c34c981a1f8a9af996073447d0518"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (QPainter *painter, const <a class="el" href="classQTradingView_1_1ViewPort.html">ViewPort</a> &amp;viewport)</td></tr>
+<tr class="memitem:a726c34c981a1f8a9af996073447d0518" id="r_a726c34c981a1f8a9af996073447d0518"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1Pane.html#a726c34c981a1f8a9af996073447d0518">render</a> (QPainter *painter, const <a class="el" href="classQTradingView_1_1ViewPort.html">ViewPort</a> &amp;viewport)</td></tr>
+<tr class="memdesc:a726c34c981a1f8a9af996073447d0518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the pane and its series using the given painter and viewport.  <br /></td></tr>
 <tr class="separator:a726c34c981a1f8a9af996073447d0518"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a chart pane that contains one or more data series. </p>
+<p><a class="el" href="classQTradingView_1_1Pane.html" title="Represents a chart pane that contains one or more data series.">Pane</a> manages the layout, scaling, and rendering of its series. It supports automatic and manual Y-axis scaling, zooming, and custom height ratios for multi-pane charts. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a15eaf45f800b2b0a78edf179fdd285c4" name="a15eaf45f800b2b0a78edf179fdd285c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15eaf45f800b2b0a78edf179fdd285c4">&#9670;&#160;</a></span>addSeries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::addSeries </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt;&#160;</td>
+          <td class="paramname"><em>series</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adds a data series to the pane. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">series</td><td>Shared pointer to the <a class="el" href="classQTradingView_1_1Series.html" title="Abstract base class for data series in QTradingView charts.">Series</a> to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab9cd287f4403fa7d830de4860dec11e8" name="ab9cd287f4403fa7d830de4860dec11e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9cd287f4403fa7d830de4860dec11e8">&#9670;&#160;</a></span>calculateRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::calculateRange </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the visible value range for the given data indices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>Start index of the data range. </td></tr>
+    <tr><td class="paramname">end</td><td>End index of the data range. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a80a0beefafd9e2594e05d1c0d6e4bf57" name="a80a0beefafd9e2594e05d1c0d6e4bf57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80a0beefafd9e2594e05d1c0d6e4bf57">&#9670;&#160;</a></span>removeSeries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::removeSeries </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classQTradingView_1_1Series.html">Series</a> &gt;&#160;</td>
+          <td class="paramname"><em>series</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a data series from the pane. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">series</td><td>Shared pointer to the <a class="el" href="classQTradingView_1_1Series.html" title="Abstract base class for data series in QTradingView charts.">Series</a> to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a726c34c981a1f8a9af996073447d0518" name="a726c34c981a1f8a9af996073447d0518"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a726c34c981a1f8a9af996073447d0518">&#9670;&#160;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::render </td>
+          <td>(</td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQTradingView_1_1ViewPort.html">ViewPort</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewport</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renders the pane and its series using the given painter and viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">painter</td><td>QPainter object for drawing. </td></tr>
+    <tr><td class="paramname">viewport</td><td>The current viewport. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1dee7d8cc166477d582d61d07039d947" name="a1dee7d8cc166477d582d61d07039d947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dee7d8cc166477d582d61d07039d947">&#9670;&#160;</a></span>setHeightRatio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::setHeightRatio </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ratio</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the height ratio of the pane relative to other panes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ratio</td><td>The height ratio (e.g., 1.0 for equal height). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a68aafaad3b268703425985116ed4213b" name="a68aafaad3b268703425985116ed4213b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68aafaad3b268703425985116ed4213b">&#9670;&#160;</a></span>setManualRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::setManualRange </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>minValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets a manual value range for the Y-axis. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minValue</td><td>Minimum value. </td></tr>
+    <tr><td class="paramname">maxValue</td><td>Maximum value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2d5936c6c34ed4b3ab0d2425c5c67bfb" name="a2d5936c6c34ed4b3ab0d2425c5c67bfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d5936c6c34ed4b3ab0d2425c5c67bfb">&#9670;&#160;</a></span>setRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::setRect </td>
+          <td>(</td>
+          <td class="paramtype">const QRectF &amp;&#160;</td>
+          <td class="paramname"><em>rect</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the rectangle area for the pane in the chart. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rect</td><td>The rectangle area. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4a8d7ea642d77b09a83059ed1907ef70" name="a4a8d7ea642d77b09a83059ed1907ef70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a8d7ea642d77b09a83059ed1907ef70">&#9670;&#160;</a></span>setScale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::setScale </td>
+          <td>(</td>
+          <td class="paramtype">ScaleType&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the Y-axis scale type for the pane. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The scale type (e.g., linear, logarithmic). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5de66a7f1fe3dc897e8ebd724966b235" name="a5de66a7f1fe3dc897e8ebd724966b235"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5de66a7f1fe3dc897e8ebd724966b235">&#9670;&#160;</a></span>zoomYAxis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::Pane::zoomYAxis </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>zoomFactor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>anchorValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zooms the Y-axis by a factor, anchored at a specific value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">zoomFactor</td><td>The zoom factor (&gt;1 to zoom in, &lt;1 to zoom out). </td></tr>
+    <tr><td class="paramname">anchorValue</td><td>The value to anchor the zoom operation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/QTradingView/<a class="el" href="Pane_8h_source.html">Pane.h</a></li>
 <li>src/<b>Pane.cpp</b></li>

@@ -130,36 +130,36 @@ $(document).ready(function(){initNavTree('LinearScale_8h_source.html',''); initR
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">namespace </span>QTradingView {</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="foldopen" id="foldopen00032" data-start="{" data-end="};">
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classQTradingView_1_1LinearScale.html">   32</a></span><span class="keyword">class </span>QTRADINGVIEW_EXPORT <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">LinearScale</a> : <span class="keyword">public</span> <a class="code hl_class" href="classQTradingView_1_1IScale.html">IScale</a></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>{</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">LinearScale</a>();</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">LinearScale</a>(<span class="keywordtype">double</span> minValue, <span class="keywordtype">double</span> maxValue, <span class="keywordtype">double</span> minPixel, <span class="keywordtype">double</span> maxPixel);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">~LinearScale</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">double</span> dataToPixel(<span class="keywordtype">double</span> value) <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">double</span> pixelToData(<span class="keywordtype">double</span> pixel) <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">void</span> setDomain(<span class="keywordtype">double</span> minValue, <span class="keywordtype">double</span> maxValue) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> setRange(<span class="keywordtype">double</span> minPixel, <span class="keywordtype">double</span> maxPixel) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    std::vector&lt;double&gt; getTicks(<span class="keywordtype">int</span> approxCount) <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">void</span> applyPadding(<span class="keywordtype">double</span> &amp;minValue, <span class="keywordtype">double</span> &amp;maxValue, <span class="keywordtype">double</span> paddingRatio) <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> zoomDomain(<span class="keywordtype">double</span> &amp;minValue, <span class="keywordtype">double</span> &amp;maxValue, <span class="keywordtype">double</span> zoomFactor, <span class="keywordtype">double</span> anchorValue) <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">double</span> m_minValue;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">double</span> m_maxValue;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">double</span> m_minPixel;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">double</span> m_maxPixel;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>};</div>
+<div class="foldopen" id="foldopen00038" data-start="{" data-end="};">
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classQTradingView_1_1LinearScale.html">   38</a></span><span class="keyword">class </span>QTRADINGVIEW_EXPORT <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">LinearScale</a> : <span class="keyword">public</span> <a class="code hl_class" href="classQTradingView_1_1IScale.html">IScale</a></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>{</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">LinearScale</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <a class="code hl_class" href="classQTradingView_1_1LinearScale.html">LinearScale</a>(<span class="keywordtype">double</span> minValue, <span class="keywordtype">double</span> maxValue, <span class="keywordtype">double</span> minPixel, <span class="keywordtype">double</span> maxPixel);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classQTradingView_1_1LinearScale.html#ab67cc487faeabe298128b6c5b1791756">   56</a></span>    <a class="code hl_function" href="classQTradingView_1_1LinearScale.html#ab67cc487faeabe298128b6c5b1791756">~LinearScale</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">double</span> dataToPixel(<span class="keywordtype">double</span> value) <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">double</span> pixelToData(<span class="keywordtype">double</span> pixel) <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordtype">void</span> setDomain(<span class="keywordtype">double</span> minValue, <span class="keywordtype">double</span> maxValue) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keywordtype">void</span> setRange(<span class="keywordtype">double</span> minPixel, <span class="keywordtype">double</span> maxPixel) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    std::vector&lt;double&gt; getTicks(<span class="keywordtype">int</span> approxCount) <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span> applyPadding(<span class="keywordtype">double</span> &amp;minValue, <span class="keywordtype">double</span> &amp;maxValue, <span class="keywordtype">double</span> paddingRatio) <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordtype">void</span> zoomDomain(<span class="keywordtype">double</span> &amp;minValue, <span class="keywordtype">double</span> &amp;maxValue, <span class="keywordtype">double</span> zoomFactor, <span class="keywordtype">double</span> anchorValue) <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordtype">double</span> m_minValue;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordtype">double</span> m_maxValue;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordtype">double</span> m_minPixel;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">double</span> m_maxPixel;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>};</div>
 </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>} <span class="comment">// namespace QTradingView</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">#endif </span><span class="comment">// QTRADINGVIEW_LINEARSCALE_H</span></div>
-<div class="ttc" id="aclassQTradingView_1_1IScale_html"><div class="ttname"><a href="classQTradingView_1_1IScale.html">QTradingView::IScale</a></div><div class="ttdef"><b>Definition</b> IScale.h:32</div></div>
-<div class="ttc" id="aclassQTradingView_1_1LinearScale_html"><div class="ttname"><a href="classQTradingView_1_1LinearScale.html">QTradingView::LinearScale</a></div><div class="ttdef"><b>Definition</b> LinearScale.h:33</div></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>} <span class="comment">// namespace QTradingView</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="preprocessor">#endif </span><span class="comment">// QTRADINGVIEW_LINEARSCALE_H</span></div>
+<div class="ttc" id="aclassQTradingView_1_1IScale_html"><div class="ttname"><a href="classQTradingView_1_1IScale.html">QTradingView::IScale</a></div><div class="ttdoc">Abstract base class for value-to-pixel scaling in QTradingView.</div><div class="ttdef"><b>Definition</b> IScale.h:37</div></div>
+<div class="ttc" id="aclassQTradingView_1_1LinearScale_html"><div class="ttname"><a href="classQTradingView_1_1LinearScale.html">QTradingView::LinearScale</a></div><div class="ttdoc">Linear scale implementation for chart axes.</div><div class="ttdef"><b>Definition</b> LinearScale.h:39</div></div>
+<div class="ttc" id="aclassQTradingView_1_1LinearScale_html_ab67cc487faeabe298128b6c5b1791756"><div class="ttname"><a href="classQTradingView_1_1LinearScale.html#ab67cc487faeabe298128b6c5b1791756">QTradingView::LinearScale::~LinearScale</a></div><div class="ttdeci">~LinearScale() override=default</div><div class="ttdoc">Destructor.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

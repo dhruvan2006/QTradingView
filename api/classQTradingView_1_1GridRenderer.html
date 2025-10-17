@@ -97,22 +97,170 @@ $(document).ready(function(){initNavTree('classQTradingView_1_1GridRenderer.html
   <div class="headertitle"><div class="title">QTradingView::GridRenderer Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Renders grid lines on the chart background.  
+ <a href="classQTradingView_1_1GridRenderer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="GridRenderer_8h_source.html">GridRenderer.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6b55b76629b3b633422677dab40e8299" id="r_a6b55b76629b3b633422677dab40e8299"><td class="memItemLeft" align="right" valign="top"><a id="a6b55b76629b3b633422677dab40e8299" name="a6b55b76629b3b633422677dab40e8299"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setGridColor</b> (const QColor &amp;color)</td></tr>
+<tr class="memitem:aa50ab24c9de5bfa6df348baae77e7275" id="r_aa50ab24c9de5bfa6df348baae77e7275"><td class="memItemLeft" align="right" valign="top"><a id="aa50ab24c9de5bfa6df348baae77e7275" name="aa50ab24c9de5bfa6df348baae77e7275"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>GridRenderer</b> ()</td></tr>
+<tr class="memdesc:aa50ab24c9de5bfa6df348baae77e7275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classQTradingView_1_1GridRenderer.html" title="Renders grid lines on the chart background.">GridRenderer</a> with default settings. <br /></td></tr>
+<tr class="separator:aa50ab24c9de5bfa6df348baae77e7275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b55b76629b3b633422677dab40e8299" id="r_a6b55b76629b3b633422677dab40e8299"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1GridRenderer.html#a6b55b76629b3b633422677dab40e8299">setGridColor</a> (const QColor &amp;color)</td></tr>
+<tr class="memdesc:a6b55b76629b3b633422677dab40e8299"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the color of the grid lines.  <br /></td></tr>
 <tr class="separator:a6b55b76629b3b633422677dab40e8299"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a671fd819caf030c76f65e0daab42f1f4" id="r_a671fd819caf030c76f65e0daab42f1f4"><td class="memItemLeft" align="right" valign="top"><a id="a671fd819caf030c76f65e0daab42f1f4" name="a671fd819caf030c76f65e0daab42f1f4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setVerticalGridEnabled</b> (bool enabled)</td></tr>
+<tr class="memitem:a671fd819caf030c76f65e0daab42f1f4" id="r_a671fd819caf030c76f65e0daab42f1f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1GridRenderer.html#a671fd819caf030c76f65e0daab42f1f4">setVerticalGridEnabled</a> (bool enabled)</td></tr>
+<tr class="memdesc:a671fd819caf030c76f65e0daab42f1f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables vertical grid lines.  <br /></td></tr>
 <tr class="separator:a671fd819caf030c76f65e0daab42f1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4295d1c96cae519c2da88ac09b14a4cf" id="r_a4295d1c96cae519c2da88ac09b14a4cf"><td class="memItemLeft" align="right" valign="top"><a id="a4295d1c96cae519c2da88ac09b14a4cf" name="a4295d1c96cae519c2da88ac09b14a4cf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setHorizontalGridEnabled</b> (bool enabled)</td></tr>
+<tr class="memitem:a4295d1c96cae519c2da88ac09b14a4cf" id="r_a4295d1c96cae519c2da88ac09b14a4cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1GridRenderer.html#a4295d1c96cae519c2da88ac09b14a4cf">setHorizontalGridEnabled</a> (bool enabled)</td></tr>
+<tr class="memdesc:a4295d1c96cae519c2da88ac09b14a4cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables horizontal grid lines.  <br /></td></tr>
 <tr class="separator:a4295d1c96cae519c2da88ac09b14a4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44979cbb423b727ee090e91e282fd05b" id="r_a44979cbb423b727ee090e91e282fd05b"><td class="memItemLeft" align="right" valign="top"><a id="a44979cbb423b727ee090e91e282fd05b" name="a44979cbb423b727ee090e91e282fd05b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (QPainter *painter, const <a class="el" href="classQTradingView_1_1Pane.html">Pane</a> *pane, const <a class="el" href="classQTradingView_1_1ViewPort.html">ViewPort</a> &amp;viewport, const <a class="el" href="classQTradingView_1_1Series.html">Series</a> *dataProvider, const <a class="el" href="classQTradingView_1_1AxisRenderer.html">AxisRenderer</a> *axisRenderer)</td></tr>
+<tr class="memitem:a44979cbb423b727ee090e91e282fd05b" id="r_a44979cbb423b727ee090e91e282fd05b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1GridRenderer.html#a44979cbb423b727ee090e91e282fd05b">render</a> (QPainter *painter, const <a class="el" href="classQTradingView_1_1Pane.html">Pane</a> *pane, const <a class="el" href="classQTradingView_1_1ViewPort.html">ViewPort</a> &amp;viewport, const <a class="el" href="classQTradingView_1_1Series.html">Series</a> *dataProvider, const <a class="el" href="classQTradingView_1_1AxisRenderer.html">AxisRenderer</a> *axisRenderer)</td></tr>
+<tr class="memdesc:a44979cbb423b727ee090e91e282fd05b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the grid on the chart pane.  <br /></td></tr>
 <tr class="separator:a44979cbb423b727ee090e91e282fd05b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Renders grid lines on the chart background. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a44979cbb423b727ee090e91e282fd05b" name="a44979cbb423b727ee090e91e282fd05b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44979cbb423b727ee090e91e282fd05b">&#9670;&#160;</a></span>render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::GridRenderer::render </td>
+          <td>(</td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQTradingView_1_1Pane.html">Pane</a> *&#160;</td>
+          <td class="paramname"><em>pane</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQTradingView_1_1ViewPort.html">ViewPort</a> &amp;&#160;</td>
+          <td class="paramname"><em>viewport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQTradingView_1_1Series.html">Series</a> *&#160;</td>
+          <td class="paramname"><em>dataProvider</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classQTradingView_1_1AxisRenderer.html">AxisRenderer</a> *&#160;</td>
+          <td class="paramname"><em>axisRenderer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renders the grid on the chart pane. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">painter</td><td>The QPainter instance used for drawing. </td></tr>
+    <tr><td class="paramname">pane</td><td>The pane being rendered. </td></tr>
+    <tr><td class="paramname">viewport</td><td>The current viewport settings. </td></tr>
+    <tr><td class="paramname">dataProvider</td><td>The data series providing grid data. </td></tr>
+    <tr><td class="paramname">axisRenderer</td><td>The axis renderer for tick positions. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6b55b76629b3b633422677dab40e8299" name="a6b55b76629b3b633422677dab40e8299"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b55b76629b3b633422677dab40e8299">&#9670;&#160;</a></span>setGridColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::GridRenderer::setGridColor </td>
+          <td>(</td>
+          <td class="paramtype">const QColor &amp;&#160;</td>
+          <td class="paramname"><em>color</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the color of the grid lines. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>The grid color. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4295d1c96cae519c2da88ac09b14a4cf" name="a4295d1c96cae519c2da88ac09b14a4cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4295d1c96cae519c2da88ac09b14a4cf">&#9670;&#160;</a></span>setHorizontalGridEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::GridRenderer::setHorizontalGridEnabled </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables or disables horizontal grid lines. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enabled</td><td>True to enable, false to disable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a671fd819caf030c76f65e0daab42f1f4" name="a671fd819caf030c76f65e0daab42f1f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a671fd819caf030c76f65e0daab42f1f4">&#9670;&#160;</a></span>setVerticalGridEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::GridRenderer::setVerticalGridEnabled </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables or disables vertical grid lines. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">enabled</td><td>True to enable, false to disable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/QTradingView/renderer/<a class="el" href="GridRenderer_8h_source.html">GridRenderer.h</a></li>
 <li>src/renderer/<b>GridRenderer.cpp</b></li>

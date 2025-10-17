@@ -97,43 +97,256 @@ $(document).ready(function(){initNavTree('classQTradingView_1_1ViewPort.html',''
   <div class="headertitle"><div class="title">QTradingView::ViewPort Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Manages the visible range and pixel mapping for chart bars.  
+ <a href="classQTradingView_1_1ViewPort.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ViewPort_8h_source.html">ViewPort.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad3bf91dec5c80e9438a26c6957c36c2a" id="r_ad3bf91dec5c80e9438a26c6957c36c2a"><td class="memItemLeft" align="right" valign="top"><a id="ad3bf91dec5c80e9438a26c6957c36c2a" name="ad3bf91dec5c80e9438a26c6957c36c2a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ViewPort</b> (int startIndex, int endIndex, const QRectF &amp;pixelRect, double barWidth=8.0)</td></tr>
+<tr class="memitem:a6a4489a7842ffe21247b711f1daced56" id="r_a6a4489a7842ffe21247b711f1daced56"><td class="memItemLeft" align="right" valign="top"><a id="a6a4489a7842ffe21247b711f1daced56" name="a6a4489a7842ffe21247b711f1daced56"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ViewPort</b> ()</td></tr>
+<tr class="memdesc:a6a4489a7842ffe21247b711f1daced56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty <a class="el" href="classQTradingView_1_1ViewPort.html" title="Manages the visible range and pixel mapping for chart bars.">ViewPort</a>. <br /></td></tr>
+<tr class="separator:a6a4489a7842ffe21247b711f1daced56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3bf91dec5c80e9438a26c6957c36c2a" id="r_ad3bf91dec5c80e9438a26c6957c36c2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1ViewPort.html#ad3bf91dec5c80e9438a26c6957c36c2a">ViewPort</a> (int <a class="el" href="classQTradingView_1_1ViewPort.html#a0c4fde5c78ce79fd1565d92394c803fd">startIndex</a>, int <a class="el" href="classQTradingView_1_1ViewPort.html#a6599a16e32b6d4dbb14514515f1c3acc">endIndex</a>, const QRectF &amp;<a class="el" href="classQTradingView_1_1ViewPort.html#adce0eb64762c61c35d7ac3e00e69a0f6">pixelRect</a>, double <a class="el" href="classQTradingView_1_1ViewPort.html#a4f6136db5641408c8212238454f56743">barWidth</a>=8.0)</td></tr>
+<tr class="memdesc:ad3bf91dec5c80e9438a26c6957c36c2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classQTradingView_1_1ViewPort.html" title="Manages the visible range and pixel mapping for chart bars.">ViewPort</a> with specified range, pixel rectangle, and bar width.  <br /></td></tr>
 <tr class="separator:ad3bf91dec5c80e9438a26c6957c36c2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2473cab9dbe4e44b8ffd84fa97bd6544" id="r_a2473cab9dbe4e44b8ffd84fa97bd6544"><td class="memItemLeft" align="right" valign="top"><a id="a2473cab9dbe4e44b8ffd84fa97bd6544" name="a2473cab9dbe4e44b8ffd84fa97bd6544"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setVisibleRange</b> (int start, int end)</td></tr>
+<tr class="memitem:a2473cab9dbe4e44b8ffd84fa97bd6544" id="r_a2473cab9dbe4e44b8ffd84fa97bd6544"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1ViewPort.html#a2473cab9dbe4e44b8ffd84fa97bd6544">setVisibleRange</a> (int start, int end)</td></tr>
+<tr class="memdesc:a2473cab9dbe4e44b8ffd84fa97bd6544"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the visible range of bar indices.  <br /></td></tr>
 <tr class="separator:a2473cab9dbe4e44b8ffd84fa97bd6544"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c4fde5c78ce79fd1565d92394c803fd" id="r_a0c4fde5c78ce79fd1565d92394c803fd"><td class="memItemLeft" align="right" valign="top"><a id="a0c4fde5c78ce79fd1565d92394c803fd" name="a0c4fde5c78ce79fd1565d92394c803fd"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>startIndex</b> () const</td></tr>
+<tr class="memdesc:a0c4fde5c78ce79fd1565d92394c803fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the first visible bar. <br /></td></tr>
 <tr class="separator:a0c4fde5c78ce79fd1565d92394c803fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6599a16e32b6d4dbb14514515f1c3acc" id="r_a6599a16e32b6d4dbb14514515f1c3acc"><td class="memItemLeft" align="right" valign="top"><a id="a6599a16e32b6d4dbb14514515f1c3acc" name="a6599a16e32b6d4dbb14514515f1c3acc"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>endIndex</b> () const</td></tr>
+<tr class="memdesc:a6599a16e32b6d4dbb14514515f1c3acc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the last visible bar. <br /></td></tr>
 <tr class="separator:a6599a16e32b6d4dbb14514515f1c3acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6189b45dbd76a7c178ccc529d2345401" id="r_a6189b45dbd76a7c178ccc529d2345401"><td class="memItemLeft" align="right" valign="top"><a id="a6189b45dbd76a7c178ccc529d2345401" name="a6189b45dbd76a7c178ccc529d2345401"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>visibleCount</b> () const</td></tr>
+<tr class="memdesc:a6189b45dbd76a7c178ccc529d2345401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of visible bars in the viewport. <br /></td></tr>
 <tr class="separator:a6189b45dbd76a7c178ccc529d2345401"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ef80882f8c11e77899099e6e6ed2070" id="r_a8ef80882f8c11e77899099e6e6ed2070"><td class="memItemLeft" align="right" valign="top"><a id="a8ef80882f8c11e77899099e6e6ed2070" name="a8ef80882f8c11e77899099e6e6ed2070"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setPixelRect</b> (const QRectF &amp;rect)</td></tr>
+<tr class="memitem:a8ef80882f8c11e77899099e6e6ed2070" id="r_a8ef80882f8c11e77899099e6e6ed2070"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1ViewPort.html#a8ef80882f8c11e77899099e6e6ed2070">setPixelRect</a> (const QRectF &amp;rect)</td></tr>
+<tr class="memdesc:a8ef80882f8c11e77899099e6e6ed2070"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the pixel rectangle for the viewport area.  <br /></td></tr>
 <tr class="separator:a8ef80882f8c11e77899099e6e6ed2070"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adce0eb64762c61c35d7ac3e00e69a0f6" id="r_adce0eb64762c61c35d7ac3e00e69a0f6"><td class="memItemLeft" align="right" valign="top"><a id="adce0eb64762c61c35d7ac3e00e69a0f6" name="adce0eb64762c61c35d7ac3e00e69a0f6"></a>
 QRectF&#160;</td><td class="memItemRight" valign="bottom"><b>pixelRect</b> () const</td></tr>
+<tr class="memdesc:adce0eb64762c61c35d7ac3e00e69a0f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the pixel rectangle of the viewport. <br /></td></tr>
 <tr class="separator:adce0eb64762c61c35d7ac3e00e69a0f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82280ae7dce87a586cc47e04838e5ee5" id="r_a82280ae7dce87a586cc47e04838e5ee5"><td class="memItemLeft" align="right" valign="top"><a id="a82280ae7dce87a586cc47e04838e5ee5" name="a82280ae7dce87a586cc47e04838e5ee5"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>indexToPixel</b> (int index) const</td></tr>
+<tr class="memitem:a82280ae7dce87a586cc47e04838e5ee5" id="r_a82280ae7dce87a586cc47e04838e5ee5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1ViewPort.html#a82280ae7dce87a586cc47e04838e5ee5">indexToPixel</a> (int index) const</td></tr>
+<tr class="memdesc:a82280ae7dce87a586cc47e04838e5ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a bar index to its pixel position within the viewport.  <br /></td></tr>
 <tr class="separator:a82280ae7dce87a586cc47e04838e5ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12fb8a3c62cb60e4462f1ba29d61a79a" id="r_a12fb8a3c62cb60e4462f1ba29d61a79a"><td class="memItemLeft" align="right" valign="top"><a id="a12fb8a3c62cb60e4462f1ba29d61a79a" name="a12fb8a3c62cb60e4462f1ba29d61a79a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>pixelToIndex</b> (double pixel) const</td></tr>
+<tr class="memitem:a12fb8a3c62cb60e4462f1ba29d61a79a" id="r_a12fb8a3c62cb60e4462f1ba29d61a79a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1ViewPort.html#a12fb8a3c62cb60e4462f1ba29d61a79a">pixelToIndex</a> (double pixel) const</td></tr>
+<tr class="memdesc:a12fb8a3c62cb60e4462f1ba29d61a79a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a pixel position to the corresponding bar index.  <br /></td></tr>
 <tr class="separator:a12fb8a3c62cb60e4462f1ba29d61a79a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6b892d9f4acbca982da1344799e19c3" id="r_ab6b892d9f4acbca982da1344799e19c3"><td class="memItemLeft" align="right" valign="top"><a id="ab6b892d9f4acbca982da1344799e19c3" name="ab6b892d9f4acbca982da1344799e19c3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setBarWidth</b> (double width)</td></tr>
+<tr class="memitem:ab6b892d9f4acbca982da1344799e19c3" id="r_ab6b892d9f4acbca982da1344799e19c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1ViewPort.html#ab6b892d9f4acbca982da1344799e19c3">setBarWidth</a> (double width)</td></tr>
+<tr class="memdesc:ab6b892d9f4acbca982da1344799e19c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the width of each bar in pixels.  <br /></td></tr>
 <tr class="separator:ab6b892d9f4acbca982da1344799e19c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f6136db5641408c8212238454f56743" id="r_a4f6136db5641408c8212238454f56743"><td class="memItemLeft" align="right" valign="top"><a id="a4f6136db5641408c8212238454f56743" name="a4f6136db5641408c8212238454f56743"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>barWidth</b> () const</td></tr>
+<tr class="memdesc:a4f6136db5641408c8212238454f56743"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the width of each bar in pixels. <br /></td></tr>
 <tr class="separator:a4f6136db5641408c8212238454f56743"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Manages the visible range and pixel mapping for chart bars. </p>
+<p><a class="el" href="classQTradingView_1_1ViewPort.html" title="Manages the visible range and pixel mapping for chart bars.">ViewPort</a> controls which data indices are visible, their pixel positions, and the bar width for rendering. It provides conversion between data indices and pixel coordinates, and supports dynamic resizing and zooming. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad3bf91dec5c80e9438a26c6957c36c2a" name="ad3bf91dec5c80e9438a26c6957c36c2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3bf91dec5c80e9438a26c6957c36c2a">&#9670;&#160;</a></span>ViewPort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTradingView::ViewPort::ViewPort </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>startIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>endIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QRectF &amp;&#160;</td>
+          <td class="paramname"><em>pixelRect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>barWidth</em> = <code>8.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a <a class="el" href="classQTradingView_1_1ViewPort.html" title="Manages the visible range and pixel mapping for chart bars.">ViewPort</a> with specified range, pixel rectangle, and bar width. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">startIndex</td><td>Index of the first visible bar. </td></tr>
+    <tr><td class="paramname">endIndex</td><td>Index of the last visible bar. </td></tr>
+    <tr><td class="paramname">pixelRect</td><td>Rectangle area in pixels for the viewport. </td></tr>
+    <tr><td class="paramname">barWidth</td><td>Width of each bar in pixels (default 8.0). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a82280ae7dce87a586cc47e04838e5ee5" name="a82280ae7dce87a586cc47e04838e5ee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82280ae7dce87a586cc47e04838e5ee5">&#9670;&#160;</a></span>indexToPixel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double QTradingView::ViewPort::indexToPixel </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a bar index to its pixel position within the viewport. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Bar index to convert. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pixel position corresponding to the index. </dd></dl>
+
+</div>
+</div>
+<a id="a12fb8a3c62cb60e4462f1ba29d61a79a" name="a12fb8a3c62cb60e4462f1ba29d61a79a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12fb8a3c62cb60e4462f1ba29d61a79a">&#9670;&#160;</a></span>pixelToIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int QTradingView::ViewPort::pixelToIndex </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pixel</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a pixel position to the corresponding bar index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pixel</td><td>Pixel position to convert. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Bar index corresponding to the pixel position. </dd></dl>
+
+</div>
+</div>
+<a id="ab6b892d9f4acbca982da1344799e19c3" name="ab6b892d9f4acbca982da1344799e19c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b892d9f4acbca982da1344799e19c3">&#9670;&#160;</a></span>setBarWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::ViewPort::setBarWidth </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>width</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the width of each bar in pixels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">width</td><td>Bar width in pixels. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8ef80882f8c11e77899099e6e6ed2070" name="a8ef80882f8c11e77899099e6e6ed2070"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ef80882f8c11e77899099e6e6ed2070">&#9670;&#160;</a></span>setPixelRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::ViewPort::setPixelRect </td>
+          <td>(</td>
+          <td class="paramtype">const QRectF &amp;&#160;</td>
+          <td class="paramname"><em>rect</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the pixel rectangle for the viewport area. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rect</td><td>Rectangle area in pixels. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2473cab9dbe4e44b8ffd84fa97bd6544" name="a2473cab9dbe4e44b8ffd84fa97bd6544"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2473cab9dbe4e44b8ffd84fa97bd6544">&#9670;&#160;</a></span>setVisibleRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QTradingView::ViewPort::setVisibleRange </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the visible range of bar indices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>Index of the first visible bar. </td></tr>
+    <tr><td class="paramname">end</td><td>Index of the last visible bar. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/QTradingView/<a class="el" href="ViewPort_8h_source.html">ViewPort.h</a></li>
 <li>src/<b>ViewPort.cpp</b></li>

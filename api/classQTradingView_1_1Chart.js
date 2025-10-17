@@ -1,0 +1,25 @@
+var classQTradingView_1_1Chart =
+[
+    [ "Chart", "classQTradingView_1_1Chart.html#ac2b70fd2789ebf0b8455abf7c312c4c4", null ],
+    [ "~Chart", "classQTradingView_1_1Chart.html#ad89935f7cfa0d3a7706e4e87f1600080", null ],
+    [ "addPane", "classQTradingView_1_1Chart.html#ad436d6c57611504b8aab009aa03c006a", null ],
+    [ "axis", "classQTradingView_1_1Chart.html#a4bec0c3344baf14948b86746f7d314df", null ],
+    [ "calculateLayout", "classQTradingView_1_1Chart.html#a164fa4241c3aba123884a05817deafd7", null ],
+    [ "crosshair", "classQTradingView_1_1Chart.html#a1e2d9be821df0360a129546ccf476175", null ],
+    [ "crosshairPosition", "classQTradingView_1_1Chart.html#a6d7a54769c3c5dcaed9025b39bb246c4", null ],
+    [ "fitToData", "classQTradingView_1_1Chart.html#a71d2a3434f46f686b4413308b17a1841", null ],
+    [ "grid", "classQTradingView_1_1Chart.html#aec8bf9b3f37d96aa21a776d92def4da2", null ],
+    [ "isCrosshairVisible", "classQTradingView_1_1Chart.html#a07d12487f2fba850e40215be8a057676", null ],
+    [ "mainPane", "classQTradingView_1_1Chart.html#a173ec47a07f744f3e8ede797008ab3fe", null ],
+    [ "pan", "classQTradingView_1_1Chart.html#ad77d7edbc48d9d78a34def29956e3a5e", null ],
+    [ "panes", "classQTradingView_1_1Chart.html#aafccab54c8c0c0f8a005b7eadea0e5ff", null ],
+    [ "removePane", "classQTradingView_1_1Chart.html#a9ef0823c844fc62e6ff01a27633b462c", null ],
+    [ "setCrosshairPosition", "classQTradingView_1_1Chart.html#ac12ab3b344e10ccc761faf50b2058143", null ],
+    [ "setCrosshairVisible", "classQTradingView_1_1Chart.html#a19ca4bc33f490bc46ae7239f7497a386", null ],
+    [ "setTheme", "classQTradingView_1_1Chart.html#aabaa37a4d30c2ca346c527c0d950b0c4", null ],
+    [ "show", "classQTradingView_1_1Chart.html#aba2482f27b9d56f4106d3ee29a233bf3", null ],
+    [ "showLastNPoints", "classQTradingView_1_1Chart.html#a919e3127704b270858ddad6fda6b9aca", null ],
+    [ "theme", "classQTradingView_1_1Chart.html#a6c9871efb11f943a6f02d52a516690cb", null ],
+    [ "viewport", "classQTradingView_1_1Chart.html#a04e52c5037e7aacec4652710ed32141f", null ],
+    [ "zoom", "classQTradingView_1_1Chart.html#aa01ac6cde2cd0e199ab58ac6f585c62c", null ]
+];

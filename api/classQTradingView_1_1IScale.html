@@ -97,44 +97,405 @@ $(document).ready(function(){initNavTree('classQTradingView_1_1IScale.html','');
   <div class="headertitle"><div class="title">QTradingView::IScale Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Abstract base class for value-to-pixel scaling in QTradingView.  
+ <a href="classQTradingView_1_1IScale.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="IScale_8h_source.html">IScale.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for QTradingView::IScale:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classQTradingView_1_1IScale.png" usemap="#QTradingView::IScale_map" alt=""/>
   <map id="QTradingView::IScale_map" name="QTradingView::IScale_map">
-<area href="classQTradingView_1_1LinearScale.html" alt="QTradingView::LinearScale" shape="rect" coords="0,56,167,80"/>
-<area href="classQTradingView_1_1LogScale.html" alt="QTradingView::LogScale" shape="rect" coords="177,56,344,80"/>
+<area href="classQTradingView_1_1LinearScale.html" title="Linear scale implementation for chart axes." alt="QTradingView::LinearScale" shape="rect" coords="0,56,167,80"/>
+<area href="classQTradingView_1_1LogScale.html" title="Logarithmic scale implementation for chart axes." alt="QTradingView::LogScale" shape="rect" coords="177,56,344,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aefc0f04802521ecfed3677a6b563f0a3" id="r_aefc0f04802521ecfed3677a6b563f0a3"><td class="memItemLeft" align="right" valign="top"><a id="aefc0f04802521ecfed3677a6b563f0a3" name="aefc0f04802521ecfed3677a6b563f0a3"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>dataToPixel</b> (double value) const =0</td></tr>
+<tr class="memitem:a99d67d3622ca65f481c939ab93e66ddb" id="r_a99d67d3622ca65f481c939ab93e66ddb"><td class="memItemLeft" align="right" valign="top"><a id="a99d67d3622ca65f481c939ab93e66ddb" name="a99d67d3622ca65f481c939ab93e66ddb"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~IScale</b> ()=default</td></tr>
+<tr class="memdesc:a99d67d3622ca65f481c939ab93e66ddb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor for <a class="el" href="classQTradingView_1_1IScale.html" title="Abstract base class for value-to-pixel scaling in QTradingView.">IScale</a>. <br /></td></tr>
+<tr class="separator:a99d67d3622ca65f481c939ab93e66ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefc0f04802521ecfed3677a6b563f0a3" id="r_aefc0f04802521ecfed3677a6b563f0a3"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#aefc0f04802521ecfed3677a6b563f0a3">dataToPixel</a> (double value) const =0</td></tr>
+<tr class="memdesc:aefc0f04802521ecfed3677a6b563f0a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a data value to its corresponding pixel position.  <br /></td></tr>
 <tr class="separator:aefc0f04802521ecfed3677a6b563f0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f08bd03cbb1b9a915f0e4886a3867fd" id="r_a0f08bd03cbb1b9a915f0e4886a3867fd"><td class="memItemLeft" align="right" valign="top"><a id="a0f08bd03cbb1b9a915f0e4886a3867fd" name="a0f08bd03cbb1b9a915f0e4886a3867fd"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>pixelToData</b> (double pixel) const =0</td></tr>
+<tr class="memitem:a0f08bd03cbb1b9a915f0e4886a3867fd" id="r_a0f08bd03cbb1b9a915f0e4886a3867fd"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#a0f08bd03cbb1b9a915f0e4886a3867fd">pixelToData</a> (double pixel) const =0</td></tr>
+<tr class="memdesc:a0f08bd03cbb1b9a915f0e4886a3867fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a pixel position to its corresponding data value.  <br /></td></tr>
 <tr class="separator:a0f08bd03cbb1b9a915f0e4886a3867fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf277328d0e8b6b6803df51d4cafbcca" id="r_aaf277328d0e8b6b6803df51d4cafbcca"><td class="memItemLeft" align="right" valign="top"><a id="aaf277328d0e8b6b6803df51d4cafbcca" name="aaf277328d0e8b6b6803df51d4cafbcca"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setDomain</b> (double minValue, double maxValue)=0</td></tr>
+<tr class="memitem:aaf277328d0e8b6b6803df51d4cafbcca" id="r_aaf277328d0e8b6b6803df51d4cafbcca"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#aaf277328d0e8b6b6803df51d4cafbcca">setDomain</a> (double minValue, double maxValue)=0</td></tr>
+<tr class="memdesc:aaf277328d0e8b6b6803df51d4cafbcca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the domain (min and max data values) for the scale.  <br /></td></tr>
 <tr class="separator:aaf277328d0e8b6b6803df51d4cafbcca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad10f02d19d791de00ebe7bf0f1d4c225" id="r_ad10f02d19d791de00ebe7bf0f1d4c225"><td class="memItemLeft" align="right" valign="top"><a id="ad10f02d19d791de00ebe7bf0f1d4c225" name="ad10f02d19d791de00ebe7bf0f1d4c225"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setRange</b> (double minPixel, double maxPixel)=0</td></tr>
+<tr class="memitem:ad10f02d19d791de00ebe7bf0f1d4c225" id="r_ad10f02d19d791de00ebe7bf0f1d4c225"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#ad10f02d19d791de00ebe7bf0f1d4c225">setRange</a> (double minPixel, double maxPixel)=0</td></tr>
+<tr class="memdesc:ad10f02d19d791de00ebe7bf0f1d4c225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the pixel range for the scale.  <br /></td></tr>
 <tr class="separator:ad10f02d19d791de00ebe7bf0f1d4c225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5de2bf989aefb44e266e31434c9921f1" id="r_a5de2bf989aefb44e266e31434c9921f1"><td class="memItemLeft" align="right" valign="top"><a id="a5de2bf989aefb44e266e31434c9921f1" name="a5de2bf989aefb44e266e31434c9921f1"></a>
-virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTicks</b> (int approxCount) const =0</td></tr>
+<tr class="memitem:a5de2bf989aefb44e266e31434c9921f1" id="r_a5de2bf989aefb44e266e31434c9921f1"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#a5de2bf989aefb44e266e31434c9921f1">getTicks</a> (int approxCount) const =0</td></tr>
+<tr class="memdesc:a5de2bf989aefb44e266e31434c9921f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a vector of tick values for the axis.  <br /></td></tr>
 <tr class="separator:a5de2bf989aefb44e266e31434c9921f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a982d9120b98994a90130fa73fc657269" id="r_a982d9120b98994a90130fa73fc657269"><td class="memItemLeft" align="right" valign="top"><a id="a982d9120b98994a90130fa73fc657269" name="a982d9120b98994a90130fa73fc657269"></a>
-std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTicks</b> () const</td></tr>
+<tr class="memitem:a982d9120b98994a90130fa73fc657269" id="r_a982d9120b98994a90130fa73fc657269"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#a982d9120b98994a90130fa73fc657269">getTicks</a> () const</td></tr>
+<tr class="memdesc:a982d9120b98994a90130fa73fc657269"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a default vector of tick values (approx. 5).  <br /></td></tr>
 <tr class="separator:a982d9120b98994a90130fa73fc657269"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f847dcdc65fcb9b832ff14045b51882" id="r_a1f847dcdc65fcb9b832ff14045b51882"><td class="memItemLeft" align="right" valign="top"><a id="a1f847dcdc65fcb9b832ff14045b51882" name="a1f847dcdc65fcb9b832ff14045b51882"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>applyPadding</b> (double &amp;minValue, double &amp;maxValue, double paddingRatio) const =0</td></tr>
+<tr class="memitem:a1f847dcdc65fcb9b832ff14045b51882" id="r_a1f847dcdc65fcb9b832ff14045b51882"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#a1f847dcdc65fcb9b832ff14045b51882">applyPadding</a> (double &amp;minValue, double &amp;maxValue, double paddingRatio) const =0</td></tr>
+<tr class="memdesc:a1f847dcdc65fcb9b832ff14045b51882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies padding to the scale domain.  <br /></td></tr>
 <tr class="separator:a1f847dcdc65fcb9b832ff14045b51882"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb5849f35f34d44e36e5447e646047d4" id="r_abb5849f35f34d44e36e5447e646047d4"><td class="memItemLeft" align="right" valign="top"><a id="abb5849f35f34d44e36e5447e646047d4" name="abb5849f35f34d44e36e5447e646047d4"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>zoomDomain</b> (double &amp;minValue, double &amp;maxValue, double zoomFactor, double anchorValue) const =0</td></tr>
+<tr class="memitem:abb5849f35f34d44e36e5447e646047d4" id="r_abb5849f35f34d44e36e5447e646047d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQTradingView_1_1IScale.html#abb5849f35f34d44e36e5447e646047d4">zoomDomain</a> (double &amp;minValue, double &amp;maxValue, double zoomFactor, double anchorValue) const =0</td></tr>
+<tr class="memdesc:abb5849f35f34d44e36e5447e646047d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zooms the scale domain around an anchor value.  <br /></td></tr>
 <tr class="separator:abb5849f35f34d44e36e5447e646047d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract base class for value-to-pixel scaling in QTradingView. </p>
+<p><a class="el" href="classQTradingView_1_1IScale.html" title="Abstract base class for value-to-pixel scaling in QTradingView.">IScale</a> provides an interface for converting between data values and pixel coordinates, managing scale domains and ranges, and generating axis ticks. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1f847dcdc65fcb9b832ff14045b51882" name="a1f847dcdc65fcb9b832ff14045b51882"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f847dcdc65fcb9b832ff14045b51882">&#9670;&#160;</a></span>applyPadding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void QTradingView::IScale::applyPadding </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>minValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>maxValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>paddingRatio</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies padding to the scale domain. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minValue</td><td>Minimum data value (modified). </td></tr>
+    <tr><td class="paramname">maxValue</td><td>Maximum data value (modified). </td></tr>
+    <tr><td class="paramname">paddingRatio</td><td>Ratio of padding to apply. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#aea80f19cfe511ca4792826c8e01d521d">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#ae140e95643d99b899f90842472f0875f">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
+<a id="aefc0f04802521ecfed3677a6b563f0a3" name="aefc0f04802521ecfed3677a6b563f0a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefc0f04802521ecfed3677a6b563f0a3">&#9670;&#160;</a></span>dataToPixel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double QTradingView::IScale::dataToPixel </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a data value to its corresponding pixel position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Data value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pixel position. </dd></dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#a64b27030356430ebd708b3aae2020c54">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#aa573cbd42bf22be348c55416d0df674a">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
+<a id="a982d9120b98994a90130fa73fc657269" name="a982d9120b98994a90130fa73fc657269"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a982d9120b98994a90130fa73fc657269">&#9670;&#160;</a></span>getTicks() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; QTradingView::IScale::getTicks </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a default vector of tick values (approx. 5). </p>
+<dl class="section return"><dt>Returns</dt><dd>Vector of tick values. </dd></dl>
+
+</div>
+</div>
+<a id="a5de2bf989aefb44e266e31434c9921f1" name="a5de2bf989aefb44e266e31434c9921f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5de2bf989aefb44e266e31434c9921f1">&#9670;&#160;</a></span>getTicks() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::vector&lt; double &gt; QTradingView::IScale::getTicks </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>approxCount</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a vector of tick values for the axis. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">approxCount</td><td>Approximate number of ticks desired. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of tick values. </dd></dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#a4b76554c4116f099e4fa35a3fe8cf394">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#a176cc21d07d0b505cdd53d628823aecc">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
+<a id="a0f08bd03cbb1b9a915f0e4886a3867fd" name="a0f08bd03cbb1b9a915f0e4886a3867fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f08bd03cbb1b9a915f0e4886a3867fd">&#9670;&#160;</a></span>pixelToData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double QTradingView::IScale::pixelToData </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pixel</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a pixel position to its corresponding data value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pixel</td><td>Pixel position. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Data value. </dd></dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#a48e64a71eace20cc11ae5c3e82f1fe74">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#a1f91d89e1e1ce1d705c70da5f6a3879a">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
+<a id="aaf277328d0e8b6b6803df51d4cafbcca" name="aaf277328d0e8b6b6803df51d4cafbcca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf277328d0e8b6b6803df51d4cafbcca">&#9670;&#160;</a></span>setDomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void QTradingView::IScale::setDomain </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>minValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the domain (min and max data values) for the scale. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minValue</td><td>Minimum data value. </td></tr>
+    <tr><td class="paramname">maxValue</td><td>Maximum data value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#a658d80dfb076a0344e297cad2519171f">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#a1c54082a371a9cfbd4e375be3847acab">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
+<a id="ad10f02d19d791de00ebe7bf0f1d4c225" name="ad10f02d19d791de00ebe7bf0f1d4c225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad10f02d19d791de00ebe7bf0f1d4c225">&#9670;&#160;</a></span>setRange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void QTradingView::IScale::setRange </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>minPixel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxPixel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the pixel range for the scale. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minPixel</td><td>Minimum pixel value. </td></tr>
+    <tr><td class="paramname">maxPixel</td><td>Maximum pixel value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#ad46efe63d0f6e82a577781a058cc584e">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#a9589c0a655717f0562b43173c8edf9f7">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
+<a id="abb5849f35f34d44e36e5447e646047d4" name="abb5849f35f34d44e36e5447e646047d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb5849f35f34d44e36e5447e646047d4">&#9670;&#160;</a></span>zoomDomain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void QTradingView::IScale::zoomDomain </td>
+          <td>(</td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>minValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>maxValue</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>zoomFactor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>anchorValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Zooms the scale domain around an anchor value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">minValue</td><td>Minimum data value (modified). </td></tr>
+    <tr><td class="paramname">maxValue</td><td>Maximum data value (modified). </td></tr>
+    <tr><td class="paramname">zoomFactor</td><td>Zoom factor to apply. </td></tr>
+    <tr><td class="paramname">anchorValue</td><td>Value to anchor the zoom operation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classQTradingView_1_1LinearScale.html#a5529159ee2a391fd9ffecb8112055a8f">QTradingView::LinearScale</a>, and <a class="el" href="classQTradingView_1_1LogScale.html#a73ca58bd5895e6a58fc54adb31f7ee9e">QTradingView::LogScale</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/QTradingView/scale/<a class="el" href="IScale_8h_source.html">IScale.h</a></li>
 </ul>
