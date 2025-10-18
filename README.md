@@ -1,6 +1,6 @@
 # QTradingView
 
-[![Build](https://img.shields.io/github/actions/workflow/status/dhruvan2006/QTradingView/build.yml?branch=main)]()
+[![Build](https://img.shields.io/github/actions/workflow/status/dhruvan2006/QTradingView/build-and-release.yml?branch=v1.0.0)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
 [![Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://dhruvan2006.github.io/QTradingView/demo)
 [![C++](https://img.shields.io/badge/C++-17-blue)]()
